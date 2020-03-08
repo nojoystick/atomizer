@@ -1,0 +1,27 @@
+.disappearingText:hover{
+  color: darkgray;
+}
+
+.menuButton {
+  position: absolute;
+  bottom: 0px;
+  width: 100px;
+  height: 30px;
+  margin-left: 40px;
+  border: solid white;
+  border-width: 2px 2px 0px 2px;
+  outline: none;
+  transition: bottom 0.75s;
+}
+
+.expandIcon {
+  margin-bottom: 2px;
+  width: 10px;
+  height: 5px;
+  color: white;
+  transition: transform 0.5s;
+}
+
+.menuButton:hover{
+  border-color: darkgray;
+}

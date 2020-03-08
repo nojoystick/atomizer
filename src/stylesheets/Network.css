@@ -1,0 +1,9 @@
+.vis-network{
+  outline: none;
+  margin: auto;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+}
