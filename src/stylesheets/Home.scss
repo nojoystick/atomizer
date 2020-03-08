@@ -1,5 +1,7 @@
+@import './colors';
+
 .disappearingText:hover{
-  color: darkgray;
+  color: $secondary;
 }
 
 .menuButton {
@@ -8,20 +10,21 @@
   width: 100px;
   height: 30px;
   margin-left: 40px;
-  border: solid white;
+  border: solid $text;
   border-width: 2px 2px 0px 2px;
   outline: none;
   transition: bottom 0.75s;
+  background-color: $background;
+  color: $text;
 }
 
 .expandIcon {
   margin-bottom: 2px;
   width: 10px;
   height: 5px;
-  color: white;
   transition: transform 0.5s;
 }
 
 .menuButton:hover{
-  border-color: darkgray;
+  border-color: $secondary;
 }

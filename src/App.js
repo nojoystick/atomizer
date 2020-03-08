@@ -1,7 +1,7 @@
 import React from "react";
 import { disableBodyScroll } from 'body-scroll-lock';
 import { HashRouter, Route, NavLink } from 'react-router-dom'
-import './stylesheets/App.css';
+import './stylesheets/App.scss';
 import Home from './pages/Home';
 import About from './pages/About';
 import IconSet from './constants/IconSet';
@@ -12,6 +12,9 @@ const App = () => {
 
   const targetElement = document.querySelector('#root');
   disableBodyScroll(targetElement);
+  targetElement.style = {
+      filter: 'invert(100%)'
+    };
 
   const Header = () => {
     return (

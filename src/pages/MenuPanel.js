@@ -1,11 +1,11 @@
 import React from 'react';
 import SubPanel from './SubPanel'
 import SubPanelData from '../config/sub-panel-data';
-import '../stylesheets/MenuPanel.css';
+import '../stylesheets/MenuPanel.scss';
 
 const MenuPanel = ({show}) => {
   const menuStyle = {
-    height: `${show ? '450px' : '0px'}`
+    height: `${show ? '480px' : '0px'}`
   }
 
   return (

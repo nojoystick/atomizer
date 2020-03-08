@@ -1,6 +1,6 @@
 import React from 'react';
 import Graph from "react-graph-vis";
-import '../stylesheets/Network.css'
+import '../stylesheets/Network.scss'
 
 const Network= () => {
 
@@ -25,7 +25,7 @@ const Network= () => {
     interaction: {
       hover: true,
       dragView: false,
-      zoomView: false
+      zoomView: true
     },
     physics: {
       barnesHut: {
@@ -36,21 +36,21 @@ const Network= () => {
     },
     nodes: {
       shape: 'circle',
-      borderWidth: 2,
+      borderWidth: 1.5,
       color: {
-        border: 'lightGray',
-        background: 'black',
+        border: 'black',
+        background: 'whitesmoke',
         highlight: {
-          border: 'gray',
-          background: 'black'
+          border: 'black',
+          background: 'white',
         },
         hover: {
-          border: 'darkGray',
-          background: '#1e1e1e',
+          border: 'black',
+          background: 'white',
         }
       },
       font: {
-        color: 'white',
+        color: 'black',
         size: 18,
         face: 'inconsolata',
         multi: 'html'
@@ -62,11 +62,11 @@ const Network= () => {
     },
     edges: {
       color: {
-        color: "lightGray",
+        color: "darkGray",
         hover: "gray"
       },
       width: 1.5,
-      selectionWidth: 2,
+      selectionWidth: 1,
       hoverWidth: 0.5,
       length: 200
     },

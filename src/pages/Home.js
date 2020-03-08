@@ -3,7 +3,7 @@ import Network from './Network';
 import MenuPanel from './MenuPanel';
 import Icon from '../components/Icon'
 import IconSet from '../constants/IconSet'
-import '../stylesheets/Home.css'
+import '../stylesheets/Home.scss'
 
 const Home = () => {
   const [textVisible, setTextVisible] = useState(false);
@@ -34,7 +34,7 @@ const Home = () => {
     <Network />
     <MenuPanel show={menuVisible}/>
     <button className="menuButton" 
-            style={{bottom: `${menuVisible ? '450px' : '0px'}`}} 
+            style={{bottom: `${menuVisible ? '480px' : '0px'}`}} 
             onClick={showMenu} 
             onMouseEnter={() => setIconColor('darkgray')} 
             onMouseLeave={() => setIconColor('black')}

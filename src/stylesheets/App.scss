@@ -1,12 +1,16 @@
+@import './colors';
+
 p {
   margin:0px;
-  padding-top: 10px;
+  padding: 10px 20px 0px 0px;
   font-family: 'Roboto Condensed', sans-serif;
   font-weight: 100;
   font-size: 0.8em;
   height: inherit;
-  max-width: 600px;
+  width: 600px;
+  max-width: 90%;
   transition: opacity 1s, height 0.5s;
+  color: $text;
 }
 
 h1, h2, h3, h4, a {
@@ -16,16 +20,17 @@ h1, h2, h3, h4, a {
   font-weight: 700;
   font-size: 1.2em;
   text-decoration: none;
+  color: $text;
 }
 
 html, body, .body, .container, #root {
   height: 100%;
   width: 100%;
-
+  background-color: $background;
 }
 
 a:hover{
-  color:darkgray;
+  color: $secondary;
 }
 
 .body {
@@ -37,6 +42,7 @@ a:hover{
   font-size: 20px;
   padding: 20px 20px 0px 20px;
   max-width: 100%;
+  background-color: $background;
 }
 
 .textContainer {
@@ -44,8 +50,9 @@ a:hover{
   margin: 0px 0px 0px 20px;
   opacity: 1.0;
   transition: height 0.5s;
-  color: white;
+  color: $text;
   text-align: justify;
+  background-color: $background;
 }
 
 .floatRight {

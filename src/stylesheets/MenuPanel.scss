@@ -1,13 +1,15 @@
+@import './colors';
+
 .menuPanel{
   z-index: 1;
   position: absolute;
   bottom: 0px;
   height: 400px;
   width: 100%;
-  border-top: 3px solid white;
+  border-top: 3px solid $text;
   margin: 0px;
   transition: height 0.75s;
-  background-color: black;
+  background-color: $background;
   overflow: scroll;
   display: flex;
 }
