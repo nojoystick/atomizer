@@ -6,9 +6,17 @@
   border: 2px solid $text;
   width: 285px;
   min-width: 285px;
-  height: 450px;
+  height: 470px;
   margin: 15px;
   background-color: $background;
+}
+
+.subtitle{
+  display: block;
+  font-style: italic;
+  font-weight: 200;
+  font-size: 0.8em;
+  margin-left: 20px;
 }
 
 .sliderLabel{

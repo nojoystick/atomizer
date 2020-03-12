@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../stylesheets/SubPanel.scss'
+import '../stylesheets/SubPanel.scss';
 
 const Settings = () => {
   const [darkTheme, setDarkTheme] = useState(false);

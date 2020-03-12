@@ -1,0 +1,48 @@
+@import './colors';
+
+.sideMenuPanel{
+  z-index: 1;
+  position: absolute;
+  right: -3px;
+  height: 100%;
+  width: 0%;
+  border-left: 3px solid $text;
+  border-top: 3px solid $text;
+  margin: 0px;
+  transition: width 0.5s;
+  background-color: $background;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.editorHeader {
+  padding: 5px;
+  white-space: nowrap;
+}
+
+.networkButton {
+  font-family: inconsolata;
+  display: block;
+  border: none;
+  width: 90%;
+  height: 30px;
+  margin: 5px;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+  background-color: $background;
+  color: $text;
+  white-space: nowrap;
+}
+
+.selected {
+  color: $secondary;
+}
+
+.networkButton:hover {
+  color: $secondary;
+}

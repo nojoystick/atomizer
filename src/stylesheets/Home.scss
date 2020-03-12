@@ -6,14 +6,30 @@
 
 .menuButton {
   position: absolute;
-  bottom: 0px;
+  bottom: -3px;
   width: 100px;
   height: 30px;
   margin-left: 40px;
   border: solid $text;
   border-width: 2px 2px 0px 2px;
   outline: none;
-  transition: bottom 0.75s;
+  transition: bottom 0.5s;
+  background-color: $background;
+  color: $text;
+}
+
+.sideMenuButton {
+  z-index: 1;
+  position: absolute;
+  right: -3px;
+  bottom: 70%;
+  width: 30px;
+  height: 100px;
+  margin-left: 40px;
+  border: solid $text;
+  border-width: 2px 0px 2px 2px;
+  outline: none;
+  transition: 0.5s;
   background-color: $background;
   color: $text;
 }

@@ -4,7 +4,7 @@ import { HashRouter, Route, NavLink } from 'react-router-dom'
 import './stylesheets/App.scss';
 import Home from './pages/Home';
 import About from './pages/About';
-import IconSet from './constants/IconSet';
+import IconSet from './constants/icon-set';
 import Icon from './components/Icon';
 import Settings from './pages/Settings';
 

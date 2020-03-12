@@ -1,16 +1,16 @@
 @import './colors';
 
 p {
+  display: block;
   margin:0px;
   padding: 10px 20px 0px 0px;
   font-family: 'Roboto Condensed', sans-serif;
   font-weight: 100;
   font-size: 0.8em;
   height: inherit;
-  width: 600px;
-  max-width: 90%;
   transition: opacity 1s, height 0.5s;
   color: $text;
+  max-width: 500px;
 }
 
 h1, h2, h3, h4, a {
@@ -53,6 +53,11 @@ a:hover{
   color: $text;
   text-align: justify;
   background-color: $background;
+  max-width: 500px;
+}
+
+.floatLeft {
+  float: left;
 }
 
 .floatRight {

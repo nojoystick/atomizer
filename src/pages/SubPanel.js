@@ -9,7 +9,10 @@ const SubPanel = ({data}) => {
 
   return (
     <div className="subPanel">
-      <h1 className="titleHeader">{data.title}</h1>
+      <div className="titleHeader">
+        <h1 >{data.title}</h1>
+        <h4 className="subtitle">{data.subtitle}</h4>
+      </div>
       <div className="sliderParent">
         {data.sliderFields.map((slider, index) => {
           return (
