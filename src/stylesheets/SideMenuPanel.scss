@@ -3,16 +3,14 @@
 .sideMenuPanel{
   z-index: 1;
   position: absolute;
-  right: -3px;
+  right: -6px;
   height: 100%;
   width: 0%;
   border-left: 3px solid $text;
   border-top: 3px solid $text;
   margin: 0px;
-  transition: width 0.5s;
+  transition: width 0.5s, height 0.5s;
   background-color: $background;
-  overflow-y: scroll;
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -20,6 +18,11 @@
 .editorHeader {
   padding: 5px;
   white-space: nowrap;
+}
+
+.networkButtons {
+  height: 100%;
+  overflow: scroll;
 }
 
 .networkButton {
@@ -30,7 +33,7 @@
   height: 30px;
   margin: 5px;
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 500;
   text-align: left;
   cursor: pointer;
   outline: none;
@@ -40,7 +43,7 @@
 }
 
 .selected {
-  color: $secondary;
+  font-weight: 800;
 }
 
 .networkButton:hover {

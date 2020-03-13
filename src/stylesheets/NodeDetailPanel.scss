@@ -1,0 +1,80 @@
+@import './colors';
+
+.nodeDetailPanel{
+  z-index: 2;
+  position: absolute;
+  bottom: -10px;
+  height: 200px;
+  max-height: 45%;
+  width: 350px;
+  border: 3px solid $text;
+  margin: 0px;
+  transition: 0.5s;
+  background-color: $background;
+  overflow-y: scroll;
+}
+
+.nodeHeader {
+  padding: 5px;
+  display: block;
+}
+
+.bigNodeTitle {
+  padding: 5px;
+  display: block;
+  font-size: 1.5em;
+}
+
+.placeholder {
+  height: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s;
+  opacity: 0.0;
+}
+
+.placeholder.show {
+  opacity: 1.0;
+}
+
+.placeholderText {
+  font-style: italic;
+  font-size: 1.2em;
+  color: $secondary;
+  height: 0px;
+  justify-self: center;
+  align-self: center;
+}
+
+.nodeToolbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.0;
+  transition: 0.5s;
+  visibility: hidden;
+}
+
+.nodeToolbar.show {
+  opacity: 1.0;
+  visibility: visible;
+}
+
+.scrollButton {
+  flex-grow: 1;
+  height: 100px;
+  border: none;
+  background-color: $background;
+  outline: none;
+}
+
+.scrollButton:hover{
+  opacity: 0.4;
+}
+
+.scrollIcon {
+  width: 20px;
+  height: 10px;
+}

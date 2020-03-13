@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 
 /**
@@ -49,4 +50,59 @@ function useNetworkHotkeys(setCtrl) {
   });
 }
 
-export { useOutsideAlerter, useNetworkHotkeys }
+function useResizer(setWindowSize) {
+
+  const _onResize = (e) => {
+    setWindowSize({width: window.innerWidth, height: window.innerHeight})
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", _onResize);
+    return () => {
+      window.removeEventListener("resize", _onResize);
+    }
+  })
+}
+
+function useMenuHandler(visibleProps, setVisibleProps, screenSize, screenBreakpoint){
+  const {textVisible, menuVisible, sideMenuVisible, nodeDetailVisible} = visibleProps;
+  const {setTextVisible, setMenuVisible, setSideMenuVisible, setNodeDetailVisible} = setVisibleProps;
+
+  const closeOtherMenus = (_openMenu, setOpenMenu) => {
+    Object.keys(setVisibleProps).forEach(set => {
+      if(setVisibleProps[set] !== setOpenMenu) {
+        setVisibleProps[set](false);
+      }
+    })
+  }
+  // useEffects can't be iterated unfortunately
+  useEffect(() => {
+    if(screenSize.width < screenBreakpoint && textVisible)
+    {
+      closeOtherMenus(textVisible, setTextVisible)
+    }
+  }, [setTextVisible, textVisible])
+
+  useEffect(() => {
+    if(screenSize.width < screenBreakpoint && menuVisible)
+    {
+      closeOtherMenus(menuVisible, setMenuVisible)
+    }
+  }, [menuVisible, setMenuVisible])
+
+  useEffect(() => {
+    if(screenSize.width < screenBreakpoint && sideMenuVisible)
+    {
+      closeOtherMenus(sideMenuVisible, setSideMenuVisible)
+    }
+  }, [setSideMenuVisible, sideMenuVisible])
+
+  useEffect(() => {
+    if(screenSize.width < screenBreakpoint && nodeDetailVisible)
+    {
+      closeOtherMenus(nodeDetailVisible, setNodeDetailVisible)
+    }
+  }, [nodeDetailVisible, setNodeDetailVisible])
+}
+
+export { useOutsideAlerter, useNetworkHotkeys, useResizer, useMenuHandler }

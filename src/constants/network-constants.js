@@ -20,12 +20,6 @@ const networkStateConstants = {
     action: utils.editEdge,
     sticky: true
   },
-  DELETE: {
-    key: 'delete',
-    label: 'delete selected',
-    action: utils.deleteSelected,
-    sticky: false,
-  },
   MULTISELECT: {
     key: 'multiselect',
     label: 'select multiple',
@@ -38,11 +32,24 @@ const networkStateConstants = {
     action: utils.selectAll,
     sticky: false
   },
+  DELETE: {
+    key: 'delete',
+    label: 'delete selected',
+    action: utils.deleteSelected,
+    sticky: false,
+  },
   ORGANIZE: {
     key: 'organize',
     label: 'organize',
     action: utils.organize,
     sticky: false
+  },
+  FIT: {
+    key: 'fit',
+    label: 'fit',
+    action: utils.fit,
+    sticky:false,
+    close: true
   }
 }
 
@@ -67,6 +74,7 @@ const config = {
       smooth: false
     },
     physics: {
+      enabled: true,
       barnesHut: {
         avoidOverlap: 0.5,
         centralGravity: 0.1
@@ -99,8 +107,9 @@ const config = {
     layout: {
       hierarchical: false,
     },
-    width: (0.9 * window.innerWidth).toString(),
-    height: (0.8 * window.innerHeight).toString()
+    autoResize: false,
+    width: window.innerWidth.toString(),
+    height: window.innerHeight.toString(),
   },
   defaultData: {
     nodes: [elements[0]],

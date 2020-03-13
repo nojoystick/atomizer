@@ -1,5 +1,4 @@
 import elements from '../constants/elements';
-import { config } from '../constants/network-constants';
 
 export default class utils {
   /**
@@ -8,18 +7,15 @@ export default class utils {
 
   static addNode = (props) => {
     const { event, graphInfo, setGraphInfo, elementIndex, setElementIndex} = props;
+    console.log(graphInfo.nodes);
     const id = graphInfo.nodes.length;
-    var nodesCopy = graphInfo.nodes.slice(); // this will create a copy with the same items
-    nodesCopy.push({...elements[elementIndex], x: (elementIndex%2) ? 30: -30, y:(elementIndex%3) ? 30: -30});
-    var edgesCopy = graphInfo.edges.slice();
-    if(event.nodes && event.nodes[0]) {
-      edgesCopy.push({from: event.nodes[0], to: id})
+    const nodesCopy = graphInfo.nodes.slice();
+    nodesCopy.push({...elements[elementIndex]});
+    const edgesCopy = graphInfo.edges.slice();
+    if( event.nodes && event.nodes.length ) {
+      edgesCopy.push({from: event.nodes[0], to: id});
     }
-    const newGraphInfo = ({nodes: nodesCopy, edges: edgesCopy})
-    if(setGraphInfo){
-      setGraphInfo(newGraphInfo);
-    }
-    else return newGraphInfo;
+    setGraphInfo({nodes: nodesCopy, edges: edgesCopy});
     if(!event.nodes || !event.nodes.length) {
       this.addEdge(props);
     }
@@ -28,41 +24,61 @@ export default class utils {
     }
   }
 
+  // static addNode = (props) => {
+  //   const { options, network, elementIndex, setElementIndex} = props;
+  //   const opt = { 
+  //     ...options,
+  //     manipulation: {
+  //       ...options.manipulation,
+  //       addNode: function(nodeData, callback) {
+  //         nodeData = elements[elementIndex];
+  //         callback(nodeData);
+  //         network.addNodeMode();
+  //         setElementIndex(elementIndex+1);
+  //       }
+  //     }
+  //   };
+  //   network.setOptions(opt);
+  //   network.addNodeMode();
+  // }
+
   static addEdge = (props) => {
-    const { options, network, setNetwork } = props;
+    const { options, network } = props;
     const opt = { 
       ...options,
       manipulation: {
         ...options.manipulation,
         addEdge: function(nodeData, callback) {
-          callback(nodeData);
-          network.addEdgeMode();
+          if(nodeData.from !== nodeData.to){
+            callback(nodeData);
+            network.addEdgeMode();
+          }
         }
       }
     };
     network.setOptions(opt);
     network.addEdgeMode();
-    setNetwork(network)
-    //setOptions(opt);
   }
 
   static editEdge = (props) => {
-    const { network, setNetwork } = props;
+    const { options, network } = props;
+    network.setOptions(options);
     network.editEdgeMode();
-    if(setNetwork){
-      setNetwork(network)
-    }
   }
 
   static deleteSelected = (props) => {
-    const { graphInfo, setGraphInfo, network, setNetwork } = props;
-    const selected = network.getSelectedNodes();
+    const { graphInfo, setGraphInfo, selectedNodes, setSelectedNodes, network, setNetwork } = props;
+    const selected = selectedNodes ? selectedNodes: network.getSelectedNodes();
     if(selected.length > 5){
+      //display warning
+      // if warning confirmed, this.doDeletion();
     }
-    this.doDeletion(selected, graphInfo, setGraphInfo, network, setNetwork);
+    else {
+      this.doDeletion(selected, setSelectedNodes, graphInfo, setGraphInfo, network, setNetwork);
+    }
   }
 
-  static doDeletion = (selected, graphInfo, setGraphInfo, network, setNetwork) => {
+  static doDeletion = (selected, setSelectedNodes, graphInfo, setGraphInfo, network, setNetwork) => {
     network.deleteSelected();
 
     for(var i = graphInfo.nodes.length-1; i >=0; i--){
@@ -72,10 +88,11 @@ export default class utils {
     }
     setGraphInfo(graphInfo);
     setNetwork(network);
+    setSelectedNodes(null);
   }
 
   static multiSelect = (dragStart, props) => {
-    const {event, graphInfo, network, setNetwork} = props;
+    const {event, graphInfo, network} = props;
     const positionMap = {nodes: [], positions: {}};
     graphInfo.nodes.forEach(node => {
       positionMap.nodes.push(node.id);
@@ -83,58 +100,79 @@ export default class utils {
     positionMap.positions = network.getPositions(positionMap.nodes);
     const selectedNodes = [];
     positionMap.nodes.forEach(node => {
-      if(inBounds(positionMap.positions[node], dragStart.canvas, event.pointer.canvas)){
+      if(this.inBounds(positionMap.positions[node], dragStart.canvas, event.pointer.canvas)){
         selectedNodes.push(node);
       }
     })
-    dragStart.ctrl ? network.selectNodes(network.getSelectedNodes().concat(selectedNodes)) : network.selectNodes(selectedNodes); 
-    setNetwork(network);
+    const nodes = dragStart.ctrl ? network.getSelectedNodes().concat(selectedNodes) : selectedNodes; 
+    this.filterSelection(nodes, props);
   }
 
   static selectAll = (props) => {
-    const {graphInfo, network, setNetwork} = props;
+    const {graphInfo, network, setSelectedNodes} = props;
     const nodes = [];
     graphInfo.nodes.forEach(node => {
       nodes.push(node.id);
     });
 
-    if(nodes.sort().join(',')=== network.getSelectedNodes().sort().join(',')){
+    if(nodes.filter(id => id!==0).sort().join(',')=== network.getSelectedNodes().sort().join(',')){
+      network.unselectAll();
+      setSelectedNodes(null);
+    }
+    else {
+      this.filterSelection(nodes, props);
+    }
+  }
+
+  static filterSelection = (nodes, props) => {
+    const {network, setSelectedNodes} = props;
+    if(nodes === null){
+      console.log('no nodes, set empty');
+      setSelectedNodes(null);
       network.unselectAll();
     }
     else {
-      network.selectNodes(nodes);
-    }
-    if(setNetwork){
-      setNetwork(network);
+      const filteredNodes = nodes.filter(id => id!==0);
+      setSelectedNodes(filteredNodes);
+      network.setSelection({nodes: filteredNodes});
     }
   }
 
   static organize = (props) => {
-    const {options, setOptions} = props;
-    let opt = options.layout.hierarchical ? config.options : {...options, layout: { hierarchical: true }};
-    if(opt.edges && (opt.edges.smooth || opt.edges.forceDirection)){
-      console.log('options corrupted! this bug never dies!');
-      opt = config.options;
-    } 
-    setOptions(opt);
+    const {network, options} = props;
+    const opt = options.layout.hierarchical ?  {...options, layout: { hierarchical: false }} : {...options, layout: { hierarchical: true }};
+    network.setOptions(opt);
+  }
+
+  static fit = (props) => {
+    return null;
+  }
+  static setMove = (x, y, scale) => {
+    return {
+      scale: scale,
+      offset: {x: -x, y: -y},
+      animation: {
+        duration: 500,
+        easingFunction: 'linear'
+      }
+    }
+  }
+
+  /**
+   * determine if a given position is between the bounds of a start and end point.
+   * 
+   * @param {} position 
+   * @param {*} start 
+   * @param {*} end 
+   */
+  static  inBounds = (position, start, end) => {
+    return position && start && end && inBoundsOneAxis(position.x, start.x, end.x) && inBoundsOneAxis(position.y, start.y, end.y);
   }
 }
 
 /****************************
  * private helpers
  ***************************/
-
-/**
- * determine if a given position is between the bounds of a start and end point.
- * 
- * @param {} position 
- * @param {*} start 
- * @param {*} end 
- */
-
-const inBounds = (position, start, end) => {
-  return position && start && end && inBoundsOneAxis(position.x, start.x, end.x) && inBoundsOneAxis(position.y, start.y, end.y);
-}
 
 const inBoundsOneAxis = (position, start, end) => {
   return ((position < start && position > end) || (position > start && position < end));

@@ -2,7 +2,7 @@ import React, {useEffect, useState, useRef} from 'react';
 import SubPanel from './SubPanel'
 import SubPanelData from '../config/sub-panel-data';
 import '../stylesheets/MenuPanel.scss';
-import Icon from '../components/Icon'
+import Icon from './Icon'
 import IconSet from '../constants/icon-set'
 import { BOTTOM_MENU_SIZE } from '../config/panel-size-constants'
 
@@ -47,7 +47,7 @@ const MenuPanel = ({show}) => {
         />
       </button>
       {!showSideMenu && <div className='iconContainer'>
-        <h1 className="ellipsisIcon">...</h1>
+        <h3 className="ellipsisIcon">...</h3>
       </div>}
     </div>
       {SubPanelData.map((subPanel, index) => {

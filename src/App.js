@@ -9,41 +9,37 @@ import Icon from './components/Icon';
 import Settings from './pages/Settings';
 
 const App = () => {
-
   const targetElement = document.querySelector('#root');
   disableBodyScroll(targetElement);
-  targetElement.style = {
-      filter: 'invert(100%)'
-    };
 
   const Header = () => {
     return (
       <>
-        <header className='titleHeader'>
-          <div className='floatRight' >
-            <NavLink to="/about">about</NavLink>
-            <NavLink to="/settings" 
-            >
-              <Icon className='settingsIcon'
-                    path={IconSet.settings} 
-                    viewBox="0 0 50 50"
-              />
-            </NavLink>
+          <header className='titleHeader'>
+            <div className='floatRight' >
+              <NavLink to="/about">about</NavLink>
+              <NavLink to="/settings" 
+              >
+                <Icon className='settingsIcon'
+                      path={IconSet.settings} 
+                      viewBox="0 0 50 50"
+                />
+              </NavLink>
+            </div>
+            <h1><NavLink exact to="/">atomizer</NavLink></h1>
+          </header>
+          <div className="body">
+            <Route path="/" exact component={Home} />
+            <Route path="/about" component={About} />
+            <Route path="/settings" component={Settings} />
           </div>
-          <h1><NavLink exact to="/">atomizer</NavLink></h1>
-        </header>
-        <div className="body">
-          <Route path="/" exact component={Home} />
-          <Route path="/about" component={About} />
-          <Route path="/settings" component={Settings} />
-        </div>
       </>
     )
   }
 
   return(
     <HashRouter>
-      <Header />
+      <Header/>
     </HashRouter>
   )
 }

@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../stylesheets/SubPanel.scss';
 
 const Settings = () => {
   const [darkTheme, setDarkTheme] = useState(false);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    setShow(true);
+  }, [])
 
   const onChange = () => {
     if(!darkTheme) {
@@ -15,6 +20,7 @@ const Settings = () => {
   }
 
   return (
+    <div className={show ? 'page show' : 'page hide'}>
       <div className='textContainer center'>
         <label className="sliderLabel">theme</label>
           <label className="switch">
@@ -22,6 +28,7 @@ const Settings = () => {
             <span className="toggleSlider"></span>
           </label>
         </div>
+      </div>
   )
 }
 

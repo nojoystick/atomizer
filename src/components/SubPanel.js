@@ -10,7 +10,7 @@ const SubPanel = ({data}) => {
   return (
     <div className="subPanel">
       <div className="titleHeader">
-        <h1 >{data.title}</h1>
+        <h3 >{data.title}</h3>
         <h4 className="subtitle">{data.subtitle}</h4>
       </div>
       <div className="sliderParent">
