@@ -11,7 +11,7 @@ const defaultMap = {
   [networkStateConstants.ORGANIZE.key]: defaultClassName
 }
 
-const SideMenuPanel = ({show, setShow, networkProps}) => {
+const SideMenuPanel = ({ show, setShow, networkProps }) => {
   const { menuVisible, sideMenuVisible } = show;
   const { setNetworkState } = networkProps;
   
@@ -66,7 +66,6 @@ const SideMenuPanel = ({show, setShow, networkProps}) => {
         })}
       </div>
     </div>
-    
   )
 }
 

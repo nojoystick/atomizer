@@ -77,9 +77,12 @@ const config = {
       enabled: true,
       barnesHut: {
         avoidOverlap: 0.5,
-        centralGravity: 0.1
+        centralGravity: 0.15,
       },
-      stabilization: false,
+      minVelocity: -1,
+      stabilization: {
+        enabled: true,
+      }
     },
     nodes: {
       shape: 'circle',

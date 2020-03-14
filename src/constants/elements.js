@@ -1,7 +1,7 @@
 import ColorVariables from '../stylesheets/Colors.scss';
 
 const elements = [
-  { id: 0, label: `<b>root</b>`, title: "root node", color: ColorVariables.root, widthConstraint: 150, fixed: true },
+  { id: 0, label: `<b>root</b>`, title: "root node", color: ColorVariables.root, widthConstraint: 150},
   { id: 1, label: `<b>H</b>`, title: "Hydrogen", color: ColorVariables.nonMetal, weight: 1.008},
   { id: 2, label: `<b>He</b>`, title: "Helium", color: ColorVariables.nobleGas, weight: 4.0026},
   { id: 3, label: `<b>Li</b>`, title: "Lithium", color: ColorVariables.alkaliMetal, weight: 6.94},

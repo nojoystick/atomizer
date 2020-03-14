@@ -3,10 +3,12 @@ import Network from '../components/Network';
 import MenuPanel from '../components/MenuPanel';
 import SideMenuPanel from '../components/SideMenuPanel';
 import NodeDetailPanel from '../components/NodeDetailPanel';
+import Modal from '../components/Modal';
 import Icon from '../components/Icon'
 import IconSet from '../constants/icon-set'
 import '../stylesheets/Home.scss'
 import { BOTTOM_MENU_SIZE, SIDE_MENU_SIZE } from '../config/panel-size-constants'
+import { modalContent } from '../config/modal-content';
 import ColorVariables from '../stylesheets/Colors.scss'
 import { useResizer, useMenuHandler } from '../utils/hooks'
 
@@ -20,6 +22,7 @@ const Home = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [sideMenuVisible, setSideMenuVisible] = useState(false);
   const [nodeDetailVisible, setNodeDetailVisible] = useState(false);
+  const [modalInfo, setModalInfo] = useState(false);
   const [networkState, setNetworkState] = useState(null);
   const [screenSize, setScreenSize] = useState({width: window.innerWidth, height: window.innerHeight});
   const [selectedNodes, setSelectedNodes] = useState(null);
@@ -39,6 +42,7 @@ const Home = () => {
 
   return (
     <div className={show ? 'page show': 'page hide'}>
+      <Modal modalInfo={modalInfo} header={modalContent.header} message={modalContent.message} setShow={setModalInfo}/>
       <div className="textFlexContainer floatLeft" 
           style={{height: `${textVisible ? '100%': '30px'}`}}
           onClick={() => {setTextVisible(!textVisible)}}
@@ -49,7 +53,7 @@ const Home = () => {
         {getExpandIcon('textHideShowIcon', [0, 180], textVisible, setTextVisible)}
       </div>
 
-      <Network visibleProps={visibleProps} networkProps={networkProps}/>
+      <Network visibleProps={visibleProps} networkProps={networkProps} setModalInfo={setModalInfo}/>
       <SideMenuPanel show={visibleProps} setShow={setVisibleProps} networkProps={networkProps}/>
       <MenuPanel show={menuVisible}/>
       <NodeDetailPanel show={visibleProps} breakpoint={screenBreakpoint} networkProps={networkProps}/>

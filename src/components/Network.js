@@ -7,7 +7,7 @@ import { BOTTOM_MENU_SIZE } from '../config/panel-size-constants'
 import utils from '../utils/network-utils';
 import { useNetworkHotkeys } from '../utils/hooks';
 
-const Network= ({visibleProps, networkProps}) => {
+const Network= ({visibleProps, networkProps, setModalInfo}) => {
   const { menuVisible, sideMenuVisible, nodeEditorVisible} = visibleProps;
   const { networkState, setNetworkState, selectedNodes, setSelectedNodes, network, setNetwork} = networkProps;
 
@@ -30,7 +30,8 @@ const Network= ({visibleProps, networkProps}) => {
     network: network,
     setNetwork: setNetwork,
     selectedNodes: selectedNodes,
-    setSelectedNodes: setSelectedNodes
+    setSelectedNodes: setSelectedNodes,
+    setModalInfo: setModalInfo
   }
 
   useNetworkHotkeys(setCtrl);
@@ -66,18 +67,26 @@ const Network= ({visibleProps, networkProps}) => {
 
     if(networkState === networkStateConstants.MULTISELECT.key){
       const opt = ({...options, interaction: {...options.interaction, dragView: false}});
-      setOptions(opt);
+      network.setOptions(opt);
     }
 
     if(prevState === networkStateConstants.MULTISELECT.key && networkState !== prevState){
       const opt = {...options, interaction: {...options.interaction, dragView: true}};
       setCursorPosition(null);
       setDragStart(null);
-      setOptions(opt);
+      network.setOptions(opt);
     }
     if(prevState === networkStateConstants.ADD_EDGES.key && networkState !== prevState){
       const opt = {...options, manipulation: {}};
-      setOptions(opt);
+      network.setOptions(opt);
+    }
+    if(prevState === networkStateConstants.EDIT_EDGES && networkState !== prevState){
+      const opt = {...options, manipulation: {}};
+      network.setOptionts(opt);
+    }
+    if(prevState === networkStateConstants.ORGANIZE && networkState !== prevState){
+      utils.organize(networkUtilProps);
+      network.redraw();
     }
     setPrevState(networkState);
   }, [networkState])
@@ -85,7 +94,8 @@ const Network= ({visibleProps, networkProps}) => {
   const events = {
     doubleClick: function(event) {
         if(!event.nodes.length){
-          if(utils.inBounds(event.pointer.canvas, {x: -60, y: 90}, {x: 90, y: -60})){
+          const rootPosition = network.getPositions([0])[0];
+          if(utils.inBounds(event.pointer.canvas, {x: rootPosition.x-60, y: rootPosition.y+90}, {x: rootPosition.x+90, y: rootPosition.y-60})){
             event.nodes.push(0);
           }
         }

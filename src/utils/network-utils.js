@@ -7,18 +7,16 @@ export default class utils {
 
   static addNode = (props) => {
     const { event, graphInfo, setGraphInfo, elementIndex, setElementIndex} = props;
-    console.log(graphInfo.nodes);
-    const id = graphInfo.nodes.length;
+    const id = elementIndex;
     const nodesCopy = graphInfo.nodes.slice();
-    nodesCopy.push({...elements[elementIndex]});
+    const x = event.pointer ? event.pointer.canvas.x : (elementIndex%2) ? 30: -30;
+    const y = event.pointer ? event.pointer.canvas.y : (elementIndex%3) ? 30: -30;
+    nodesCopy.push({...elements[elementIndex], x: x, y: y});
     const edgesCopy = graphInfo.edges.slice();
     if( event.nodes && event.nodes.length ) {
       edgesCopy.push({from: event.nodes[0], to: id});
     }
     setGraphInfo({nodes: nodesCopy, edges: edgesCopy});
-    if(!event.nodes || !event.nodes.length) {
-      this.addEdge(props);
-    }
     if(setElementIndex){
       setElementIndex(elementIndex+1);
     }
@@ -61,26 +59,30 @@ export default class utils {
   }
 
   static editEdge = (props) => {
-    const { options, network } = props;
-    network.setOptions(options);
+    const { network } = props;
     network.editEdgeMode();
   }
 
   static deleteSelected = (props) => {
-    const { graphInfo, setGraphInfo, selectedNodes, setSelectedNodes, network, setNetwork } = props;
+    const {selectedNodes, network, setModalInfo} = props;
     const selected = selectedNodes ? selectedNodes: network.getSelectedNodes();
+    props.selected = selected;
     if(selected.length > 5){
-      //display warning
-      // if warning confirmed, this.doDeletion();
+      setModalInfo({
+        show: true,
+        numItems: selected.length, 
+        props: props,
+        func: this.doDeletion
+      });
     }
     else {
-      this.doDeletion(selected, setSelectedNodes, graphInfo, setGraphInfo, network, setNetwork);
+      this.doDeletion(props);
     }
   }
 
-  static doDeletion = (selected, setSelectedNodes, graphInfo, setGraphInfo, network, setNetwork) => {
+  static doDeletion = (props) => {
+    const {selected, setSelectedNodes, graphInfo, setGraphInfo, network, setNetwork} = props;
     network.deleteSelected();
-
     for(var i = graphInfo.nodes.length-1; i >=0; i--){
       if(selected.includes(graphInfo.nodes[i].id)){
         graphInfo.nodes.splice(i, 1);
@@ -127,7 +129,6 @@ export default class utils {
   static filterSelection = (nodes, props) => {
     const {network, setSelectedNodes} = props;
     if(nodes === null){
-      console.log('no nodes, set empty');
       setSelectedNodes(null);
       network.unselectAll();
     }
