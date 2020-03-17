@@ -11,7 +11,7 @@ import IconSet from '../constants/icon-set';
 import '../stylesheets/Home.scss';
 import { BOTTOM_MENU_SIZE, SIDE_MENU_SIZE } from '../config/panel-size-constants';
 import ColorVariables from '../stylesheets/Colors.scss';
-import { useResizer, useMenuHandler, useHotkeys } from '../utils/hooks';
+import { useResizer, useHotkeys } from '../utils/hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import { viewActions } from '../redux/actions';
 
@@ -26,13 +26,12 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(viewActions.toggleTextVisible());
+    dispatch(viewActions.setTextVisible(true, screenSize));
     setShow(true);
-  }, [dispatch]);
+  }, [dispatch, screenSize]);
 
   useHotkeys();
   useResizer(setScreenSize);
-  useMenuHandler(screenSize, screenBreakpoint);
 
   return (
     <div className={show ? 'page show' : 'page hide'}>
@@ -41,7 +40,7 @@ const Home = () => {
         className='textFlexContainer floatLeft'
         style={{ height: `${textVisible ? '100%' : '30px'}` }}
         onClick={() => {
-          dispatch(viewActions.toggleTextVisible());
+          dispatch(viewActions.setTextVisible(!textVisible, screenSize));
         }}
       >
         <p className='disappearingText' style={getTextStyle(textVisible, screenSize)}>
@@ -59,21 +58,21 @@ const Home = () => {
       <button
         className='sideMenuButton'
         style={{ right: `${sideMenuVisible ? SIDE_MENU_SIZE - 4 + 'px' : '-6px'}` }}
-        onClick={() => dispatch(viewActions.toggleSideMenuVisible())}
+        onClick={() => dispatch(viewActions.setSideMenuVisible(!sideMenuVisible, screenSize))}
       >
         {getExpandIcon('expandIcon', [90, 270], sideMenuVisible)}
       </button>
       <button
         className='menuButton'
         style={{ bottom: `${menuVisible ? BOTTOM_MENU_SIZE - 10 + 'px' : '-10px'}` }}
-        onClick={() => dispatch(viewActions.toggleMenuVisible())}
+        onClick={() => dispatch(viewActions.setMenuVisible(!menuVisible, screenSize))}
       >
         {getExpandIcon('expandIcon', [180, 0], menuVisible)}
       </button>
       <button
         className='menuButton'
         style={getDetailStyle(menuVisible, sideMenuVisible)}
-        onClick={() => dispatch(viewActions.toggleNodeDetailVisible())}
+        onClick={() => dispatch(viewActions.setNodeDetailVisible(!nodeDetailVisible, screenSize))}
       >
         {getExpandIcon('expandIcon', [180, 0], nodeDetailVisible)}
       </button>

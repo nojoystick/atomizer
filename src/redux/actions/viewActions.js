@@ -1,22 +1,30 @@
 export const viewActions = {
-  toggleTextVisible: () => {
+  setTextVisible: (param, screenSize) => {
     return {
-      type: 'TOGGLE_TEXT_VISIBLE'
+      type: 'SET_TEXT_VISIBLE',
+      payload: param,
+      screenSize: screenSize
     };
   },
-  toggleMenuVisible: () => {
+  setMenuVisible: (param, screenSize) => {
     return {
-      type: 'TOGGLE_MENU_VISIBLE'
+      type: 'SET_MENU_VISIBLE',
+      payload: param,
+      screenSize: screenSize
     };
   },
-  toggleSideMenuVisible: () => {
+  setSideMenuVisible: (param, screenSize) => {
     return {
-      type: 'TOGGLE_SIDE_MENU_VISIBLE'
+      type: 'SET_SIDE_MENU_VISIBLE',
+      payload: param,
+      screenSize: screenSize
     };
   },
-  toggleNodeDetailVisible: () => {
+  setNodeDetailVisible: (param, screenSize) => {
     return {
-      type: 'TOGGLE_NODE_DETAIL_VISIBLE'
+      type: 'SET_NODE_DETAIL_VISIBLE',
+      payload: param,
+      screenSize: screenSize
     };
   },
   closeAll: () => {

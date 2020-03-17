@@ -3,30 +3,37 @@ const defaultState = {
   menuVisible: false,
   sideMenuVisible: false,
   nodeDetailVisible: false,
-  modalVisible: false
+  modalVisible: false,
+  screenBreakpoint: 800
 };
 
 const viewReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case 'TOGGLE_TEXT_VISIBLE':
-      return (state = { ...state, textVisible: !state.textVisible });
-    case 'TOGGLE_MENU_VISIBLE':
-      return (state = { ...state, menuVisible: !state.menuVisible });
-    case 'TOGGLE_SIDE_MENU_VISIBLE':
-      return (state = { ...state, sideMenuVisible: !state.sideMenuVisible });
-    case 'TOGGLE_NODE_DETAIL_VISIBLE':
-      return (state = { ...state, nodeDetailVisible: !state.nodeDetailVisible });
+    case 'SET_TEXT_VISIBLE':
+      closeOthers(state, action, 'textVisible');
+      return (state = { ...state, textVisible: action.payload });
+    case 'SET_MENU_VISIBLE':
+      closeOthers(state, action, 'menuVisible');
+      return (state = { ...state, menuVisible: action.payload });
+    case 'SET_SIDE_MENU_VISIBLE':
+      closeOthers(state, action, 'sideMenuVisible');
+      return (state = { ...state, sideMenuVisible: action.payload });
+    case 'SET_NODE_DETAIL_VISIBLE':
+      closeOthers(state, action, 'nodeDetailVisible');
+      return (state = { ...state, nodeDetailVisible: action.payload });
     case 'CLOSE_ALL':
       return (state = defaultState);
-    case 'CLOSE_ALL_OTHERS':
-      Object.keys(state).forEach(set => {
-        if (set !== action.payload) {
-          state[set](false);
-        }
-      });
-      return state;
     default:
       return state;
+  }
+};
+const closeOthers = (state, action, keepOpen) => {
+  if (action.screenSize.width < state.screenBreakpoint && action.payload) {
+    Object.keys(state).forEach(key => {
+      if (key !== keepOpen && key !== 'screenBreakpoint') {
+        state[key] = false;
+      }
+    });
   }
 };
 

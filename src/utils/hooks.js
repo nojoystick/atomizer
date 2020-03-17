@@ -64,36 +64,6 @@ function useResizer(setWindowSize) {
   });
 }
 
-function useMenuHandler(screenSize, screenBreakpoint) {
-  const { textVisible, menuVisible, sideMenuVisible, nodeDetailVisible } = useSelector(state => state.view);
-  const dispatch = useDispatch();
-
-  // useEffects can't be iterated unfortunately
-  useEffect(() => {
-    if (screenSize.width < screenBreakpoint && textVisible) {
-      dispatch(viewActions.closeAllOthers(textVisible));
-    }
-  }, [textVisible]);
-
-  useEffect(() => {
-    if (screenSize.width < screenBreakpoint && menuVisible) {
-      dispatch(viewActions.closeAllOthers(menuVisible));
-    }
-  }, [menuVisible]);
-
-  useEffect(() => {
-    if (screenSize.width < screenBreakpoint && sideMenuVisible) {
-      dispatch(viewActions.closeAllOthers(sideMenuVisible));
-    }
-  }, [sideMenuVisible]);
-
-  useEffect(() => {
-    if (screenSize.width < screenBreakpoint && nodeDetailVisible) {
-      dispatch(viewActions.closeAllOthers(nodeDetailVisible));
-    }
-  }, [nodeDetailVisible]);
-}
-
 function useHotkeys() {
   const _onKeyDown = event => {
     switch (event.key) {
@@ -114,4 +84,4 @@ function useHotkeys() {
   });
 }
 
-export { useOutsideAlerter, useNetworkHotkeys, useResizer, useMenuHandler, useHotkeys };
+export { useOutsideAlerter, useNetworkHotkeys, useResizer, useHotkeys };
