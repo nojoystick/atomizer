@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ff3646096b41bef6e6b842a31df5c38c",
+    "revision": "386e93d424f12bad0ced99a990b42c28",
     "url": "/atomizer/index.html"
   },
   {
-    "revision": "222a0d38f5f6ee718495",
-    "url": "/atomizer/static/css/main.e800e23f.chunk.css"
+    "revision": "822e9ce1caa0cf890cf0",
+    "url": "/atomizer/static/css/main.68627ae0.chunk.css"
   },
   {
     "revision": "d9488a5e69e7b43df595",
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/atomizer/static/js/2.34a789ed.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "222a0d38f5f6ee718495",
-    "url": "/atomizer/static/js/main.b79ba4c2.chunk.js"
+    "revision": "822e9ce1caa0cf890cf0",
+    "url": "/atomizer/static/js/main.39f14bcd.chunk.js"
   },
   {
     "revision": "e0d92a4bfdcf6938d3bd",
