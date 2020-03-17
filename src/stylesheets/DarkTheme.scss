@@ -1,16 +1,20 @@
-:root { 
+:root {
   filter: invert(100%);
   transition: 0.5s;
 }
 
-* { 
+* {
   background-color: inherit;
 }
 
-img:not([src*=".svg"]), video, input, .slider::-webkit-slider-runnable-track {  
+img:not([src*='.svg']),
+video,
+input,
+.slider::-webkit-slider-runnable-track {
   filter: invert(100%);
 }
 
-.slider::-webkit-slider-thumb, .toggleSlider:before {
+.slider::-webkit-slider-thumb,
+.toggleSlider:before {
   filter: invert(80%);
 }

@@ -1,5 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from "react";
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { viewActions } from '../redux/actions';
 
 /**
  * Hook that alerts clicks outside of the passed ref
@@ -16,93 +18,100 @@ function useOutsideAlerter(ref, handler) {
 
   useEffect(() => {
     // Bind the event listener
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
       // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   });
 }
 
 function useNetworkHotkeys(setCtrl) {
-
-  const _onKeyDown = (e) => {
-    if(e.ctrlKey || e.key==="Meta"){
+  const _onKeyDown = e => {
+    if (e.ctrlKey || e.key === 'Meta') {
       setCtrl(true);
     }
-  }
+  };
 
-  const _onKeyUp = (e) => {
-    if(e.ctrlKey || e.key==="Meta"){
+  const _onKeyUp = e => {
+    if (e.ctrlKey || e.key === 'Meta') {
       setCtrl(false);
     }
-  }
+  };
 
   useEffect(() => {
     // Bind the event listener
-    document.addEventListener("keydown", _onKeyDown);
-    document.addEventListener("keyup", _onKeyUp);
+    document.addEventListener('keydown', _onKeyDown);
+    document.addEventListener('keyup', _onKeyUp);
     return () => {
       // Unbind the event listener on clean up
-      document.removeEventListener("keydown", _onKeyDown);
-      document.removeEventListener("keyup", _onKeyUp);
+      document.removeEventListener('keydown', _onKeyDown);
+      document.removeEventListener('keyup', _onKeyUp);
     };
   });
 }
 
 function useResizer(setWindowSize) {
-
-  const _onResize = (e) => {
-    setWindowSize({width: window.innerWidth, height: window.innerHeight})
-  }
+  const _onResize = e => {
+    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+  };
 
   useEffect(() => {
-    window.addEventListener("resize", _onResize);
+    window.addEventListener('resize', _onResize);
     return () => {
-      window.removeEventListener("resize", _onResize);
-    }
-  })
+      window.removeEventListener('resize', _onResize);
+    };
+  });
 }
 
-function useMenuHandler(visibleProps, setVisibleProps, screenSize, screenBreakpoint){
-  const {textVisible, menuVisible, sideMenuVisible, nodeDetailVisible} = visibleProps;
-  const {setTextVisible, setMenuVisible, setSideMenuVisible, setNodeDetailVisible} = setVisibleProps;
+function useMenuHandler(screenSize, screenBreakpoint) {
+  const { textVisible, menuVisible, sideMenuVisible, nodeDetailVisible } = useSelector(state => state.view);
+  const dispatch = useDispatch();
 
-  const closeOtherMenus = (_openMenu, setOpenMenu) => {
-    Object.keys(setVisibleProps).forEach(set => {
-      if(setVisibleProps[set] !== setOpenMenu) {
-        setVisibleProps[set](false);
-      }
-    })
-  }
   // useEffects can't be iterated unfortunately
   useEffect(() => {
-    if(screenSize.width < screenBreakpoint && textVisible)
-    {
-      closeOtherMenus(textVisible, setTextVisible)
+    if (screenSize.width < screenBreakpoint && textVisible) {
+      dispatch(viewActions.closeAllOthers(textVisible));
     }
-  }, [setTextVisible, textVisible])
+  }, [textVisible]);
 
   useEffect(() => {
-    if(screenSize.width < screenBreakpoint && menuVisible)
-    {
-      closeOtherMenus(menuVisible, setMenuVisible)
+    if (screenSize.width < screenBreakpoint && menuVisible) {
+      dispatch(viewActions.closeAllOthers(menuVisible));
     }
-  }, [menuVisible, setMenuVisible])
+  }, [menuVisible]);
 
   useEffect(() => {
-    if(screenSize.width < screenBreakpoint && sideMenuVisible)
-    {
-      closeOtherMenus(sideMenuVisible, setSideMenuVisible)
+    if (screenSize.width < screenBreakpoint && sideMenuVisible) {
+      dispatch(viewActions.closeAllOthers(sideMenuVisible));
     }
-  }, [setSideMenuVisible, sideMenuVisible])
+  }, [sideMenuVisible]);
 
   useEffect(() => {
-    if(screenSize.width < screenBreakpoint && nodeDetailVisible)
-    {
-      closeOtherMenus(nodeDetailVisible, setNodeDetailVisible)
+    if (screenSize.width < screenBreakpoint && nodeDetailVisible) {
+      dispatch(viewActions.closeAllOthers(nodeDetailVisible));
     }
-  }, [nodeDetailVisible, setNodeDetailVisible])
+  }, [nodeDetailVisible]);
 }
 
-export { useOutsideAlerter, useNetworkHotkeys, useResizer, useMenuHandler }
+function useHotkeys() {
+  const _onKeyDown = event => {
+    switch (event.key) {
+      case 'a':
+        break;
+      case 's':
+        break;
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', _onKeyDown);
+    return () => {
+      window.removeEventListener('keydown', _onKeyDown);
+    };
+  });
+}
+
+export { useOutsideAlerter, useNetworkHotkeys, useResizer, useMenuHandler, useHotkeys };

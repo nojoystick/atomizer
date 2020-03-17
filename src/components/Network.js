@@ -1,169 +1,146 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import Graph from "react-graph-vis";
-import '../stylesheets/Network.scss'
-import { config, networkStateConstants } from '../constants/network-constants'
-import { BOTTOM_MENU_SIZE } from '../config/panel-size-constants'
-import utils from '../utils/network-utils';
+import Graph from './Graph';
+import '../stylesheets/Network.scss';
+import { BOTTOM_MENU_SIZE } from '../config/panel-size-constants';
 import { useNetworkHotkeys } from '../utils/hooks';
+import { useSelector, useDispatch } from 'react-redux';
+import { networkActions } from '../redux/actions';
 
-const Network= ({visibleProps, networkProps, setModalInfo}) => {
-  const { menuVisible, sideMenuVisible, nodeEditorVisible} = visibleProps;
-  const { networkState, setNetworkState, selectedNodes, setSelectedNodes, network, setNetwork} = networkProps;
+const Network = () => {
+  const { menuVisible, sideMenuVisible, nodeDetailVisible } = useSelector(state => state.view);
+  const { network, options, graphInfo, multiSelectState } = useSelector(state => state.network);
 
-  const [graphInfo, setGraphInfo] = useState(config.defaultData);
-  const [options, setOptions] = useState(config.options);
-  const [elementIndex, setElementIndex] = useState(1);
-  const [dragStart, setDragStart] = useState({window: {x: 0, y: 0}});
+  const [dragStart, setDragStart] = useState({ window: { x: 0, y: 0 } });
   const [cursorPosition, setCursorPosition] = useState(null);
-  const [prevState, setPrevState] = useState(networkState);
   const [ctrl, setCtrl] = useState(false);
 
-  const networkUtilProps = {
-    event: {},
-    graphInfo: graphInfo,
-    setGraphInfo: setGraphInfo,
-    options: options,
-    setOptions: setOptions,
-    elementIndex: elementIndex,
-    setElementIndex: setElementIndex,
-    network: network,
-    setNetwork: setNetwork,
-    selectedNodes: selectedNodes,
-    setSelectedNodes: setSelectedNodes,
-    setModalInfo: setModalInfo
-  }
+  const dispatch = useDispatch();
 
   useNetworkHotkeys(setCtrl);
 
   useEffect(() => {
-    if(network){
+    if (network) {
       const node = Object.keys(network.body.nodes)[0];
-      if(!menuVisible && !sideMenuVisible){
-        network.fit(utils.setMove());
+      if (!menuVisible && !sideMenuVisible) {
+        network.fit(setMove());
+      } else if (menuVisible) {
+        network.focus(
+          node,
+          setMove(
+            sideMenuVisible || nodeDetailVisible ? 0.3 * window.innerWidth : 0,
+            window.innerHeight > 600 ? BOTTOM_MENU_SIZE - 300 : 0,
+            0.3
+          )
+        );
+      } else if (sideMenuVisible && !menuVisible) {
+        network.focus(node, setMove(0.3 * window.innerWidth, 0, 0.6));
       }
-      else if(menuVisible){
-        network.focus(node, utils.setMove((sideMenuVisible || nodeEditorVisible) ? 0.3*window.innerWidth : 0, window.innerHeight > 600 ? BOTTOM_MENU_SIZE-300 : 0, 0.3));
-      }
-      else if(sideMenuVisible && !menuVisible){
-        network.focus(node, utils.setMove(0.3*window.innerWidth, 0, 0.6));
-      }
     }
-  }, [menuVisible, sideMenuVisible])
-
-  useEffect(() => {
-    networkUtilProps.event = [];
-    Object.keys(networkStateConstants).forEach(key => {
-      if(networkState === networkStateConstants[key].key){
-        networkUtilProps.event = [];
-        if(networkStateConstants[key].action){
-          networkStateConstants[key].action(networkUtilProps);
-        }
-        if(!networkStateConstants[key].sticky){
-          setNetworkState(null);
-        }
-      }
-    })
-
-    if(networkState === networkStateConstants.MULTISELECT.key){
-      const opt = ({...options, interaction: {...options.interaction, dragView: false}});
-      network.setOptions(opt);
-    }
-
-    if(prevState === networkStateConstants.MULTISELECT.key && networkState !== prevState){
-      const opt = {...options, interaction: {...options.interaction, dragView: true}};
-      setCursorPosition(null);
-      setDragStart(null);
-      network.setOptions(opt);
-    }
-    if(prevState === networkStateConstants.ADD_EDGES.key && networkState !== prevState){
-      const opt = {...options, manipulation: {}};
-      network.setOptions(opt);
-    }
-    if(prevState === networkStateConstants.EDIT_EDGES && networkState !== prevState){
-      const opt = {...options, manipulation: {}};
-      network.setOptionts(opt);
-    }
-    if(prevState === networkStateConstants.ORGANIZE && networkState !== prevState){
-      utils.organize(networkUtilProps);
-      network.redraw();
-    }
-    setPrevState(networkState);
-  }, [networkState])
+  }, [menuVisible, sideMenuVisible]);
 
   const events = {
     doubleClick: function(event) {
-        if(!event.nodes.length){
-          const rootPosition = network.getPositions([0])[0];
-          if(utils.inBounds(event.pointer.canvas, {x: rootPosition.x-60, y: rootPosition.y+90}, {x: rootPosition.x+90, y: rootPosition.y-60})){
-            event.nodes.push(0);
-          }
+      if (!event.nodes.length) {
+        const rootPosition = network.getPositions([0])[0];
+        if (
+          inBounds(
+            event.pointer.canvas,
+            { x: rootPosition.x - 60, y: rootPosition.y + 90 },
+            { x: rootPosition.x + 90, y: rootPosition.y - 60 }
+          )
+        ) {
+          event.nodes.push(0);
         }
-        const props = setNetworkUtilProps(event, networkUtilProps);
-        utils.addNode(props);
+      }
+      dispatch(networkActions.addNodeFromClick(event));
     },
     dragStart: function(event) {
-      if(!event.nodes.length && networkState === networkStateConstants.MULTISELECT.key){
-        document.addEventListener("mousemove", _onMouseMove);
-        setDragStart({canvas: event.pointer.canvas, window: {x: event.event.srcEvent.x, y: event.event.srcEvent.y}, ctrl: ctrl});
-      }  
+      if (!event.nodes.length && multiSelectState) {
+        document.addEventListener('mousemove', _onMouseMove);
+        setDragStart({
+          canvas: event.pointer.canvas,
+          window: { x: event.event.srcEvent.x, y: event.event.srcEvent.y },
+          ctrl: ctrl
+        });
+      }
     },
     dragEnd: function(event) {
-      if(!event.nodes.length && networkState === networkStateConstants.MULTISELECT.key && dragStart.canvas)
-      {
-        const props = setNetworkUtilProps(event, networkUtilProps);
-        utils.multiSelect(dragStart, props);
+      if (!event.nodes.length && multiSelectState && dragStart.canvas) {
+        dispatch(networkActions.multiselect(dragStart, event));
         setDragStart(null);
         setCursorPosition(null);
       }
-      document.removeEventListener("mousemove", _onMouseMove);
+      document.removeEventListener('mousemove', _onMouseMove);
     },
     selectNode: function(event) {
-      utils.filterSelection(event.nodes, networkUtilProps);
+      dispatch(networkActions.filterSelection(event.nodes));
     },
     deselectNode: function(event) {
-      utils.filterSelection(event.nodes, networkUtilProps);
+      dispatch(networkActions.filterSelection(event.nodes));
     }
-  }
+  };
 
-  const _onMouseMove = (e) => {
-    if(dragStart){
+  const _onMouseMove = e => {
+    if (dragStart) {
       setCursorPosition({ x: e.x, y: e.y });
     }
-  }
+  };
 
   const dragBoxStyle = () => {
-    if(dragStart && cursorPosition) {
+    if (dragStart && cursorPosition) {
       return {
         backgroundColor: '#fed8b1',
         opacity: 0.4,
         zIndex: 999999,
         position: 'absolute',
-        left: `${(dragStart.window.x < cursorPosition.x) ? dragStart.window.x : cursorPosition.x}px`,
-        top: `${(dragStart.window.y < cursorPosition.y) ? dragStart.window.y : cursorPosition.y}px`,
+        left: `${dragStart.window.x < cursorPosition.x ? dragStart.window.x : cursorPosition.x}px`,
+        top: `${dragStart.window.y < cursorPosition.y ? dragStart.window.y : cursorPosition.y}px`,
         width: `${Math.abs(dragStart.window.x - cursorPosition.x)}px`,
-        height: `${Math.abs(dragStart.window.y - cursorPosition.y)}px`,
-      }
+        height: `${Math.abs(dragStart.window.y - cursorPosition.y)}px`
+      };
     }
-  }
-  
+  };
+
+  const setMove = (x, y, scale) => {
+    return {
+      scale: scale,
+      offset: { x: -x, y: -y },
+      animation: {
+        duration: 500,
+        easingFunction: 'linear'
+      }
+    };
+  };
+
+  /**
+   * determine if a given position is between the bounds of a start and end point.
+   *
+   * @param {} position
+   * @param {*} start
+   * @param {*} end
+   */
+  const inBounds = (position, start, end) => {
+    return position && start && end && inBoundsOneAxis(position.x, start.x, end.x) && inBoundsOneAxis(position.y, start.y, end.y);
+  };
+
+  const inBoundsOneAxis = (position, start, end) => {
+    return (position < start && position > end) || (position > start && position < end);
+  };
+
   return (
     <>
-      <div style={dragBoxStyle()}/>
-      <Graph 
-          graph={graphInfo}
-          options={options}
-          events={events}
-          getNetwork={network => { setNetwork(network) }}
-          setNetwork={network}
-        />
+      <div style={dragBoxStyle()} />
+      <Graph
+        graph={graphInfo}
+        options={options}
+        events={events}
+        getNetwork={network => {
+          dispatch(networkActions.setNetwork(network));
+        }}
+      />
     </>
-  )
-}
-
-const setNetworkUtilProps = (event, props) => {
-  event ? props.event = event : props.event = {};
-  return props;
-}
+  );
+};
 
 export default Network;

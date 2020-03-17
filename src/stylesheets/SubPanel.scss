@@ -11,7 +11,7 @@
   background-color: $background;
 }
 
-.subtitle{
+.subtitle {
   display: block;
   font-style: italic;
   font-weight: 200;
@@ -19,16 +19,16 @@
   margin-left: 20px;
 }
 
-.sliderLabel{
+.sliderLabel {
   display: block;
   font-family: 'Roboto Condensed';
   color: $text;
 }
 
-.toggleContainer{
+.toggleContainer {
   display: inline-block;
   font-family: 'Roboto Condensed';
-   margin: 10px 10px 0px 10px;
+  margin: 10px 10px 0px 10px;
 }
 
 .toggleParent.vertical {
@@ -47,7 +47,6 @@
   width: 90%;
   padding: 10px;
 }
-
 
 .slider {
   -webkit-appearance: none;
@@ -162,8 +161,8 @@
   right: 0;
   bottom: 0;
   background-color: $tertiary;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .toggleSlider:before {
@@ -171,14 +170,14 @@
   box-sizing: border-box;
   border: 1px solid #4e4e4e;
   position: absolute;
-  content: "";
+  content: '';
   height: 26px;
   width: 26px;
   left: 4px;
   bottom: 4px;
   background-color: whitesmoke;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
   border-radius: 3px;
 }
 
@@ -204,11 +203,11 @@ input:checked + .toggleSlider:before {
 .slider.vertical {
   transform: rotate(270deg);
   display: inline-block;
-  margin-top:120px;
-  margin-left:-5px;
+  margin-top: 120px;
+  margin-left: -5px;
 }
 .sliderLabel.vertical {
-  text-align:center;
+  text-align: center;
   width: 80%;
   margin-bottom: 5px;
 }

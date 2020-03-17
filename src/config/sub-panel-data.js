@@ -1,5 +1,4 @@
-const SubPanelData = 
-[
+const SubPanelData = [
   {
     title: 'lab station',
     subtitle: 'master settings',
@@ -24,7 +23,7 @@ const SubPanelData =
       {
         label: 'limit',
         hoverText: 'prevent clipping'
-      },    
+      },
       {
         label: 'sync',
         hoverText: 'lock nodes to master tempo'
@@ -65,7 +64,7 @@ const SubPanelData =
       },
       {
         label: 'triplet'
-      },     
+      },
       {
         label: 'chorus'
       },
@@ -107,7 +106,7 @@ const SubPanelData =
       {
         label: 'spiral'
       }
-    ],
+    ]
   },
   {
     title: 'spectroscopy',
@@ -130,8 +129,7 @@ const SubPanelData =
         label: ''
       }
     ],
-    toggleFields: [
-    ]
+    toggleFields: []
   },
   {
     title: 'kelvin',
@@ -172,9 +170,8 @@ const SubPanelData =
         label: 'low pass res'
       }
     ],
-    toggleFields: [
-    ]
-  },
+    toggleFields: []
+  }
 ];
 
 export default SubPanelData;

@@ -1,11 +1,11 @@
 @import './colors';
 
-.textFlexContainer{
+.textFlexContainer {
   display: flex;
   flex-direction: column;
   font-size: 20px;
   margin: 0px 0px 0px 20px;
-  opacity: 1.0;
+  opacity: 1;
   transition: 0.5s;
   color: $text;
   text-align: justify;
@@ -20,14 +20,14 @@
   margin-top: -13px;
 }
 
-.disappearingText{
+.disappearingText {
   display: inline-block;
   transition: 0.5s;
   z-index: 2;
 }
 
-.textFlexContainer:hover{
-  position:relative;
+.textFlexContainer:hover {
+  position: relative;
   z-index: 2;
   opacity: 0.4;
 }
@@ -51,7 +51,7 @@
   z-index: 3;
   position: absolute;
   right: -3px;
-  top: 63px;
+  top: 62px;
   width: 36px;
   height: 100px;
   margin-left: 40px;
@@ -76,21 +76,20 @@
   width: 16px;
   height: 8px;
   margin-left: 2px;
-  transition: 0.5s;
+  transition: opacity 0.5s ease;
 }
 
-.menuButton:hover{
+.menuButton:hover {
   border-color: $secondary;
   opacity: 0.6;
 }
 
-
-.sideMenuButton:hover{
+.sideMenuButton:hover {
   border-color: $secondary;
   opacity: 0.6;
 }
 
-.nodeDetailButton:hover{
+.nodeDetailButton:hover {
   border-color: $secondary;
   opacity: 0.6;
 }

@@ -1,6 +1,6 @@
 @import './colors';
 
-.nodeDetailPanel{
+.nodeDetailPanel {
   z-index: 2;
   position: absolute;
   bottom: -10px;
@@ -31,11 +31,11 @@
   justify-content: center;
   align-items: center;
   transition: opacity 0.5s;
-  opacity: 0.0;
+  opacity: 0;
 }
 
 .placeholder.show {
-  opacity: 1.0;
+  opacity: 1;
 }
 
 .placeholderText {
@@ -52,13 +52,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.0;
+  opacity: 0;
   transition: 0.5s;
   visibility: hidden;
 }
 
 .nodeToolbar.show {
-  opacity: 1.0;
+  opacity: 1;
   visibility: visible;
 }
 
@@ -70,7 +70,7 @@
   outline: none;
 }
 
-.scrollButton:hover{
+.scrollButton:hover {
   opacity: 0.4;
 }
 

@@ -3,13 +3,13 @@
  * https://github.com/crubier/react-graph-vis
  */
 
-import React, { Component } from "react";
-import defaultsDeep from "lodash/fp/defaultsDeep";
-import isEqual from "lodash/isEqual";
-import differenceWith from "lodash/differenceWith";
-import vis from "vis-network";
-import uuid from "uuid";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import defaultsDeep from 'lodash/fp/defaultsDeep';
+import isEqual from 'lodash/isEqual';
+import differenceWith from 'lodash/differenceWith';
+import vis from 'vis-network';
+import uuid from 'uuid';
+import PropTypes from 'prop-types';
 
 class Graph extends Component {
   constructor(props) {
@@ -40,20 +40,14 @@ class Graph extends Component {
       const idIsEqual = (n1, n2) => n1.id === n2.id;
       const nodesRemoved = differenceWith(this.props.graph.nodes, nextProps.graph.nodes, idIsEqual);
       const nodesAdded = differenceWith(nextProps.graph.nodes, this.props.graph.nodes, idIsEqual);
-      const nodesChanged = differenceWith(
-        differenceWith(nextProps.graph.nodes, this.props.graph.nodes, isEqual),
-        nodesAdded
-      );
+      const nodesChanged = differenceWith(differenceWith(nextProps.graph.nodes, this.props.graph.nodes, isEqual), nodesAdded);
       this.patchNodes({ nodesRemoved, nodesAdded, nodesChanged });
     }
 
     if (edgesChange) {
       const edgesRemoved = differenceWith(this.props.graph.edges, nextProps.graph.edges, isEqual);
       const edgesAdded = differenceWith(nextProps.graph.edges, this.props.graph.edges, isEqual);
-      const edgesChanged = differenceWith(
-        differenceWith(nextProps.graph.edges, this.props.graph.edges, isEqual),
-        edgesAdded
-      );
+      const edgesChanged = differenceWith(differenceWith(nextProps.graph.edges, this.props.graph.edges, isEqual), edgesAdded);
       this.patchEdges({ edgesRemoved, edgesAdded, edgesChanged });
     }
 
@@ -96,7 +90,7 @@ class Graph extends Component {
       autoResize: false,
       edges: {
         smooth: false,
-        color: "#000000",
+        color: '#000000',
         width: 0.5,
         arrows: {
           to: {
@@ -110,7 +104,7 @@ class Graph extends Component {
     // merge user provied options with our default ones
     let options = defaultsDeep(defaultOptions, this.props.options);
 
-    this.Network = this.props.setNetwork ? this.props.setNetwork : new vis.Network(
+    this.Network = new vis.Network(
       this.container.current,
       Object.assign({}, this.props.graph, {
         edges: this.edges,
@@ -142,7 +136,7 @@ class Graph extends Component {
     const { identifier } = this.state;
     const { style } = this.props;
     return React.createElement(
-      "div",
+      'div',
       {
         id: identifier,
         ref: this.container,
@@ -155,15 +149,14 @@ class Graph extends Component {
 
 Graph.defaultProps = {
   graph: {},
-  style: { width: "100%", height: "100%" }
+  style: { width: '100%', height: '100%' }
 };
 Graph.propTypes = {
   graph: PropTypes.object,
   style: PropTypes.object,
   getNetwork: PropTypes.func,
-  setNetwork: PropTypes.object,
   getNodes: PropTypes.func,
-  getEdges: PropTypes.func,
+  getEdges: PropTypes.func
 };
 
 export default Graph;

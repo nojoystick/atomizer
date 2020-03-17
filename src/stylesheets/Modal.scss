@@ -1,7 +1,7 @@
 @import './Colors.scss';
 
 .background {
-  opacity: 0.0;
+  opacity: 0;
   transition: opacity 1s, visibility 0s 1s;
   position: absolute;
   top: 0px;
@@ -16,7 +16,7 @@
   z-index: 9998;
 }
 
-.flexContainer{
+.flexContainer {
   background-color: transparent;
   position: absolute;
   top: 0px;
@@ -30,11 +30,11 @@
   visibility: hidden;
 }
 
-.content{
+.content {
   width: 350px;
   height: 200px;
   background-color: transparent;
-  opacity: 1.0;
+  opacity: 1;
   z-index: 9999;
   margin: auto;
   font-size: 1.2em;
@@ -71,6 +71,7 @@
   outline: none;
 }
 
-.confirmButton:hover, .cancelButton:hover{
+.confirmButton:hover,
+.cancelButton:hover {
   opacity: 0.4;
 }

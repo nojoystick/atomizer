@@ -1,58 +1,50 @@
 import elements from './elements';
-import utils from '../utils/network-utils';
+import { networkActions, viewActions } from '../redux/actions';
 
 const networkStateConstants = {
-  NODE: {
-    key: 'node',
-    label: 'add node',
-    action: utils.addNode,
-    sticky: false,
-  },
-  ADD_EDGES: {
-    key: 'addEdges',
-    label: 'add edges',
-    action: utils.addEdge,
-    sticky: true,
-  },
-  EDIT_EDGES: {
-    key: 'editEdge',
-    label: 'edit edge',
-    action: utils.editEdge,
-    sticky: true
-  },
-  MULTISELECT: {
-    key: 'multiselect',
-    label: 'select multiple',
-    action: null,
-    sticky: true
-  },
-  SELECT_ALL: {
-    key: 'select all',
-    label: 'select all',
-    action: utils.selectAll,
-    sticky: false
-  },
-  DELETE: {
-    key: 'delete',
-    label: 'delete selected',
-    action: utils.deleteSelected,
-    sticky: false,
-  },
-  ORGANIZE: {
-    key: 'organize',
-    label: 'organize',
-    action: utils.organize,
-    sticky: false
-  },
-  FIT: {
-    key: 'fit',
-    label: 'fit',
-    action: utils.fit,
-    sticky:false,
-    close: true
-  }
-}
-
+  INTERACT: [
+    {
+      label: 'add node',
+      action: networkActions.addNodeFromMenu
+    },
+    {
+      label: 'edit edge',
+      action: networkActions.editEdge
+    },
+    {
+      label: 'select all',
+      action: networkActions.selectAll
+    },
+    {
+      label: 'delete selected',
+      action: networkActions.deleteSelected
+    }
+  ],
+  MODE: [
+    {
+      label: 'pointer',
+      action: networkActions.defaultMode
+    },
+    {
+      label: 'add edges',
+      action: networkActions.addEdge
+    },
+    {
+      label: 'multiselect',
+      action: networkActions.toggleSelect
+    }
+  ],
+  VIEW: [
+    {
+      label: 'organize',
+      action: networkActions.organize
+    },
+    {
+      label: 'fit',
+      action: viewActions.closeAll
+    }
+  ]
+};
 
 const config = {
   options: {
@@ -64,8 +56,8 @@ const config = {
     },
     edges: {
       color: {
-        color: "darkGray",
-        hover: "gray"
+        color: 'darkGray',
+        hover: 'gray'
       },
       width: 1.5,
       selectionWidth: 1,
@@ -77,13 +69,14 @@ const config = {
       enabled: true,
       barnesHut: {
         avoidOverlap: 0.5,
-        centralGravity: 0.15,
+        centralGravity: 0.15
       },
       minVelocity: -1,
       stabilization: {
-        enabled: true,
+        enabled: true
       }
     },
+    manipulation: {},
     nodes: {
       shape: 'circle',
       borderWidth: 1.5,
@@ -92,11 +85,11 @@ const config = {
         background: 'whitesmoke',
         highlight: {
           border: 'black',
-          background: 'white',
+          background: 'white'
         },
         hover: {
           border: 'black',
-          background: 'white',
+          background: 'white'
         }
       },
       font: {
@@ -108,19 +101,16 @@ const config = {
       widthConstraint: 100
     },
     layout: {
-      hierarchical: false,
+      hierarchical: false
     },
     autoResize: false,
     width: window.innerWidth.toString(),
-    height: window.innerHeight.toString(),
+    height: window.innerHeight.toString()
   },
   defaultData: {
     nodes: [elements[0]],
-    edges: 
-    [
-    ]
-  },
-}
+    edges: []
+  }
+};
 
-
-export { networkStateConstants, config }
+export { networkStateConstants, config };

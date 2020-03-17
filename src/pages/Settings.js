@@ -7,29 +7,29 @@ const Settings = () => {
 
   useEffect(() => {
     setShow(true);
-  }, [])
+  }, []);
 
   const onChange = () => {
-    if(!darkTheme) {
+    if (!darkTheme) {
       require('../stylesheets/DarkTheme.scss');
     }
-    if(darkTheme) {
+    if (darkTheme) {
       window.location.reload();
     }
     setDarkTheme(!darkTheme);
-  }
+  };
 
   return (
     <div className={show ? 'page show' : 'page hide'}>
       <div className='textContainer center'>
-        <label className="sliderLabel">theme</label>
-          <label className="switch">
-            <input type="checkbox" onChange={() => onChange()}/>
-            <span className="toggleSlider"></span>
-          </label>
-        </div>
+        <div className='sliderLabel'>theme</div>
+        <label className='switch'>
+          <input type='checkbox' onChange={() => onChange()} />
+          <span className='toggleSlider'></span>
+        </label>
       </div>
-  )
-}
+    </div>
+  );
+};
 
 export default Settings;

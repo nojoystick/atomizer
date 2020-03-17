@@ -1,6 +1,6 @@
 @import './colors';
 
-.sideMenuPanel{
+.sideMenuPanel {
   z-index: 1;
   position: absolute;
   right: -6px;
@@ -20,9 +20,28 @@
   white-space: nowrap;
 }
 
+.categoryHeader { 
+  padding: 0px;
+  margin: 0px 0px 0px 5px;
+  text-transform: lowercase;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  text-align: left;
+  vertical-align: center;
+  height: 30px;
+  font-size: 0.8em;
+  outline: none;
+}
+
+.categoryHeader:hover {
+  opacity: 0.4;
+}
+
 .networkButtons {
-  height: 100%;
-  overflow: scroll;
+  height: 90%;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .networkButton {
@@ -31,7 +50,7 @@
   border: none;
   width: 90%;
   height: 30px;
-  margin: 5px;
+  margin: 5px 5px 5px 10px;
   font-size: 20px;
   font-weight: 500;
   text-align: left;
@@ -48,4 +67,25 @@
 
 .networkButton:hover {
   color: $secondary;
+}
+
+.showHideIcon {
+  float: right;
+  margin: 5px 20px 0px 0px;
+  width: 10px;
+  height: 5px;
+  transition: 0.5s;
+}
+
+.categoryContainer {
+  opacity: 1.0;
+  visibility: visible;
+  transition: opacity 0.5s;
+}
+
+.hide {
+  height: 0px;
+  opacity: 0.0;
+  visibility: hidden;
+  transition: visibility 0.5s;
 }
