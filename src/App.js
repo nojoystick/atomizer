@@ -19,7 +19,10 @@ const App = () => {
           <div className='floatRight'>
             <NavLink to='/about'>about</NavLink>
             <NavLink to='/settings'>
-              <Icon className='settingsIcon' path={IconSet.settings} viewBox='0 0 50 50' />
+              <Icon className='settingsIcon' path={IconSet.settings} viewBox='0 0 50 48' />
+            </NavLink>
+            <NavLink to='/'>
+              <Icon className='infoIcon' path={IconSet.info} viewBox='0 0 25 23' />
             </NavLink>
           </div>
           <h1>

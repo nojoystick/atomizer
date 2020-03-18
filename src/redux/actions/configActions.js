@@ -4,5 +4,7 @@ export const configActions = {
       type: 'SET_MODAL',
       payload: { header: header, message: message, func: func }
     };
-  }
+  },
+  toggleTheme: () => {},
+  toggleHotkeys: () => {}
 };

@@ -32,14 +32,12 @@
   border: none;
   cursor: pointer;
   outline: none;
-}
-
-.iconContainer:hover {
-  opacity: 0.6;
-}
-
-.iconContainer.show {
-  height: 100%;
+  &:hover{
+    opacity: 0.6;
+  }
+  &.show{
+    height: 100%;
+  }
 }
 
 .navIcons {

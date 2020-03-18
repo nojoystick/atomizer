@@ -1,5 +1,7 @@
-const BOTTOM_MENU_SIZE = 505;
-const SIDE_MENU_SIZE = 200;
-const HEADER_SIZE = 63;
+const sizeConstants = {
+  BOTTOM_MENU_SIZE: 505,
+  SIDE_MENU_SIZE: 230,
+  HEADER_SIZE: 63
+};
 
-export { BOTTOM_MENU_SIZE, SIDE_MENU_SIZE, HEADER_SIZE };
+export { sizeConstants };

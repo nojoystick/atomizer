@@ -1,49 +1,51 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState, useEffect } from 'react';
-import Network from '../components/Network';
-import MenuPanel from '../components/MenuPanel';
-import SideMenuPanel from '../components/SideMenuPanel';
-import NodeDetailPanel from '../components/NodeDetailPanel';
+import Network from '../components/network/Network';
+import MenuPanel from '../components/menus/main/MenuPanel';
+import SideMenuPanel from '../components/menus/node-editor/SideMenuPanel';
+import NodeDetailPanel from '../components/menus/node-detail/NodeDetailPanel';
 import Modal from '../components/Modal';
 import Icon from '../components/Icon';
 import IconSet from '../constants/icon-set';
 import '../stylesheets/Home.scss';
-import { BOTTOM_MENU_SIZE, SIDE_MENU_SIZE } from '../config/panel-size-constants';
+import { sizeConstants } from '../config';
 import ColorVariables from '../stylesheets/Colors.scss';
-import { useResizer, useHotkeys } from '../utils/hooks';
+import { useResizer, useHotkeys } from '../utils/hotkeys';
 import { useSelector, useDispatch } from 'react-redux';
 import { viewActions } from '../redux/actions';
 
-const screenBreakpoint = 800;
 const iconColor = ColorVariables.text;
 
 const Home = () => {
   const [show, setShow] = useState(false);
-  const { textVisible, menuVisible, sideMenuVisible, nodeDetailVisible } = useSelector(state => state.view);
-  const [screenSize, setScreenSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+  const { textVisible, menuVisible, sideMenuVisible, nodeDetailVisible, screenInfo } = useSelector(state => state.view);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(viewActions.setTextVisible(true, screenSize));
+    dispatch(viewActions.setTextVisible(true));
     setShow(true);
-  }, [dispatch, screenSize]);
+  }, [dispatch]);
 
   useHotkeys();
-  useResizer(setScreenSize);
+  useResizer();
 
   return (
     <div className={show ? 'page show' : 'page hide'}>
       <Modal />
       <div
         className='textFlexContainer floatLeft'
-        style={{ height: `${textVisible ? '100%' : '30px'}` }}
+        style={{
+          height: `${textVisible ? '100%' : '30px'}`,
+          maxWidth: `${textVisible ? '' : '160px'}`,
+          transition: `${textVisible ? 'max-width 0s' : 'max-width 1s'}`
+        }}
         onClick={() => {
-          dispatch(viewActions.setTextVisible(!textVisible, screenSize));
+          dispatch(viewActions.setTextVisible(!textVisible));
         }}
       >
-        <p className='disappearingText' style={getTextStyle(textVisible, screenSize)}>
+        <p className='disappearingText' style={getTextStyle(textVisible, screenInfo)}>
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam ea quas maiores adipisci doloremque impedit illum illo
           natus mollitia possimus blanditiis accusantium, ut nostrum. Voluptates modi eum maiores repellat molestias!
         </p>
@@ -53,26 +55,26 @@ const Home = () => {
       <Network />
       <SideMenuPanel />
       <MenuPanel />
-      <NodeDetailPanel breakpoint={screenBreakpoint} />
+      <NodeDetailPanel />
 
       <button
         className='sideMenuButton'
-        style={{ right: `${sideMenuVisible ? SIDE_MENU_SIZE - 4 + 'px' : '-6px'}` }}
-        onClick={() => dispatch(viewActions.setSideMenuVisible(!sideMenuVisible, screenSize))}
+        style={{ right: `${sideMenuVisible ? sizeConstants.SIDE_MENU_SIZE - 4 + 'px' : '-6px'}` }}
+        onClick={() => dispatch(viewActions.setSideMenuVisible(!sideMenuVisible))}
       >
         {getExpandIcon('expandIcon', [90, 270], sideMenuVisible)}
       </button>
       <button
         className='menuButton'
-        style={{ bottom: `${menuVisible ? BOTTOM_MENU_SIZE - 10 + 'px' : '-10px'}` }}
-        onClick={() => dispatch(viewActions.setMenuVisible(!menuVisible, screenSize))}
+        style={{ bottom: `${menuVisible ? sizeConstants.BOTTOM_MENU_SIZE - 10 + 'px' : '-10px'}` }}
+        onClick={() => dispatch(viewActions.setMenuVisible(!menuVisible))}
       >
         {getExpandIcon('expandIcon', [180, 0], menuVisible)}
       </button>
       <button
         className='menuButton'
         style={getDetailStyle(menuVisible, sideMenuVisible)}
-        onClick={() => dispatch(viewActions.setNodeDetailVisible(!nodeDetailVisible, screenSize))}
+        onClick={() => dispatch(viewActions.setNodeDetailVisible(!nodeDetailVisible))}
       >
         {getExpandIcon('expandIcon', [180, 0], nodeDetailVisible)}
       </button>
@@ -80,12 +82,12 @@ const Home = () => {
   );
 };
 
-const getTextStyle = (textVisible, screenSize) => {
+const getTextStyle = (textVisible, screenInfo) => {
   return textVisible
     ? {
         opacity: 1.0,
         visibility: 'visible',
-        height: screenSize.width < screenBreakpoint ? '120px' : '70px'
+        height: screenInfo.width < screenInfo.breakpoint ? '120px' : '70px'
       }
     : {
         opacity: 0.0,
@@ -96,9 +98,9 @@ const getTextStyle = (textVisible, screenSize) => {
 
 const getDetailStyle = (menuVisible, sideMenuVisible) => {
   return {
-    bottom: `${menuVisible ? BOTTOM_MENU_SIZE - 10 + 'px' : '-10px'}`,
+    bottom: `${menuVisible ? sizeConstants.BOTTOM_MENU_SIZE - 10 + 'px' : '-10px'}`,
     left: 'unset',
-    right: `${sideMenuVisible ? SIDE_MENU_SIZE - 5 + 'px' : '40px'}`
+    right: `${sideMenuVisible ? sizeConstants.SIDE_MENU_SIZE - 5 + 'px' : '40px'}`
   };
 };
 

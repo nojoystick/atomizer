@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import '../stylesheets/NodeDetailPanel.scss';
-import { SIDE_MENU_SIZE, BOTTOM_MENU_SIZE, HEADER_SIZE } from '../config/panel-size-constants';
-import elements from '../constants/elements';
+import '../../../stylesheets/NodeDetailPanel.scss';
+import { sizeConstants } from '../../../config';
+import elements from '../../../constants/elements';
 import ElementTile from './ElementTile';
-import Icon from '../components/Icon';
-import IconSet from '../constants/icon-set';
-import ColorVariables from '../stylesheets/Colors.scss';
+import Icon from '../../Icon';
+import IconSet from '../../../constants/icon-set';
+import ColorVariables from '../../../stylesheets/Colors.scss';
 import { useSelector } from 'react-redux';
+import { useNodeDetailHotkeys } from '../../../utils/hotkeys';
 
 const iconColor = ColorVariables.text;
 
-const NodeDetailPanel = ({ breakpoint }) => {
-  const { menuVisible, sideMenuVisible, nodeDetailVisible } = useSelector(state => state.view);
+const NodeDetailPanel = () => {
+  const { menuVisible, sideMenuVisible, nodeDetailVisible, screenInfo } = useSelector(state => state.view);
   const selectedNodes = useSelector(state => state.network.selectedNodes);
   const [nodeData, setNodeData] = useState(null);
+  const { BOTTOM_MENU_SIZE, SIDE_MENU_SIZE, HEADER_SIZE } = sizeConstants;
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -43,13 +45,21 @@ const NodeDetailPanel = ({ breakpoint }) => {
     }
   };
 
+  useNodeDetailHotkeys(index, updateIndex);
+
   const menuStyle = () => {
     return {
-      height: `${nodeDetailVisible ? window.innerHeight - BOTTOM_MENU_SIZE - HEADER_SIZE + 8 + 'px' : '0px'}`,
-      right: `${window.innerWidth < breakpoint ? '-3px' : sideMenuVisible ? SIDE_MENU_SIZE - 5 + 'px' : '0px'}`,
+      height: `${
+        nodeDetailVisible
+          ? menuVisible
+            ? screenInfo.height - BOTTOM_MENU_SIZE - HEADER_SIZE + 8 + 'px'
+            : BOTTOM_MENU_SIZE + 'px'
+          : '0px'
+      }`,
+      right: `${screenInfo.width < screenInfo.breakpoint ? '-3px' : sideMenuVisible ? SIDE_MENU_SIZE - 5 + 'px' : '0px'}`,
       bottom: `${menuVisible ? BOTTOM_MENU_SIZE - 13 + 'px' : '-10px'}`,
       borderBottom: `${nodeDetailVisible ? '3px solid black' : '0px solid black'}`,
-      width: `${window.innerWidth < breakpoint ? '100%' : '350px'}`
+      width: `${screenInfo.width < screenInfo.breakpoint ? '100%' : '350px'}`
     };
   };
 

@@ -1,4 +1,4 @@
-const SubPanelData = [
+const subPanelData = [
   {
     title: 'lab station',
     subtitle: 'master settings',
@@ -174,4 +174,4 @@ const SubPanelData = [
   }
 ];
 
-export default SubPanelData;
+export { subPanelData };

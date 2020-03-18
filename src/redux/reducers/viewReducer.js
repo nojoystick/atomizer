@@ -4,7 +4,11 @@ const defaultState = {
   sideMenuVisible: false,
   nodeDetailVisible: false,
   modalVisible: false,
-  screenBreakpoint: 800
+  screenInfo: {
+    breakpoint: 800,
+    width: window.innerWidth,
+    height: window.innerHeight
+  }
 };
 
 const viewReducer = (state = defaultState, action) => {
@@ -21,6 +25,15 @@ const viewReducer = (state = defaultState, action) => {
     case 'SET_NODE_DETAIL_VISIBLE':
       closeOthers(state, action, 'nodeDetailVisible');
       return (state = { ...state, nodeDetailVisible: action.payload });
+    case 'SET_SCREEN_DIMENSIONS':
+      return (state = {
+        ...state,
+        screenInfo: {
+          ...state.screenInfo,
+          width: action.payload.width,
+          height: action.payload.height
+        }
+      });
     case 'CLOSE_ALL':
       return (state = defaultState);
     default:
@@ -28,9 +41,9 @@ const viewReducer = (state = defaultState, action) => {
   }
 };
 const closeOthers = (state, action, keepOpen) => {
-  if (action.screenSize.width < state.screenBreakpoint && action.payload) {
+  if (state.screenInfo.width < state.screenInfo.breakpoint && action.payload) {
     Object.keys(state).forEach(key => {
-      if (key !== keepOpen && key !== 'screenBreakpoint') {
+      if (key !== keepOpen && key !== 'screenInfo') {
         state[key] = false;
       }
     });

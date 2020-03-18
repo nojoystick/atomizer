@@ -31,10 +31,9 @@
   align-items: center;
   transition: opacity 0.5s;
   opacity: 0;
-}
-
-.placeholder.show {
-  opacity: 1;
+  &.show{
+    opacity: 1;
+  }
 }
 
 .placeholderText {
@@ -54,11 +53,10 @@
   opacity: 0;
   transition: 0.5s;
   visibility: hidden;
-}
-
-.nodeToolbar.show {
-  opacity: 1;
-  visibility: visible;
+  &.show{
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
 .scrollButton {
@@ -67,10 +65,9 @@
   border: none;
   background-color: $background;
   outline: none;
-}
-
-.scrollButton:hover {
-  opacity: 0.4;
+  &:hover{
+    opacity: 0.4;
+  }
 }
 
 .scrollIcon {

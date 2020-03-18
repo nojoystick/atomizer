@@ -1,5 +1,5 @@
 import React from 'react';
-import '../stylesheets/ElementTile.scss';
+import '../../../stylesheets/ElementTile.scss';
 
 const ElementTile = ({ nodeData }) => {
   if (!nodeData) {

@@ -1,23 +1,22 @@
 import React, { useEffect, useState, useRef } from 'react';
 import SubPanel from './SubPanel';
-import SubPanelData from '../config/sub-panel-data';
-import '../stylesheets/MenuPanel.scss';
-import Icon from './Icon';
-import IconSet from '../constants/icon-set';
-import { BOTTOM_MENU_SIZE } from '../config/panel-size-constants';
+import '../../../stylesheets/MenuPanel.scss';
+import Icon from '../../Icon';
+import IconSet from '../../../constants/icon-set';
+import { sizeConstants, subPanelData } from '../../../config';
 import { useSelector } from 'react-redux';
 
 const MenuPanel = () => {
-  const show = useSelector(state => state.view.menuVisible);
+  const { menuVisible, screenInfo } = useSelector(state => state.view);
   const [showSideMenu, setShowSideMenu] = useState(false);
   const scrollRef = useRef(null);
 
   const menuStyle = {
-    height: `${show ? BOTTOM_MENU_SIZE + 'px' : '0px'}`
+    height: `${menuVisible ? sizeConstants.BOTTOM_MENU_SIZE + 'px' : '0px'}`
   };
 
   const sideMenuStyle = {
-    minWidth: `${window.innerWidth < 500 ? '80%' : '50%'}`,
+    minWidth: `${screenInfo.width < 500 ? '80%' : '50%'}`,
     transition: '0.5s'
   };
 
@@ -48,7 +47,7 @@ const MenuPanel = () => {
           </div>
         )}
       </div>
-      {SubPanelData.map((subPanel, index) => {
+      {subPanelData.map((subPanel, index) => {
         return <SubPanel data={subPanel} key={index} />;
       })}
     </div>

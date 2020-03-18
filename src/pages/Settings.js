@@ -10,12 +10,13 @@ const Settings = () => {
   }, []);
 
   const onChange = () => {
-    if (!darkTheme) {
-      require('../stylesheets/DarkTheme.scss');
-    }
-    if (darkTheme) {
-      window.location.reload();
-    }
+    // todo: gotta reimplement the theme in a better way
+    // if (!darkTheme) {
+    //   require('../stylesheets/DarkTheme.scss');
+    // }
+    // if (darkTheme) {
+    //   window.location.reload();
+    // }
     setDarkTheme(!darkTheme);
   };
 

@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import Graph from './Graph';
-import '../stylesheets/Network.scss';
-import { BOTTOM_MENU_SIZE } from '../config/panel-size-constants';
-import { useNetworkHotkeys } from '../utils/hooks';
+import '../../stylesheets/Network.scss';
+import { sizeConstants } from '../../config';
+import { useMultiSelectHotkeys } from '../../utils/hotkeys';
 import { useSelector, useDispatch } from 'react-redux';
-import { networkActions } from '../redux/actions';
+import { networkActions } from '../../redux/actions';
 
 const Network = () => {
-  const { menuVisible, sideMenuVisible, nodeDetailVisible } = useSelector(state => state.view);
+  const { menuVisible, sideMenuVisible, nodeDetailVisible, screenInfo } = useSelector(state => state.view);
   const { network, options, graphInfo, multiSelectState } = useSelector(state => state.network);
 
   const [dragStart, setDragStart] = useState({ window: { x: 0, y: 0 } });
@@ -17,7 +17,7 @@ const Network = () => {
 
   const dispatch = useDispatch();
 
-  useNetworkHotkeys(setCtrl);
+  useMultiSelectHotkeys(setCtrl);
 
   useEffect(() => {
     if (network) {
@@ -28,13 +28,13 @@ const Network = () => {
         network.focus(
           node,
           setMove(
-            sideMenuVisible || nodeDetailVisible ? 0.3 * window.innerWidth : 0,
-            window.innerHeight > 600 ? BOTTOM_MENU_SIZE - 300 : 0,
+            sideMenuVisible || nodeDetailVisible ? 0.3 * screenInfo.width : 0,
+            screenInfo.height > 600 ? sizeConstants.BOTTOM_MENU_SIZE - 300 : 0,
             0.3
           )
         );
       } else if (sideMenuVisible && !menuVisible) {
-        network.focus(node, setMove(0.3 * window.innerWidth, 0, 0.6));
+        network.focus(node, setMove(0.3 * screenInfo.width, 0, 0.6));
       }
     }
   }, [menuVisible, sideMenuVisible]);

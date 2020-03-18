@@ -25,6 +25,9 @@ a {
   text-decoration: none;
   color: $text;
   background-color: transparent;
+  &:hover{
+    opacity: 0.4;
+  }
 }
 
 html,
@@ -35,19 +38,16 @@ body,
   height: 100%;
   width: 100%;
   background-color: $background;
+  touch-action: manipulation;
 }
 
-a:hover {
-  opacity: 0.4;
-}
-
-.page.show {
-  opacity: 1;
-  transition: 2s;
-}
-
-.page.hide {
-  opacity: 0;
+.page {
+  &.show{
+    opacity: 1;
+  }
+  &.hide{
+    opacity: 0;
+  }
   transition: 2s;
 }
 
@@ -82,16 +82,23 @@ a:hover {
 
 .floatRight {
   float: right;
+  vertical-align: middle;
 }
 
 .settingsIcon {
-  margin: 5px 0px 0px 30px;
+  margin: 0px 0px 0px 30px;
   width: 15px;
-  height: 15px;
+  height: 13px;
 }
 
 .center {
   margin: auto;
   max-width: 600px;
   padding: 100px 20px 20px 20px;
+}
+
+.infoIcon {
+  margin: 0px 0px 0px 30px;
+  width: 14px;
+  height: 14px;
 }

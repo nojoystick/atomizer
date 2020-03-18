@@ -4,6 +4,7 @@ import React from 'react';
 import '../stylesheets/Modal.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { networkActions } from '../redux/actions';
+import { useModalHotkeys } from '../utils/hotkeys';
 
 const Modal = () => {
   const show = useSelector(state => state.network.modalVisible);
@@ -13,8 +14,14 @@ const Modal = () => {
 
   const confirm = () => {
     dispatch(func());
+    cancel();
+  };
+
+  const cancel = () => {
     dispatch(networkActions.setModalVisible(false));
   };
+
+  useModalHotkeys(confirm, cancel);
 
   return (
     <>
@@ -25,7 +32,7 @@ const Modal = () => {
       <div
         className='flexContainer'
         style={show ? { visibility: 'visible', opacity: '1.0' } : { opacity: '0.0' }}
-        onClick={() => dispatch(networkActions.setModalVisible(false))}
+        onClick={cancel}
       >
         <div className='content'>
           <h3 className='header'>{header}</h3>
@@ -37,10 +44,10 @@ const Modal = () => {
             </p>
           )}
           <div className='buttonContainer'>
-            <button className='cancelButton' onClick={() => dispatch(networkActions.setModalVisible(false))}>
+            <button className='cancelButton' onClick={cancel}>
               cancel
             </button>
-            <button className='confirmButton' onClick={() => confirm()}>
+            <button className='confirmButton' onClick={() => confirm}>
               confirm
             </button>
           </div>

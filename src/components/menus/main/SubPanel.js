@@ -1,5 +1,5 @@
 import React from 'react';
-import '../stylesheets/SubPanel.scss';
+import '../../../stylesheets/SubPanel.scss';
 
 const SubPanel = ({ data }) => {
   const vertical = data.sliderFields.length === 1;

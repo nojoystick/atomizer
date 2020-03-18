@@ -1,10 +1,10 @@
-import { config } from '../../constants/network-constants';
+import { networkData } from '../../config/';
 import elements from '../../constants/elements';
 
 const defaultState = {
   network: null,
-  options: config.options,
-  graphInfo: config.defaultData,
+  options: networkData.options,
+  graphInfo: networkData.defaultData,
   elementIndex: 1,
   selectedNodes: null,
   modalVisible: false,
@@ -53,7 +53,7 @@ const networkReducer = (state = defaultState, action) => {
       const opt = state.addEdgeState
         ? {
             ...state.options,
-            manipulation: config.options.manipulation,
+            manipulation: networkData.options.manipulation,
             ...state.options
           }
         : {
@@ -76,7 +76,7 @@ const networkReducer = (state = defaultState, action) => {
 
     case 'DEFAULT_MODE':
       state.network.disableEditMode();
-      return { ...state, options: config.options, defaultState: true, addEdgeState: false, multiSelectState: false };
+      return { ...state, options: networkData.options, defaultState: true, addEdgeState: false, multiSelectState: false };
 
     case 'DELETE_SELECTED':
       if (!state.selectedNodes) {
@@ -119,8 +119,8 @@ const networkReducer = (state = defaultState, action) => {
 
     case 'ORGANIZE':
       const newOptions = state.organizeState
-        ? { ...state.options, layout: { hierarchical: false } }
-        : { ...state.options, layout: { hierarchical: true } };
+        ? { ...state.options, layout: { hierarchical: { ...state.options.layout.hierarchical, enabled: false } } }
+        : { ...state.options, layout: { hierarchical: { ...state.options.layout.hierarchical, enabled: true } } };
       return {
         ...state,
         options: newOptions,

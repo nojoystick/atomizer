@@ -6,7 +6,7 @@
   font-size: 20px;
   margin: 0px 0px 0px 20px;
   opacity: 1;
-  transition: 0.5s;
+  transition: 0.3s;
   color: $text;
   text-align: justify;
   background-color: transparent;
@@ -18,18 +18,17 @@
   position: relative;
   max-width: 80%;
   margin-top: -13px;
+  &:hover{
+    position: relative;
+    z-index: 2;
+    opacity: 0.4;
+  }
 }
 
 .disappearingText {
   display: inline-block;
   transition: 0.5s;
   z-index: 2;
-}
-
-.textFlexContainer:hover {
-  position: relative;
-  z-index: 2;
-  opacity: 0.4;
 }
 
 .menuButton {
@@ -45,6 +44,10 @@
   background-color: $background;
   color: $text;
   z-index: 3;
+  &:hover{
+    border-color: $secondary;
+    opacity: 0.6;
+  }
 }
 
 .sideMenuButton {
@@ -61,6 +64,10 @@
   background-color: $background;
   color: $text;
   box-sizing: border-box;
+  &:hover{
+    border-color: $secondary;
+    opacity: 0.6;
+  }
 }
 
 .expandIcon {
@@ -77,19 +84,4 @@
   height: 8px;
   margin-left: 2px;
   transition: opacity 0.5s ease;
-}
-
-.menuButton:hover {
-  border-color: $secondary;
-  opacity: 0.6;
-}
-
-.sideMenuButton:hover {
-  border-color: $secondary;
-  opacity: 0.6;
-}
-
-.nodeDetailButton:hover {
-  border-color: $secondary;
-  opacity: 0.6;
 }

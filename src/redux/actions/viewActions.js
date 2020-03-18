@@ -20,22 +20,21 @@ export const viewActions = {
       screenSize: screenSize
     };
   },
-  setNodeDetailVisible: (param, screenSize) => {
+  setNodeDetailVisible: param => {
     return {
       type: 'SET_NODE_DETAIL_VISIBLE',
-      payload: param,
-      screenSize: screenSize
+      payload: param
+    };
+  },
+  setScreenDimensions: (width, height) => {
+    return {
+      type: 'SET_SCREEN_DIMENSIONS',
+      payload: { width: width, height: height }
     };
   },
   closeAll: () => {
     return {
       type: 'CLOSE_ALL'
-    };
-  },
-  closeAllOthers: param => {
-    return {
-      type: 'CLOSE_ALL_OTHERS',
-      payload: param
     };
   }
 };

@@ -59,6 +59,9 @@
   background-color: $background;
   border: 1.5px solid $text;
   outline: none;
+  &:hover{
+    opacity: 0.4;
+  }
 }
 
 .cancelButton {
@@ -69,9 +72,7 @@
   background-color: $secondary;
   border: 1.5px solid $text;
   outline: none;
-}
-
-.confirmButton:hover,
-.cancelButton:hover {
-  opacity: 0.4;
+  &:hover{
+    opacity: 0.4;
+  }
 }

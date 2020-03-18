@@ -4,7 +4,7 @@
   z-index: 1;
   position: absolute;
   right: -6px;
-  height: 100%;
+  height: 90%;
   width: 0%;
   border-left: 3px solid $text;
   border-top: 3px solid $text;
@@ -32,14 +32,12 @@
   height: 30px;
   font-size: 0.8em;
   outline: none;
-}
-
-.categoryHeader:hover {
-  opacity: 0.4;
+  &:hover{
+    opacity: 0.4;
+  }
 }
 
 .networkButtons {
-  height: 90%;
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -59,14 +57,13 @@
   background-color: $background;
   color: $text;
   white-space: nowrap;
+  &:hover{
+    color: $secondary;
+  }
 }
 
 .selected {
   font-weight: 800;
-}
-
-.networkButton:hover {
-  color: $secondary;
 }
 
 .showHideIcon {

@@ -1,52 +1,6 @@
-import elements from './elements';
-import { networkActions, viewActions } from '../redux/actions';
+import elements from '../constants/elements';
 
-const networkStateConstants = {
-  INTERACT: [
-    {
-      label: 'add node',
-      action: networkActions.addNodeFromMenu
-    },
-    {
-      label: 'edit edge',
-      action: networkActions.editEdge
-    },
-    {
-      label: 'select all',
-      action: networkActions.selectAll
-    },
-    {
-      label: 'delete selected',
-      action: networkActions.deleteSelected
-    }
-  ],
-  MODE: [
-    {
-      label: 'pointer',
-      action: networkActions.defaultMode
-    },
-    {
-      label: 'add edges',
-      action: networkActions.addEdge
-    },
-    {
-      label: 'multiselect',
-      action: networkActions.toggleSelect
-    }
-  ],
-  VIEW: [
-    {
-      label: 'organize',
-      action: networkActions.organize
-    },
-    {
-      label: 'fit',
-      action: viewActions.closeAll
-    }
-  ]
-};
-
-const config = {
+const networkData = {
   options: {
     interaction: {
       hover: true,
@@ -101,7 +55,10 @@ const config = {
       widthConstraint: 100
     },
     layout: {
-      hierarchical: false
+      hierarchical: {
+        enabled: false,
+        sortMethod: 'hubsize'
+      }
     },
     autoResize: false,
     width: window.innerWidth.toString(),
@@ -113,4 +70,4 @@ const config = {
   }
 };
 
-export { networkStateConstants, config };
+export { networkData };
