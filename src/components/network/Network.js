@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import Graph from './Graph';
 import '../../stylesheets/Network.scss';
-import { sizeConstants } from '../../config';
 import { useMultiSelectHotkeys } from '../../utils/hotkeys';
 import { useSelector, useDispatch } from 'react-redux';
 import { networkActions } from '../../redux/actions';
@@ -10,34 +9,27 @@ import { networkActions } from '../../redux/actions';
 const Network = () => {
   const { menuVisible, sideMenuVisible, nodeDetailVisible, screenInfo } = useSelector(state => state.view);
   const { network, options, graphInfo, multiSelectState } = useSelector(state => state.network);
-
   const [dragStart, setDragStart] = useState({ window: { x: 0, y: 0 } });
   const [cursorPosition, setCursorPosition] = useState(null);
   const [ctrl, setCtrl] = useState(false);
-
   const dispatch = useDispatch();
-
   useMultiSelectHotkeys(setCtrl);
 
   useEffect(() => {
     if (network) {
-      const node = Object.keys(network.body.nodes)[0];
-      if (!menuVisible && !sideMenuVisible) {
-        network.fit(setMove());
+      if (!menuVisible && !sideMenuVisible && !nodeDetailVisible) {
+        network.moveTo(fit(0, 0, 1.0));
+      } else if (nodeDetailVisible && screenInfo.width < screenInfo.breakpoint) {
+        network.moveTo(fit(0, screenInfo.height * 0.7, 0.3));
+      } else if ((sideMenuVisible || nodeDetailVisible) && menuVisible) {
+        network.moveTo(fit(screenInfo.width * 0.7, screenInfo.height * 0.7, 0.3));
       } else if (menuVisible) {
-        network.focus(
-          node,
-          setMove(
-            sideMenuVisible || nodeDetailVisible ? 0.3 * screenInfo.width : 0,
-            screenInfo.height > 600 ? sizeConstants.BOTTOM_MENU_SIZE - 300 : 0,
-            0.3
-          )
-        );
-      } else if (sideMenuVisible && !menuVisible) {
-        network.focus(node, setMove(0.3 * screenInfo.width, 0, 0.6));
+        network.moveTo(fit(0, screenInfo.height * 0.7, 0.3));
+      } else if ((sideMenuVisible || nodeDetailVisible) && !menuVisible) {
+        network.moveTo(fit(screenInfo.width * 0.3, 0, 0.7));
       }
     }
-  }, [menuVisible, sideMenuVisible]);
+  }, [menuVisible, sideMenuVisible, nodeDetailVisible]);
 
   const events = {
     doubleClick: function(event) {
@@ -102,15 +94,49 @@ const Network = () => {
     }
   };
 
-  const setMove = (x, y, scale) => {
+  const fit = (offsetX, offsetY, offsetZoom) => {
+    const pos = [];
+    Object.values(network.getPositions()).forEach(value => {
+      pos.push(value);
+    });
+    const bounds = [getMinVal(pos, 'x'), getMinVal(pos, 'y'), getMaxVal(pos, 'x'), getMaxVal(pos, 'y')];
+    const ranges = [Math.abs(bounds[0]) + Math.abs(bounds[2]), Math.abs(bounds[1]) + Math.abs(bounds[3])];
+    let zoom;
+    if (ranges[0] < 50 && ranges[1] < 50) {
+      zoom = 1.0;
+    } else {
+      zoom = 0.75 * Math.min(screenInfo.width / ranges[0], screenInfo.height / ranges[1]);
+    }
     return {
-      scale: scale,
-      offset: { x: -x, y: -y },
+      position: {
+        x: bounds[0] + ranges[0] / 2 + offsetX,
+        y: bounds[1] + ranges[1] / 2 + offsetY
+      },
+      scale: zoom * offsetZoom,
       animation: {
-        duration: 500,
         easingFunction: 'linear'
       }
     };
+  };
+
+  const getMinVal = (data, key) => {
+    let min = data[0][key];
+    data.forEach(val => {
+      if (val[key] < min) {
+        min = val[key];
+      }
+    });
+    return min;
+  };
+
+  const getMaxVal = (data, key) => {
+    let max = data[0][key];
+    data.forEach(val => {
+      if (val[key] > max) {
+        max = val[key];
+      }
+    });
+    return max;
   };
 
   /**

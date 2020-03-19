@@ -52,7 +52,7 @@ const NodeDetailPanel = () => {
       height: `${
         nodeDetailVisible
           ? menuVisible
-            ? screenInfo.height - BOTTOM_MENU_SIZE - HEADER_SIZE + 8 + 'px'
+            ? screenInfo.height - BOTTOM_MENU_SIZE - HEADER_SIZE + 18 + 'px'
             : BOTTOM_MENU_SIZE + 'px'
           : '0px'
       }`,

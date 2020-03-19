@@ -5,14 +5,26 @@ import { modalContent } from '../config';
 
 function useResizer() {
   const dispatch = useDispatch();
-  const _onResize = e => {
-    dispatch(viewActions.setScreenDimensions(window.innerWidth, window.innerHeight));
-  };
-
   useEffect(() => {
-    window.addEventListener('resize', _onResize);
+    const _onResize = e => {
+      dispatch(viewActions.setScreenDimensions(window.innerWidth, window.innerHeight));
+    };
+    function debounced(delay, fn) {
+      let timerId;
+      return function(...args) {
+        if (timerId) {
+          clearTimeout(timerId);
+        }
+        timerId = setTimeout(() => {
+          fn(...args);
+          timerId = null;
+        }, delay);
+      };
+    }
+    const tHandler = debounced(100, _onResize);
+    window.addEventListener('resize', tHandler);
     return () => {
-      window.removeEventListener('resize', _onResize);
+      window.removeEventListener('resize', tHandler);
     };
   });
 }

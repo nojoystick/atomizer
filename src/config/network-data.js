@@ -61,8 +61,8 @@ const networkData = {
       }
     },
     autoResize: false,
-    width: window.innerWidth.toString(),
-    height: window.innerHeight.toString()
+    width: 3000 + 'px',
+    height: 2000 + 'px'
   },
   defaultData: {
     nodes: [elements[0]],
