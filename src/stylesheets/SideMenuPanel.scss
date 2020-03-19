@@ -37,6 +37,12 @@
   }
 }
 
+.rowContainer {
+  width: 80%;
+  display: flex;
+  align-items: center;
+}
+
 .networkButtons {
   overflow-y: scroll;
   overflow-x: hidden;
@@ -46,7 +52,7 @@
   font-family: inconsolata;
   display: block;
   border: none;
-  width: 90%;
+  flex-grow: 1;
   height: 30px;
   margin: 5px 5px 5px 10px;
   font-size: 20px;
@@ -85,4 +91,63 @@
   opacity: 0.0;
   visibility: hidden;
   transition: visibility 0.5s;
+}
+
+.dropdown {
+  width: 50px !important;
+  max-width: 50px;
+  height: 18px !important;
+  min-height: 18px !important;
+  font-family: 'Inconsolata';
+  font-weight: 800;
+  z-index: 3;
+  border-width: 0px 0px 2px 0px !important;
+  border-color: black !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0px !important;
+}
+.react-dropdown-select-content {
+  align-items: center;
+  span {
+    height: 18px !important;
+    width: 18px;
+    max-width: 15px;
+    overflow: hidden;
+  }
+}
+.react-dropdown-select-input {
+  margin-top: 2px;
+  font-family: 'Inconsolata';
+  font-weight: 800;
+  max-width: 15px;
+  height: 18px !important;
+  overflow-y: scroll;
+}
+.react-dropdown-select-dropdown {
+  margin-top: -4px !important;
+  border: 2px solid $text!important;
+}
+.react-dropdown-select-item {
+  background: $background !important;
+  color: $text !important;
+}
+.react-dropdown-select-no-data {
+  color: $text !important;
+}
+
+.Dropdown-menu {
+  background-color: $background;
+  padding: 5px 5px 0px 0px;
+  max-height: 150px;
+  overflow-y: scroll;
+  z-index: 2;
+}
+
+.Dropdown-option {
+
+  &:hover{
+    cursor: pointer;
+    opacity: 0.4;
+  }
 }

@@ -101,6 +101,25 @@ function useNodeDetailHotkeys(index, setIndex) {
   }, [index, nodeDetailVisible, setIndex]);
 }
 
+function useElementIndexHotkeys() {
+  const elementIndex = useSelector(state => state.network.elementIndex);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const _onKeyDown = e => {
+      if (e.key === 'ArrowDown') {
+        dispatch(networkActions.setElementIndex(elementIndex + 1));
+      } else if (e.key === 'ArrowUp') {
+        dispatch(networkActions.setElementIndex(elementIndex - 1));
+      }
+    };
+
+    document.addEventListener('keydown', _onKeyDown);
+    return () => {
+      document.removeEventListener('keydown', _onKeyDown);
+    };
+  }, [dispatch, elementIndex]);
+}
+
 function useHotkeys() {
   const { menuVisible, nodeDetailVisible, sideMenuVisible } = useSelector(state => state.view);
   const dispatch = useDispatch();
@@ -167,4 +186,4 @@ function useHotkeys() {
   });
 }
 
-export { useMultiSelectHotkeys, useModalHotkeys, useNodeDetailHotkeys, useResizer, useHotkeys };
+export { useMultiSelectHotkeys, useModalHotkeys, useNodeDetailHotkeys, useElementIndexHotkeys, useResizer, useHotkeys };

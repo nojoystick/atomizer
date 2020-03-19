@@ -27,7 +27,7 @@ const NodeDetailPanel = () => {
         }
         setIndex(i);
       }
-      setNodeData(elements.find(el => el.id === selectedNodes[index]));
+      setNodeData(elements.find(el => el.atomicNumber === selectedNodes[index]));
     } else {
       setNodeData(null);
     }

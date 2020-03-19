@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Network from '../components/network/Network';
 import MenuPanel from '../components/menus/main/MenuPanel';
-import SideMenuPanel from '../components/menus/node-editor/SideMenuPanel';
+import SideMenuPanel from '../components/menus/network-editor/SideMenuPanel';
 import NodeDetailPanel from '../components/menus/node-detail/NodeDetailPanel';
 import Modal from '../components/Modal';
 import Icon from '../components/Icon';
@@ -11,7 +11,7 @@ import IconSet from '../constants/icon-set';
 import '../stylesheets/Home.scss';
 import { sizeConstants } from '../config';
 import ColorVariables from '../stylesheets/Colors.scss';
-import { useResizer, useHotkeys } from '../utils/hotkeys';
+import { useResizer, useHotkeys, useElementIndexHotkeys } from '../utils/hotkeys';
 import { useSelector, useDispatch } from 'react-redux';
 import { viewActions } from '../redux/actions';
 
@@ -30,6 +30,7 @@ const Home = () => {
 
   useHotkeys();
   useResizer();
+  useElementIndexHotkeys();
 
   return (
     <div className={show ? 'page show' : 'page hide'}>

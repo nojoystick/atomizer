@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { configActions, networkActions } from '../../../redux/actions';
 import { sideMenuData, modalContent } from '../../../config';
+import elements from '../../../constants/elements';
+import Select from 'react-dropdown-select';
 
 const defaultCategoryClassName = 'categoryContainer';
 const hideCategoryClassName = 'categoryContainer hide';
@@ -20,10 +22,13 @@ const classNameMap = {
 };
 
 const SideMenuCategoryContainer = ({ category, show }) => {
-  const { defaultState, addEdgeState, multiSelectState, organizeState } = useSelector(state => state.network);
+  const { defaultState, addEdgeState, multiSelectState, organizeState, elementIndex } = useSelector(state => state.network);
   const [classNames, setClassNames] = useState(classNameMap);
-
   const dispatch = useDispatch();
+  const el = elements.slice();
+  if (el[0].atomicNumber === 0) {
+    el.shift();
+  }
 
   useEffect(() => {
     const bool = prop => {
@@ -46,13 +51,31 @@ const SideMenuCategoryContainer = ({ category, show }) => {
     }
   };
 
+  const onDropdownChange = item => {
+    dispatch(networkActions.setElementIndex(item[0].id));
+  };
+
   return (
     <div className={show ? defaultCategoryClassName : hideCategoryClassName}>
       {sideMenuData[category].map((action, j) => {
         return (
-          <button className={classNames[action.label]} key={j} onClick={() => onClick(action)}>
-            {action.label}
-          </button>
+          <div className='rowContainer' key={j}>
+            <button className={classNames[action.label]} onClick={() => onClick(action)}>
+              {action.label}
+            </button>
+            {action.label === 'add node' && (
+              <Select
+                options={el}
+                onChange={onDropdownChange}
+                className='dropdown'
+                values={[el[elementIndex - 1]]}
+                dropdownGap={0}
+                dropdownHandle={false}
+                labelField='dropdownLabel'
+                handleKeyDownFn={null}
+              />
+            )}
+          </div>
         );
       })}
     </div>

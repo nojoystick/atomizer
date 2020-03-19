@@ -1,5 +1,6 @@
 import { networkData } from '../../config/';
 import elements from '../../constants/elements';
+import { v4 as uuidv4 } from 'uuid';
 
 const defaultState = {
   network: null,
@@ -17,11 +18,11 @@ const defaultState = {
 const networkReducer = (state = defaultState, action) => {
   switch (action.type) {
     case 'ADD_NODE_CLICK':
-      const id = state.elementIndex; // todo import uuid from "uuid";
+      const id = uuidv4();
       const nodesCopy = state.graphInfo.nodes.slice();
       const x = action.payload.pointer.canvas.x;
       const y = action.payload.pointer.canvas.y;
-      nodesCopy.push({ ...elements[state.elementIndex], x: x, y: y });
+      nodesCopy.push({ ...elements[state.elementIndex], id: id, x: x, y: y });
       const edgesCopy = state.graphInfo.edges.slice();
       if (action.payload.nodes.length) {
         edgesCopy.push({ from: action.payload.nodes[0], to: id });
@@ -29,21 +30,20 @@ const networkReducer = (state = defaultState, action) => {
       return (state = {
         ...state,
         graphInfo: { nodes: nodesCopy, edges: edgesCopy },
-        elementIndex: state.elementIndex + 1,
         defaultState: true,
         addEdgeState: false,
         multiSelectState: false
       });
 
     case 'ADD_NODE_MENU':
+      const _id = uuidv4();
       const nodes = state.graphInfo.nodes.slice();
       const nodeX = state.elementIndex % 2 ? 30 : -30;
       const nodeY = state.elementIndex % 3 ? 30 : -30;
-      nodes.push({ ...elements[state.elementIndex], x: nodeX, y: nodeY });
+      nodes.push({ ...elements[state.elementIndex], id: _id, x: nodeX, y: nodeY });
       return (state = {
         ...state,
         graphInfo: { ...state.graphInfo, nodes: nodes },
-        elementIndex: state.elementIndex + 1,
         defaultState: true,
         addEdgeState: false,
         multiSelectState: false
@@ -164,7 +164,9 @@ const networkReducer = (state = defaultState, action) => {
       return (state = { ...state, graphInfo: action.payload });
 
     case 'SET_ELEMENT_INDEX':
-      return (state = { ...state, elementIndex: action.payload });
+      if (action.payload > 0 && action.payload < elements.length) {
+        return (state = { ...state, elementIndex: action.payload });
+      } else return state;
 
     case 'SET_MODAL_VISIBLE':
       return setModalVisible(state, action.payload);
