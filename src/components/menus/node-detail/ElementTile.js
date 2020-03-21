@@ -1,17 +1,34 @@
 import React from 'react';
-import '../../../stylesheets/ElementTile.scss';
+import { useSelector } from 'react-redux';
+import { makeStyles } from '@material-ui/styles';
 
 const ElementTile = ({ nodeData }) => {
+  const theme = useSelector(state => state.network.theme);
+  const useStyles = makeStyles({
+    elementTile: {
+      backgroundColor: nodeData ? nodeData.options.color.background : theme.background,
+      border: `2px solid ${theme.text}`,
+      width: '100px',
+      height: '100px',
+      textAlign: 'center',
+      justifyContent: 'center',
+      display: 'flex',
+      flexDirection: 'column'
+    }
+  });
+  const classes = useStyles();
+
   if (!nodeData) {
     return <div className='elementTile' />;
   }
-  let { title, dropdownLabel, weight, id, color } = nodeData;
+
+  const { title, dropdownLabel, weight, atomicNumber } = nodeData.options;
 
   return (
     <>
-      <div className='elementTile' style={{ backgroundColor: color }}>
+      <div className={classes.elementTile}>
         <h4>{title}</h4>
-        <h4>{id}</h4>
+        <h4>{atomicNumber}</h4>
         <h1>{dropdownLabel}</h1>
         <h4>{weight}</h4>
       </div>

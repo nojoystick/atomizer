@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import '../stylesheets/About.scss';
 
 const About = () => {
   const [show, setShow] = useState(false);

@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import Graph from './Graph';
-import '../../stylesheets/Network.scss';
 import { useMultiSelectHotkeys } from '../../utils/hotkeys';
 import { useSelector, useDispatch } from 'react-redux';
 import { networkActions } from '../../redux/actions';

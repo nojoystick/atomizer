@@ -1,8 +1,12 @@
 import { networkData } from '../../config/';
 import elements from '../../constants/elements';
 import { v4 as uuidv4 } from 'uuid';
+import Theme from '../../stylesheets/Theme';
+import Audio from '../../audio/Audio';
+import { frequency, toPenta } from '../../constants/frequencies';
 
 const defaultState = {
+  theme: Theme.light,
   network: null,
   options: networkData.options,
   graphInfo: networkData.defaultData,
@@ -12,7 +16,9 @@ const defaultState = {
   defaultState: true,
   addEdgeState: false,
   multiSelectState: false,
-  organizeState: false
+  organizeState: false,
+  oscillatorNodes: [],
+  masterGainValue: 0.5
 };
 
 const networkReducer = (state = defaultState, action) => {
@@ -22,17 +28,19 @@ const networkReducer = (state = defaultState, action) => {
       const nodesCopy = state.graphInfo.nodes.slice();
       const x = action.payload.pointer.canvas.x;
       const y = action.payload.pointer.canvas.y;
-      nodesCopy.push({ ...elements[state.elementIndex], id: id, x: x, y: y });
+      nodesCopy.push({ ...elements(state.theme)[state.elementIndex], id: id, x: x, y: y });
       const edgesCopy = state.graphInfo.edges.slice();
       if (action.payload.nodes.length) {
         edgesCopy.push({ from: action.payload.nodes[0], to: id });
       }
+      const osc = addOscillatorNode(state, state.elementIndex, id);
       return (state = {
         ...state,
         graphInfo: { nodes: nodesCopy, edges: edgesCopy },
         defaultState: true,
         addEdgeState: false,
-        multiSelectState: false
+        multiSelectState: false,
+        oscillatorNodes: [...state.oscillatorNodes, osc]
       });
 
     case 'ADD_NODE_MENU':
@@ -40,13 +48,15 @@ const networkReducer = (state = defaultState, action) => {
       const nodes = state.graphInfo.nodes.slice();
       const nodeX = state.elementIndex % 2 ? 30 : -30;
       const nodeY = state.elementIndex % 3 ? 30 : -30;
-      nodes.push({ ...elements[state.elementIndex], id: _id, x: nodeX, y: nodeY });
+      nodes.push({ ...elements(state.theme)[state.elementIndex], id: _id, x: nodeX, y: nodeY });
+      const _osc = addOscillatorNode(state, state.elementIndex, _id);
       return (state = {
         ...state,
         graphInfo: { ...state.graphInfo, nodes: nodes },
         defaultState: true,
         addEdgeState: false,
-        multiSelectState: false
+        multiSelectState: false,
+        oscillatorNodes: [...state.oscillatorNodes, _osc]
       });
 
     case 'ADD_EDGE':
@@ -130,6 +140,10 @@ const networkReducer = (state = defaultState, action) => {
         organizeState: !state.organizeState
       };
 
+    case 'PLAY':
+      play(state);
+      return state;
+
     case 'SELECT_ALL':
       const n = [];
       state.graphInfo.nodes.forEach(node => {
@@ -164,12 +178,26 @@ const networkReducer = (state = defaultState, action) => {
       return (state = { ...state, graphInfo: action.payload });
 
     case 'SET_ELEMENT_INDEX':
-      if (action.payload > 0 && action.payload < elements.length) {
+      if (action.payload > 0 && action.payload < elements(state.theme).length) {
         return (state = { ...state, elementIndex: action.payload });
       } else return state;
 
     case 'SET_MODAL_VISIBLE':
       return setModalVisible(state, action.payload);
+
+    case 'SET_THEME':
+      // todo redraw the existing nodes
+      // const el = elements(action.payload);
+      // const _nodes = state.network.body.nodes;
+      // Object.values(_nodes).forEach(node => {
+      //   node.options.color = el.find(item => item.atomicNumber === node.options.atomicNumber).color;
+      // })
+      // state.network.setData({nodes: _nodes});
+      return (state = { ...state, theme: action.payload });
+
+    case 'STOP':
+      stop();
+      return state;
 
     case 'TOGGLE_SELECT':
       const op = state.multiSelectState
@@ -191,9 +219,12 @@ const networkReducer = (state = defaultState, action) => {
 const doDeletion = state => {
   state.network.deleteSelected(state.selectedNodes);
   const graphCopy = state.graphInfo;
+  const nodesCopy = state.oscillatorNodes;
   for (var i = graphCopy.nodes.length - 1; i >= 0; i--) {
     if (state.selectedNodes.includes(graphCopy.nodes[i].id)) {
       graphCopy.nodes.splice(i, 1);
+      muteOscillatorNode(state.oscillatorNodes[i - 1]);
+      nodesCopy.splice(i - 1, 1);
     }
   }
   return (state = { ...state, graphInfo: graphCopy, selectedNodes: null });
@@ -229,6 +260,45 @@ const inBoundsOneAxis = (position, start, end) => {
 
 const setModalVisible = (state, payload) => {
   return (state = { ...state, modalVisible: payload });
+};
+
+const addOscillatorNode = (state, atomicNumber, id) => {
+  const oscillatorGainNode = Audio.context.createGain();
+  oscillatorGainNode.gain.setValueAtTime(0.3, Audio.context.currentTime);
+  oscillatorGainNode.connect(Audio.masterGainNode);
+
+  const oscillatorNode = Audio.context.createOscillator();
+  oscillatorNode.connect(oscillatorGainNode);
+  oscillatorNode.start();
+  oscillatorNode.frequency.setValueAtTime(frequency[toPenta[atomicNumber]], Audio.context.currentTime);
+
+  const oscillatorNodeValues = {
+    oscillatorNode: oscillatorNode,
+    oscillatorGainNode: oscillatorGainNode,
+    frequency: oscillatorNode.frequency.value,
+    type: oscillatorNode.type,
+    gain: 0,
+    id: id
+  };
+
+  return oscillatorNodeValues;
+};
+
+const muteOscillatorNode = node => {
+  node.oscillatorGainNode.gain.setTargetAtTime(0, Audio.context.currentTime, 0.05);
+  setTimeout(() => {
+    node.oscillatorNode.stop();
+  }, 1000);
+};
+
+// Fade in the MasterGainNode gain value to masterGainValue on mouseDown by .001 seconds
+const play = state => {
+  Audio.masterGainNode.gain.setTargetAtTime(state.masterGainValue, Audio.context.currentTime, 0.001);
+};
+
+// Fade out the MasterGainNode gain value to 0 on mouseDown by .001 seconds
+const stop = () => {
+  Audio.masterGainNode.gain.setTargetAtTime(0, Audio.context.currentTime, 0.001);
 };
 
 export default networkReducer;

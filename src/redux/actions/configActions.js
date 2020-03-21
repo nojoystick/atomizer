@@ -5,6 +5,10 @@ export const configActions = {
       payload: { header: header, message: message, func: func }
     };
   },
-  toggleTheme: () => {},
-  toggleHotkeys: () => {}
+  setHotkeys: param => {
+    return {
+      type: 'SET_HOTKEYS',
+      payload: param
+    };
+  }
 };

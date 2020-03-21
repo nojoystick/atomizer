@@ -35,6 +35,12 @@ export const networkActions = {
       payload: param
     };
   },
+  setTheme: param => {
+    return {
+      type: 'SET_THEME',
+      payload: param
+    };
+  },
   addNodeFromClick: event => {
     return {
       type: 'ADD_NODE_CLICK',
@@ -96,6 +102,16 @@ export const networkActions = {
   organize: () => {
     return {
       type: 'ORGANIZE'
+    };
+  },
+  play: () => {
+    return {
+      type: 'PLAY'
+    };
+  },
+  stop: () => {
+    return {
+      type: 'STOP'
     };
   }
 };

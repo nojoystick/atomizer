@@ -8,9 +8,9 @@ p {
   font-weight: 100;
   font-size: 0.8em;
   height: 100%;
-  transition: opacity 1s, height 0.5s;
-  color: $text;
+  transition: opacity 1s, height 0.5s, color 1s, background-color 1s;
   max-width: 500px;
+  background-color: inherit; 
 }
 
 h1,
@@ -23,22 +23,28 @@ a {
   font-family: 'Inconsolata';
   font-weight: 700;
   text-decoration: none;
-  color: $text;
-  background-color: transparent;
+  background-color: inherit;
+  color: inherit;
   &:hover{
     opacity: 0.4;
   }
+  transition: color 1s, background-color 1s;
 }
 
 html,
 body,
 .body,
 .container,
-#root {
+#root,
+#body {
   height: 100%;
   width: 100%;
-  background-color: $background;
   touch-action: manipulation;
+  background-color: inherit;
+}
+
+#root {
+  transition: background-color 0.75s ease;
 }
 
 .page {
@@ -51,45 +57,23 @@ body,
   transition: 2s;
 }
 
-.body {
-  width: 100%;
-  height: 100%;
+.vis-network {
+  outline: none;
+  margin: 0px;
+  transition: 0.5s;
+  position: absolute !important;
+  top: calc(-1000px + 50%);
+  left: calc(-1500px + 50%);
 }
 
-.titleHeader {
-  font-size: 20px;
-  padding: 10px 20px 0px 20px;
-  max-width: 100%;
-  background-color: transparent;
-  z-index: 2;
-  position: relative;
-  vertical-align: bottom;
-}
 
 .textContainer {
   font-size: 20px;
   margin: 0px 0px 0px 20px;
   opacity: 1;
   transition: height 0.5s;
-  color: $text;
   text-align: justify;
-  background-color: $background;
   max-width: 500px;
-}
-
-.floatLeft {
-  float: left;
-}
-
-.floatRight {
-  float: right;
-  vertical-align: middle;
-}
-
-.settingsIcon {
-  margin: 0px 0px 0px 30px;
-  width: 15px;
-  height: 13px;
 }
 
 .center {
@@ -98,8 +82,217 @@ body,
   padding: 100px 20px 20px 20px;
 }
 
-.infoIcon {
-  margin: 0px 0px 0px 30px;
-  width: 14px;
-  height: 14px;
+/* Global dropdown theme */
+
+.react-dropdown-select-content {
+  align-items: center;
+  span {
+    height: 18px !important;
+    width: 18px;
+    max-width: 15px;
+    overflow: hidden;
+  }
+}
+.react-dropdown-select-input {
+  margin-top: 2px;
+  font-family: 'Inconsolata';
+  font-weight: 800;
+  max-width: 15px;
+  height: 18px !important;
+  overflow-y: scroll;
+}
+.react-dropdown-select-dropdown {
+  margin-top: -4px !important;
+  border: 2px solid $text!important;
+}
+.react-dropdown-select-item {
+  background: $background !important;
+  color: $text !important;
+}
+.react-dropdown-select-no-data {
+  color: $text !important;
+}
+
+.toggleContainer {
+  display: inline-block;
+  font-family: 'Roboto Condensed';
+  margin: 10px 10px 0px 10px;
+}
+
+.toggleParent.vertical {
+  margin-top: 100px;
+}
+
+.sliderParent {
+  width: 100%;
+}
+
+.sliderContainer {
+  margin: 20px 0px 0px 20px;
+}
+
+.toggleParent {
+  width: 90%;
+  padding: 10px;
+}
+
+.slider {
+  -webkit-appearance: none;
+  margin: 18px 0;
+  width: 85%;
+  align-self: center;
+  &:focus {
+    outline: none;
+  }
+}
+
+.slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px $text, 0px 0px 1px $tertiary;
+  background: $tertiary;
+  border-radius: 1.3px;
+  border: 0.4px solid $text;
+}
+
+.slider::-webkit-slider-thumb {
+  box-shadow: 1px 1px 1px $text, 0px 0px 1px #0d0d0d;
+  border: 1px solid $text;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: $primary;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -14px;
+}
+
+.slider:focus::-webkit-slider-thumb {
+  background: $primary;
+}
+
+.slider:focus::-webkit-slider-runnable-track {
+  background: #4e4e4e;
+}
+
+.slider::-moz-range-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px $text, 0px 0px 1px #0d0d0d;
+  background: lightgray;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+
+.slider::-moz-range-thumb {
+  box-shadow: 1px 1px 1px $text, 0px 0px 1px #0d0d0d;
+  border: 1px solid $text;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: $primary;
+  cursor: pointer;
+}
+
+.slider::-ms-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  border-width: 16px 0;
+  color: transparent;
+}
+
+.slider::-ms-fill-lower {
+  background: black;
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px $text, 0px 0px 1px #0d0d0d;
+}
+
+.slider::-ms-fill-upper {
+  background: black;
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px $text, 0px 0px 1px #0d0d0d;
+}
+
+.slider::-ms-thumb {
+  box-shadow: 1px 1px 1px $text, 0px 0px 1px #0d0d0d;
+  border: 1px solid $text;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: whitesmoke;
+  cursor: pointer;
+}
+
+.slider:focus::-ms-fill-lower {
+  background: black;
+}
+
+.slider:focus::-ms-fill-upper {
+  background: black;
+}
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.toggleSlider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $tertiary;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  &:before{
+    box-shadow: 1px 1px 1px #4e4e4e, 0px 0px 1px #646464;
+    box-sizing: border-box;
+    border: 1px solid #4e4e4e;
+    position: absolute;
+    content: '';
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: whitesmoke;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+    border-radius: 3px;
+  }
+}
+
+input:checked + .toggleSlider {
+  background-color: #4e4e4e;
+}
+
+input:checked + .toggleSlider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.vertical {
+  transform: rotate(270deg);
+  display: inline-block;
+  margin-top: 120px;
+  margin-left: -5px;
 }

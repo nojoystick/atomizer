@@ -65,7 +65,7 @@ const networkData = {
     height: 2000 + 'px'
   },
   defaultData: {
-    nodes: [elements[0]],
+    nodes: [elements()[0]],
     edges: []
   }
 };

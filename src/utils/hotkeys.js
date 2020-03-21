@@ -122,66 +122,89 @@ function useElementIndexHotkeys() {
 
 function useHotkeys() {
   const { menuVisible, nodeDetailVisible, sideMenuVisible } = useSelector(state => state.view);
+  const { hotkeys } = useSelector(state => state.config);
   const dispatch = useDispatch();
+
+  // ES6 code
+  function throttled(delay, fn) {
+    let lastCall = 0;
+    return function(...args) {
+      const now = new Date().getTime();
+      if (now - lastCall < delay) {
+        return;
+      }
+      lastCall = now;
+      return fn(...args);
+    };
+  }
+
   const _onKeyDown = event => {
-    switch (event.key) {
-      case 'Backspace':
-        dispatch(configActions.setModal(modalContent.header, modalContent.message, networkActions.delete));
-        dispatch(networkActions.deleteSelected());
-        break;
-      case 'Escape':
-        dispatch(viewActions.closeAll());
-        break;
-      // interact
-      case 'a':
-        dispatch(networkActions.addNodeFromMenu());
-        break;
-      case 's':
-        dispatch(networkActions.selectAll());
-        break;
-      case 'd':
-        dispatch(configActions.setModal(modalContent.header, modalContent.message, networkActions.delete));
-        dispatch(networkActions.deleteSelected());
-        break;
-      case 'f':
-        dispatch(networkActions.editEdge());
-        break;
-      // mode
-      case 'q':
-        dispatch(networkActions.defaultMode());
-        break;
-      case 'w':
-        dispatch(networkActions.toggleSelect());
-        break;
-      case 'e':
-        dispatch(networkActions.addEdge());
-        break;
-      // view
-      case 'z':
-        dispatch(networkActions.organize());
-        break;
-      case 'x':
-        dispatch(viewActions.closeAll());
-        break;
-      // menus
-      case 'b':
-        dispatch(viewActions.setMenuVisible(!menuVisible));
-        break;
-      case 'n':
-        dispatch(viewActions.setNodeDetailVisible(!nodeDetailVisible));
-        break;
-      case 'm':
-        dispatch(viewActions.setSideMenuVisible(!sideMenuVisible));
-        break;
-      default:
-        break;
+    if (hotkeys) {
+      switch (event.key) {
+        case 'Backspace':
+          dispatch(configActions.setModal(modalContent.header, modalContent.message, networkActions.delete));
+          dispatch(networkActions.deleteSelected());
+          break;
+        case 'Escape':
+          dispatch(viewActions.closeAll());
+          break;
+        // interact
+        case 'a':
+          dispatch(networkActions.addNodeFromMenu());
+          break;
+        case 's':
+          dispatch(networkActions.selectAll());
+          break;
+        case 'd':
+          dispatch(configActions.setModal(modalContent.header, modalContent.message, networkActions.delete));
+          dispatch(networkActions.deleteSelected());
+          break;
+        case 'f':
+          dispatch(networkActions.editEdge());
+          break;
+        // mode
+        case 'q':
+          dispatch(networkActions.defaultMode());
+          break;
+        case 'w':
+          dispatch(networkActions.toggleSelect());
+          break;
+        case 'e':
+          dispatch(networkActions.addEdge());
+          break;
+        // view
+        case 'z':
+          dispatch(networkActions.organize());
+          break;
+        case 'x':
+          dispatch(viewActions.closeAll());
+          break;
+        // menus
+        case 'b':
+          dispatch(viewActions.setMenuVisible(!menuVisible));
+          break;
+        case 'n':
+          dispatch(viewActions.setNodeDetailVisible(!nodeDetailVisible));
+          break;
+        case 'm':
+          dispatch(viewActions.setSideMenuVisible(!sideMenuVisible));
+          break;
+        default:
+          break;
+      }
     }
   };
 
+  const handler = throttled(100, _onKeyDown);
+
   useEffect(() => {
-    window.addEventListener('keydown', _onKeyDown);
+    if (hotkeys) {
+      window.addEventListener('keydown', handler);
+    } else {
+      window.removeEventListener('keydown', handler);
+    }
     return () => {
-      window.removeEventListener('keydown', _onKeyDown);
+      window.removeEventListener('keydown', handler);
     };
   });
 }
