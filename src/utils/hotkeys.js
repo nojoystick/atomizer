@@ -189,6 +189,10 @@ function useHotkeys() {
         case 'm':
           dispatch(viewActions.setSideMenuVisible(!sideMenuVisible));
           break;
+        // audio
+        case 'Space':
+          dispatch(networkActions.playOrPause());
+          break;
         default:
           break;
       }

@@ -1,28 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { configActions, networkActions } from '../../../redux/actions';
-import { sideMenuData, modalContent } from '../../../config';
+import { useSideMenuData, modalContent } from '../../../config';
 import elements from '../../../constants/elements';
 import Select from 'react-dropdown-select';
 import { makeStyles } from '@material-ui/styles';
 
-const classNameMap = {
-  'add node': false,
-  'edit edge': false,
-  'select all': false,
-  'delete selected': false,
-  'add edges': false,
-  pointer: false,
-  multiselect: false,
-  organize: false,
-  fit: false
-};
-
 const SideMenuCategoryContainer = ({ category, show }) => {
-  const { defaultState, addEdgeState, multiSelectState, organizeState, elementIndex, theme } = useSelector(
-    state => state.network
-  );
-  const [classNames, setClassNames] = useState(classNameMap);
+  const { elementIndex, theme } = useSelector(state => state.network);
 
   const useStyles = makeStyles({
     categoryContainer: {
@@ -90,24 +75,11 @@ const SideMenuCategoryContainer = ({ category, show }) => {
 
   const classes = useStyles();
   const dispatch = useDispatch();
+  const sideMenuData = useSideMenuData();
   const el = elements(theme).slice();
   if (el[0].atomicNumber === 0) {
     el.shift();
   }
-
-  useEffect(() => {
-    const bool = prop => {
-      return prop ? true : false;
-    };
-    setClassNames({
-      ...classNames,
-      pointer: bool(defaultState),
-      'add edges': bool(addEdgeState),
-      multiselect: bool(multiSelectState),
-      organize: bool(organizeState)
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultState, addEdgeState, multiSelectState, organizeState]);
 
   const onClick = action => {
     dispatch(action.action());
@@ -125,10 +97,7 @@ const SideMenuCategoryContainer = ({ category, show }) => {
       {sideMenuData[category].map((action, j) => {
         return (
           <div className={classes.rowContainer} key={j}>
-            <button
-              className={`${classes.networkButton} ${classNames[action.label] && classes.selected}`}
-              onClick={() => onClick(action)}
-            >
+            <button className={`${classes.networkButton} ${action.active && classes.selected}`} onClick={() => onClick(action)}>
               {action.label}
             </button>
             {action.label === 'add node' && (

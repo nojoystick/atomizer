@@ -53,8 +53,21 @@ const App = () => {
 
   useEffect(() => {
     const initializeMasterGain = () => {
+      Audio.masterGainNode.gain.setValueAtTime(0.0, Audio.context.currentTime);
+      Audio.preampGainNode.connect(Audio.hpFilter);
+      Audio.preampGainNode.connect(Audio.lpFilter);
+
+      Audio.hpFilter.type = 'highpass';
+      Audio.hpFilter.frequency.setValueAtTime(0, Audio.context.currentTime);
+      Audio.hpFilter.Q.setValueAtTime(0, Audio.context.currentTime);
+      Audio.hpFilter.connect(Audio.masterGainNode);
+
+      Audio.lpFilter.type = 'lowpass';
+      Audio.lpFilter.frequency.setValueAtTime(0, Audio.context.currentTime);
+      Audio.lpFilter.Q.setValueAtTime(0, Audio.context.currentTime);
+      Audio.lpFilter.connect(Audio.masterGainNode);
+
       Audio.masterGainNode.connect(Audio.context.destination);
-      Audio.masterGainNode.gain.setValueAtTime(0.5, Audio.context.currentTime);
     };
     initializeMasterGain();
   }, []);

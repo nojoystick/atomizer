@@ -4,9 +4,12 @@ import { useDrop } from 'react-dnd';
 import Player from './Player';
 import ItemTypes from './ItemTypes';
 import { v4 as uuidv4 } from 'uuid';
+import { useSelector } from 'react-redux';
 
 const PlayerContainer = ({ hideSourceOnDrag }) => {
-  const [player, setPlayer] = useState({ id: uuidv4(), top: '30px', left: 'calc(50% - 100px)' });
+  const { screenInfo } = useSelector(state => state.view);
+  const [player, setPlayer] = useState({ id: uuidv4(), top: 30, left: screenInfo.width / 2 });
+  const [interactible, setInteractible] = useState(false);
   const [, drop] = useDrop({
     accept: ItemTypes.PLAYER,
     drop(item, monitor) {
@@ -22,7 +25,6 @@ const PlayerContainer = ({ hideSourceOnDrag }) => {
   };
   const useStyles = makeStyles({
     background: {
-      transition: 'opacity 1s, visibility 0s',
       position: 'absolute',
       top: '0px',
       left: '0px',
@@ -33,16 +35,26 @@ const PlayerContainer = ({ hideSourceOnDrag }) => {
       alignItems: 'center',
       justifyContent: 'center',
       zIndex: '9996',
-      pointerEvents: 'none'
+      visibility: interactible ? 'visible' : 'hidden'
     }
   });
 
   const classes = useStyles();
 
   return (
-    <div ref={drop} className={classes.background}>
-      <Player id={player.id} left={player.left} top={player.top} hideSourceOnDrag={hideSourceOnDrag} />
-    </div>
+    <>
+      {screenInfo.width > screenInfo.breakpoint && (
+        <div ref={drop} className={classes.background}>
+          <Player
+            id={player.id}
+            left={player.left}
+            top={player.top}
+            hideSourceOnDrag={hideSourceOnDrag}
+            setInteractible={setInteractible}
+          />
+        </div>
+      )}
+    </>
   );
 };
 

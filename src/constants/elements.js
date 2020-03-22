@@ -1,4 +1,4 @@
-import Theme from '../stylesheets/Theme';
+import Theme from '../stylesheets/Theme.js';
 
 const elements = theme => {
   if (!theme) {

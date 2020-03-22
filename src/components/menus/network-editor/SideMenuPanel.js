@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { sizeConstants, sideMenuData } from '../../../config';
+import { sizeConstants, useSideMenuData } from '../../../config';
 import { useSelector } from 'react-redux';
 import Icon from '../../Icon';
 import IconSet from '../../../constants/icon-set';
@@ -24,7 +24,7 @@ const SideMenuPanel = () => {
       flexDirection: 'column',
       right: '-6px',
       width: `${sideMenuVisible ? sizeConstants.SIDE_MENU_SIZE + 'px' : '0px'}`,
-      height: screenInfo.height - sizeConstants.HEADER_SIZE + 8 - (menuVisible ? sizeConstants.BOTTOM_MENU_SIZE : 0),
+      height: screenInfo.height - sizeConstants.HEADER_SIZE + 20 - (menuVisible ? sizeConstants.BOTTOM_MENU_SIZE : 0),
       borderLeft: `3px solid ${theme.text}`,
       borderTop: `3px solid ${theme.text}`,
       margin: '0px',
@@ -87,6 +87,7 @@ const SideMenuPanel = () => {
   });
 
   const classes = useStyles();
+  const sideMenuData = useSideMenuData();
 
   const toggleCategoryClassName = key => {
     setCategoryVisible({

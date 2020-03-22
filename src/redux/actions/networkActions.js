@@ -104,14 +104,56 @@ export const networkActions = {
       type: 'ORGANIZE'
     };
   },
-  play: () => {
+  playOrPause: () => {
     return {
-      type: 'PLAY'
+      type: 'PLAY_OR_PAUSE'
     };
   },
   stop: () => {
     return {
       type: 'STOP'
+    };
+  },
+  setMasterVolume: param => {
+    return {
+      type: 'SET_MASTER_VOLUME',
+      payload: param
+    };
+  },
+  setTempo: param => {
+    return {
+      type: 'SET_TEMPO',
+      payload: param
+    };
+  },
+  setLowPassFilterFrequency: param => {
+    return {
+      type: 'SET_LP_FILTER_FREQUENCY',
+      payload: param
+    };
+  },
+  setLowPassFilterQ: param => {
+    return {
+      type: 'SET_LP_FILTER_Q',
+      payload: param
+    };
+  },
+  setHighPassFilterFrequency: param => {
+    return {
+      type: 'SET_HP_FILTER_FREQUENCY',
+      payload: param
+    };
+  },
+  setHighPassFilterQ: param => {
+    return {
+      type: 'SET_HP_FILTER_Q',
+      payload: param
+    };
+  },
+  setBeatIndex: param => {
+    return {
+      type: 'SET_BEAT_INDEX',
+      payload: param
     };
   }
 };

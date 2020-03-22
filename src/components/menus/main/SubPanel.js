@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 const SubPanel = ({ data }) => {
   const theme = useSelector(state => state.network.theme);
@@ -49,6 +49,13 @@ const SubPanel = ({ data }) => {
   });
 
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const _onChange = (slider, e) => {
+    if (slider.action) {
+      dispatch(slider.action(e.target.value));
+    }
+  };
 
   return (
     <div className={classes.subPanel}>
@@ -65,7 +72,9 @@ const SubPanel = ({ data }) => {
                 className={sliderClassName}
                 type='range'
                 min={slider.min ? slider.min : 0}
-                max={slider.max ? slider.max : 128}
+                max={slider.max ? slider.max : 127}
+                defaultValue={slider.value ? slider.value : 50}
+                onChange={e => _onChange(slider, e)}
               />
             </div>
           );

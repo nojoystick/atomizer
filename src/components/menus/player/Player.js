@@ -1,4 +1,7 @@
-import React from 'react';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrag } from 'react-dnd';
@@ -7,17 +10,18 @@ import Icon from '../../Icon';
 import IconSet from '../../../constants/icon-set';
 import { networkActions } from '../../../redux/actions';
 
-const Player = ({ id, left, top, hideSourceOnDrag }) => {
+const Player = ({ id, left, top, hideSourceOnDrag, setInteractible }) => {
   const theme = useSelector(state => state.network.theme);
   const useStyles = makeStyles({
     player: {
       width: '200px',
       height: '50px',
-      border: `1px solid ${theme.text}`,
+      border: `3px solid ${theme.text}`,
       backgroundColor: theme.background,
       position: 'absolute',
       zIndex: '9999',
-      pointerEvents: 'auto'
+      pointerEvents: 'auto',
+      visibility: 'visible'
     },
     button: {
       width: '50px',
@@ -33,7 +37,7 @@ const Player = ({ id, left, top, hideSourceOnDrag }) => {
     },
     playIcon: {
       width: '15px',
-      height: '15px'
+      height: '17px'
     },
     stopIcon: {
       width: '15px',
@@ -49,12 +53,17 @@ const Player = ({ id, left, top, hideSourceOnDrag }) => {
       isDragging: monitor.isDragging()
     })
   });
+
+  useEffect(() => {
+    setInteractible(isDragging);
+  }, [isDragging, setInteractible]);
+
   if (isDragging && hideSourceOnDrag) {
     return <div ref={drag} />;
   }
   return (
     <div ref={drag} className={classes.player} style={{ left, top }}>
-      <button className={classes.button} onClick={() => dispatch(networkActions.play())}>
+      <button className={classes.button} onClick={() => dispatch(networkActions.playOrPause())}>
         <Icon className={classes.playIcon} fill={theme.text} viewBox='0 0 300 300' path={IconSet.play} />
       </button>
       <button className={classes.button} onClick={() => dispatch(networkActions.stop())}>

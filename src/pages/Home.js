@@ -14,11 +14,12 @@ import { useResizer, useHotkeys, useElementIndexHotkeys } from '../utils/hotkeys
 import { useSelector, useDispatch } from 'react-redux';
 import { viewActions } from '../redux/actions';
 import { makeStyles } from '@material-ui/styles';
+import { setPlayer, usePreciseTimer } from '../audio/startPlayer';
 
 const Home = () => {
   const [show, setShow] = useState(false);
   const { textVisible, menuVisible, sideMenuVisible, nodeDetailVisible, screenInfo } = useSelector(state => state.view);
-  const theme = useSelector(state => state.network.theme);
+  const { theme, audio } = useSelector(state => state.network);
   const useStyles = makeStyles({
     textFlexContainer: {
       position: 'relative',
@@ -58,8 +59,8 @@ const Home = () => {
       padding: '0px',
       width: '16px',
       height: '8px',
-      margin: '8px 0px 2px 0px',
-      marginTop: `${textVisible ? '8px' : '0px'}`,
+      marginTop: `${textVisible ? '8px' : '-1px'}`,
+      marginLeft: '1px',
       transition: 'opacity 0.5s ease'
     },
     button: {
@@ -104,6 +105,7 @@ const Home = () => {
   useHotkeys();
   useResizer();
   useElementIndexHotkeys();
+  usePreciseTimer(setPlayer, bpmToMs(audio.masterTempo), audio.playing);
 
   const getExpandIcon = (className, rotation, visible) => {
     return (
@@ -167,6 +169,11 @@ const getDetailStyle = (menuVisible, sideMenuVisible) => {
     left: 'unset',
     right: `${sideMenuVisible ? sizeConstants.SIDE_MENU_SIZE - 5 + 'px' : '40px'}`
   };
+};
+
+/* determine how many ms in a 32nd note for a given bpm*/
+const bpmToMs = bpm => {
+  return 60000 / bpm / 8;
 };
 
 export default Home;

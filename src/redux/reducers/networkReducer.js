@@ -3,7 +3,7 @@ import elements from '../../constants/elements';
 import { v4 as uuidv4 } from 'uuid';
 import Theme from '../../stylesheets/Theme';
 import Audio from '../../audio/Audio';
-import { frequency, toPenta } from '../../constants/frequencies';
+import { frequency, volume } from '../../constants/frequencies';
 
 const defaultState = {
   theme: Theme.light,
@@ -17,8 +17,16 @@ const defaultState = {
   addEdgeState: false,
   multiSelectState: false,
   organizeState: false,
-  oscillatorNodes: [],
-  masterGainValue: 0.5
+  audio: {
+    playing: false,
+    beatIndex: 0,
+    masterGain: 0.5,
+    masterTempo: 120,
+    lpFilterFrequency: 0.1,
+    lpFilterQ: 0.1,
+    hpFilterFrequency: 0.1,
+    hpFilterQ: 0.1
+  }
 };
 
 const networkReducer = (state = defaultState, action) => {
@@ -28,19 +36,18 @@ const networkReducer = (state = defaultState, action) => {
       const nodesCopy = state.graphInfo.nodes.slice();
       const x = action.payload.pointer.canvas.x;
       const y = action.payload.pointer.canvas.y;
-      nodesCopy.push({ ...elements(state.theme)[state.elementIndex], id: id, x: x, y: y });
+      const osc = addOscillatorNode(state, state.elementIndex, id);
+      nodesCopy.push({ ...elements(state.theme)[state.elementIndex], id: id, x: x, y: y, oscillator: osc });
       const edgesCopy = state.graphInfo.edges.slice();
       if (action.payload.nodes.length) {
         edgesCopy.push({ from: action.payload.nodes[0], to: id });
       }
-      const osc = addOscillatorNode(state, state.elementIndex, id);
       return (state = {
         ...state,
         graphInfo: { nodes: nodesCopy, edges: edgesCopy },
         defaultState: true,
         addEdgeState: false,
-        multiSelectState: false,
-        oscillatorNodes: [...state.oscillatorNodes, osc]
+        multiSelectState: false
       });
 
     case 'ADD_NODE_MENU':
@@ -48,22 +55,21 @@ const networkReducer = (state = defaultState, action) => {
       const nodes = state.graphInfo.nodes.slice();
       const nodeX = state.elementIndex % 2 ? 30 : -30;
       const nodeY = state.elementIndex % 3 ? 30 : -30;
-      nodes.push({ ...elements(state.theme)[state.elementIndex], id: _id, x: nodeX, y: nodeY });
       const _osc = addOscillatorNode(state, state.elementIndex, _id);
+      nodes.push({ ...elements(state.theme)[state.elementIndex], id: _id, x: nodeX, y: nodeY, oscillator: _osc });
       return (state = {
         ...state,
         graphInfo: { ...state.graphInfo, nodes: nodes },
         defaultState: true,
         addEdgeState: false,
-        multiSelectState: false,
-        oscillatorNodes: [...state.oscillatorNodes, _osc]
+        multiSelectState: false
       });
 
     case 'ADD_EDGE':
       const opt = state.addEdgeState
         ? {
             ...state.options,
-            manipulation: networkData.options.manipulation,
+            manipulation: {},
             ...state.options
           }
         : {
@@ -140,9 +146,9 @@ const networkReducer = (state = defaultState, action) => {
         organizeState: !state.organizeState
       };
 
-    case 'PLAY':
-      play(state);
-      return state;
+    case 'PLAY_OR_PAUSE':
+      playOrPause(state);
+      return { ...state, audio: { ...state.audio, playing: !state.audio.playing } };
 
     case 'SELECT_ALL':
       const n = [];
@@ -182,6 +188,32 @@ const networkReducer = (state = defaultState, action) => {
         return (state = { ...state, elementIndex: action.payload });
       } else return state;
 
+    case 'SET_BEAT_INDEX':
+      return { ...state, audio: { ...state.audio, beatIndex: action.payload } };
+
+    case 'SET_LP_FILTER_FREQUENCY':
+      Audio.lpFilter.frequency.setValueAtTime(frequency[action.payload], Audio.context.currentTime);
+      return { ...state, audio: { ...state.audio, lpFilterFrequency: frequency[action.payload] } };
+
+    case 'SET_LP_FILTER_Q':
+      Audio.lpFilter.Q.setValueAtTime(volume[action.payload] * 1000, Audio.context.currentTime);
+      return { ...state, audio: { ...state.audio, lpFilterQ: action.payload } };
+
+    case 'SET_HP_FILTER_FREQUENCY':
+      Audio.hpFilter.frequency.setValueAtTime(frequency[action.payload], Audio.context.currentTime);
+      return { ...state, audio: { ...state.audio, hpFilterFrequency: frequency[action.payload] } };
+
+    case 'SET_HP_FILTER_Q':
+      Audio.hpFilter.Q.setValueAtTime(volume[action.payload] * 1000, Audio.context.currentTime);
+      return { ...state, audio: { ...state.audio, hpFilterQ: action.payload } };
+
+    case 'SET_MASTER_VOLUME':
+      const vol = volume[action.payload];
+      Audio.masterGainNode.gain.setValueAtTime(vol, Audio.context.currentTime);
+      return { ...state, audio: { ...state.audio, masterGain: vol } };
+
+    case 'SET_TEMPO':
+      return { ...state, audio: { ...state.audio, masterTempo: 6 + 2 * action.payload } };
     case 'SET_MODAL_VISIBLE':
       return setModalVisible(state, action.payload);
 
@@ -197,7 +229,7 @@ const networkReducer = (state = defaultState, action) => {
 
     case 'STOP':
       stop();
-      return state;
+      return { ...state, audio: { ...state.audio, playing: false, beatIndex: 0 } };
 
     case 'TOGGLE_SELECT':
       const op = state.multiSelectState
@@ -219,12 +251,10 @@ const networkReducer = (state = defaultState, action) => {
 const doDeletion = state => {
   state.network.deleteSelected(state.selectedNodes);
   const graphCopy = state.graphInfo;
-  const nodesCopy = state.oscillatorNodes;
   for (var i = graphCopy.nodes.length - 1; i >= 0; i--) {
     if (state.selectedNodes.includes(graphCopy.nodes[i].id)) {
+      muteOscillatorNode(graphCopy.nodes[i].oscillator);
       graphCopy.nodes.splice(i, 1);
-      muteOscillatorNode(state.oscillatorNodes[i - 1]);
-      nodesCopy.splice(i - 1, 1);
     }
   }
   return (state = { ...state, graphInfo: graphCopy, selectedNodes: null });
@@ -265,38 +295,29 @@ const setModalVisible = (state, payload) => {
 const addOscillatorNode = (state, atomicNumber, id) => {
   const oscillatorGainNode = Audio.context.createGain();
   oscillatorGainNode.gain.setValueAtTime(0.3, Audio.context.currentTime);
-  oscillatorGainNode.connect(Audio.masterGainNode);
+  oscillatorGainNode.connect(Audio.preampGainNode);
 
-  const oscillatorNode = Audio.context.createOscillator();
-  oscillatorNode.connect(oscillatorGainNode);
-  oscillatorNode.start();
-  oscillatorNode.frequency.setValueAtTime(frequency[toPenta[atomicNumber]], Audio.context.currentTime);
-
-  const oscillatorNodeValues = {
-    oscillatorNode: oscillatorNode,
+  const oscillatorValues = {
     oscillatorGainNode: oscillatorGainNode,
-    frequency: oscillatorNode.frequency.value,
-    type: oscillatorNode.type,
-    gain: 0,
+    gain: 0.3,
     id: id
   };
 
-  return oscillatorNodeValues;
+  return oscillatorValues;
 };
 
 const muteOscillatorNode = node => {
   node.oscillatorGainNode.gain.setTargetAtTime(0, Audio.context.currentTime, 0.05);
-  setTimeout(() => {
-    node.oscillatorNode.stop();
-  }, 1000);
 };
 
-// Fade in the MasterGainNode gain value to masterGainValue on mouseDown by .001 seconds
-const play = state => {
-  Audio.masterGainNode.gain.setTargetAtTime(state.masterGainValue, Audio.context.currentTime, 0.001);
+const playOrPause = state => {
+  if (state.audio.playing) {
+    stop();
+  } else {
+    Audio.masterGainNode.gain.setTargetAtTime(state.audio.masterGain, Audio.context.currentTime, 0.001);
+  }
 };
 
-// Fade out the MasterGainNode gain value to 0 on mouseDown by .001 seconds
 const stop = () => {
   Audio.masterGainNode.gain.setTargetAtTime(0, Audio.context.currentTime, 0.001);
 };

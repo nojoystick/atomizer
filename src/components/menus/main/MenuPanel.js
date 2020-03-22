@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import SubPanel from './SubPanel';
 import Icon from '../../Icon';
 import IconSet from '../../../constants/icon-set';
-import { sizeConstants, subPanelData } from '../../../config';
+import { sizeConstants, useSubPanelData } from '../../../config';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 
@@ -69,6 +69,7 @@ const MenuPanel = () => {
   });
 
   const classes = useStyles();
+  const subPanelData = useSubPanelData();
 
   /**
    * Set scroll to be just past the settings menu by default
