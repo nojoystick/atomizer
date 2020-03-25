@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/atomizer/static/css/main.16f7795f.chunk.css",
-    "main.js": "/atomizer/static/js/main.87623fd5.chunk.js",
-    "main.js.map": "/atomizer/static/js/main.87623fd5.chunk.js.map",
+    "main.js": "/atomizer/static/js/main.e52b45cc.chunk.js",
+    "main.js.map": "/atomizer/static/js/main.e52b45cc.chunk.js.map",
     "runtime-main.js": "/atomizer/static/js/runtime-main.94fcc704.js",
     "runtime-main.js.map": "/atomizer/static/js/runtime-main.94fcc704.js.map",
     "static/js/2.cfa3033e.chunk.js": "/atomizer/static/js/2.cfa3033e.chunk.js",
     "static/js/2.cfa3033e.chunk.js.map": "/atomizer/static/js/2.cfa3033e.chunk.js.map",
     "index.html": "/atomizer/index.html",
-    "precache-manifest.8112e9ed065ba6fe035be85c57071921.js": "/atomizer/precache-manifest.8112e9ed065ba6fe035be85c57071921.js",
+    "precache-manifest.e62b4e8f1789c5226739d9fa734ee297.js": "/atomizer/precache-manifest.e62b4e8f1789c5226739d9fa734ee297.js",
     "service-worker.js": "/atomizer/service-worker.js",
     "static/css/main.16f7795f.chunk.css.map": "/atomizer/static/css/main.16f7795f.chunk.css.map",
     "static/js/2.cfa3033e.chunk.js.LICENSE.txt": "/atomizer/static/js/2.cfa3033e.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.94fcc704.js",
     "static/js/2.cfa3033e.chunk.js",
     "static/css/main.16f7795f.chunk.css",
-    "static/js/main.87623fd5.chunk.js"
+    "static/js/main.e52b45cc.chunk.js"
   ]
 }
