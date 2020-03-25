@@ -104,7 +104,7 @@ const Network = () => {
     if (ranges[0] < 50 && ranges[1] < 50) {
       zoom = 1.0;
     } else {
-      zoom = 0.75 * Math.min(screenInfo.width / ranges[0], screenInfo.height / ranges[1]);
+      zoom = 0.5 * Math.min(screenInfo.width / ranges[0], screenInfo.height / ranges[1]);
     }
     return {
       position: {

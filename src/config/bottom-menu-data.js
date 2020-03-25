@@ -1,47 +1,10 @@
 import { networkActions } from '../redux/actions';
 import { useSelector } from 'react-redux';
 const useSubPanelData = () => {
-  const { masterGain, masterTempo, lpFilterFrequency, lpFilterQ, hpFilterFrequency, hpFilterQ } = useSelector(
+  const { lpFilterFrequency, lpFilterQ, hpFilterFrequency, hpFilterQ } = useSelector(
     state => state.network.audio
   );
   return [
-    {
-      title: 'lab station',
-      subtitle: 'master settings',
-      size: 'large',
-      sliderFields: [
-        {
-          value: masterGain * 127,
-          label: 'volume',
-          hoverText: 'master volume',
-          action: networkActions.setMasterVolume
-        },
-        {
-          value: masterTempo / 2 - 6,
-          label: 'tempo',
-          hoverText: 'master tempo in bpm',
-          action: networkActions.setTempo
-        },
-        {
-          label: 'range',
-          hoverText: 'octave range expander'
-        }
-      ],
-      toggleFields: [
-        {
-          label: 'limit',
-          hoverText: 'prevent clipping'
-        },
-        {
-          label: 'sync',
-          hoverText: 'lock nodes to master tempo'
-        },
-        {
-          label: 'safety goggles',
-          hoverText: 'restict to pentatonic scale'
-        }
-      ]
-    },
     {
       title: '∆t',
       subtitle: 'delay',

@@ -389,8 +389,8 @@ const volume = [
   0.991,
   0.992,
   0.993,
-  0.993,
-  0.994
+  0.994,
+  1.000
 ];
 
 export { frequency, toPenta, volume };

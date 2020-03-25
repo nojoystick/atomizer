@@ -10,7 +10,13 @@ const Icon = ({ style = {}, fill = '#000', width = '100%', className = '', heigh
     xmlns='http://www.w3.org/2000/svg'
     xmlnsXlink='http://www.w3.org/1999/xlink'
   >
-    <path d={path} fill={fill} />
+    {typeof path === 'string' ? 
+        <path d={path} fill={fill} /> :
+        path.map(d => {
+          return <path d={d} fill={fill} />
+        })
+    }
+
   </svg>
 );
 

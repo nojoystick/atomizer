@@ -18,50 +18,14 @@ import { setPlayer, usePreciseTimer } from '../audio/startPlayer';
 
 const Home = () => {
   const [show, setShow] = useState(false);
-  const { textVisible, menuVisible, sideMenuVisible, nodeDetailVisible, screenInfo } = useSelector(state => state.view);
+  const { menuVisible, sideMenuVisible, nodeDetailVisible } = useSelector(state => state.view);
   const { theme, audio } = useSelector(state => state.network);
   const useStyles = makeStyles({
-    textFlexContainer: {
-      position: 'relative',
-      float: 'left',
-      display: 'flex',
-      flexDirection: 'column',
-      fontSize: '20px',
-      margin: '-13px 0px 0px 20px',
-      padding: '0px',
-      zIndex: '2',
-      opacity: '1',
-      color: 'inherit',
-      backgroundColor: 'inherit',
-      height: `${textVisible ? '100%' : '30px'}`,
-      maxWidth: `${textVisible ? '500px' : '160px'}`,
-      transition: `${textVisible ? 'max-width 0s' : 'max-width 4s'}, 0.3s`,
-      '&:hover': {
-        opacity: '0.4'
-      }
-    },
-    disappearingText: {
-      display: 'inline-block',
-      transition: '0.5s',
-      zIndex: '2',
-      opacity: textVisible ? '1.0' : '0.0',
-      visibility: textVisible ? 'visible' : 'hidden',
-      height: textVisible ? (screenInfo.width < screenInfo.breakpoint ? '120px' : '70px') : '0px'
-    },
     expandIcon: {
       marginBottom: '2px',
       width: '10px',
       height: '5px',
       transition: 'transform 0.5s'
-    },
-    textHideShowIcon: {
-      display: 'inline-block',
-      padding: '0px',
-      width: '16px',
-      height: '8px',
-      marginTop: `${textVisible ? '8px' : '-1px'}`,
-      marginLeft: '1px',
-      transition: 'opacity 0.5s ease'
     },
     button: {
       position: 'absolute',
@@ -98,7 +62,6 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(viewActions.setTextVisible(true));
     setShow(true);
   }, [dispatch]);
 
@@ -123,19 +86,6 @@ const Home = () => {
     <div className={show ? 'page show' : 'page hide'}>
       <PlayerContainer hideSourceOnDrag={true} />
       <Modal />
-      <div
-        className={classes.textFlexContainer}
-        onClick={() => {
-          dispatch(viewActions.setTextVisible(!textVisible));
-        }}
-      >
-        <p className={classes.disappearingText}>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam ea quas maiores adipisci doloremque impedit illum illo
-          natus mollitia possimus blanditiis accusantium, ut nostrum. Voluptates modi eum maiores repellat molestias!
-        </p>
-        {getExpandIcon(classes.textHideShowIcon, [0, 180], textVisible)}
-      </div>
-
       <Network />
       <SideMenuPanel />
       <MenuPanel />

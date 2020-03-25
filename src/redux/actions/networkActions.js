@@ -114,10 +114,11 @@ export const networkActions = {
       type: 'STOP'
     };
   },
-  setMasterVolume: param => {
+  setMasterVolume: (param, scale) => {
     return {
       type: 'SET_MASTER_VOLUME',
-      payload: param
+      payload: param,
+      scale: scale
     };
   },
   setTempo: param => {

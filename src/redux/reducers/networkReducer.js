@@ -6,7 +6,7 @@ import Audio from '../../audio/Audio';
 import { frequency, volume } from '../../constants/frequencies';
 
 const defaultState = {
-  theme: Theme.light,
+  theme: Theme.dark,
   network: null,
   options: networkData.options,
   graphInfo: networkData.defaultData,
@@ -208,12 +208,12 @@ const networkReducer = (state = defaultState, action) => {
       return { ...state, audio: { ...state.audio, hpFilterQ: action.payload } };
 
     case 'SET_MASTER_VOLUME':
-      const vol = volume[action.payload];
+      const vol = action.scale === 'MIDI' ? volume[action.payload] : action.payload;
       Audio.masterGainNode.gain.setValueAtTime(vol, Audio.context.currentTime);
       return { ...state, audio: { ...state.audio, masterGain: vol } };
 
     case 'SET_TEMPO':
-      return { ...state, audio: { ...state.audio, masterTempo: 6 + 2 * action.payload } };
+      return { ...state, audio: { ...state.audio, masterTempo: action.payload } };
     case 'SET_MODAL_VISIBLE':
       return setModalVisible(state, action.payload);
 

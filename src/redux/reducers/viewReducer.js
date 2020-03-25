@@ -1,5 +1,4 @@
 const defaultState = {
-  textVisible: false,
   menuVisible: false,
   sideMenuVisible: false,
   nodeDetailVisible: false,
@@ -13,9 +12,6 @@ const defaultState = {
 
 const viewReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case 'SET_TEXT_VISIBLE':
-      closeOthers(state, action, 'textVisible');
-      return (state = { ...state, textVisible: action.payload });
     case 'SET_MENU_VISIBLE':
       closeOthers(state, action, 'menuVisible');
       return (state = { ...state, menuVisible: action.payload });
