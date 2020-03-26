@@ -3,8 +3,6 @@ import { disableBodyScroll } from 'body-scroll-lock';
 import { HashRouter, Route, NavLink } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
-import IconSet from './constants/icon-set';
-import Icon from './components/Icon';
 import Settings from './pages/Settings';
 import { makeStyles } from '@material-ui/styles';
 import './stylesheets/App.scss';
@@ -43,6 +41,9 @@ const App = () => {
       height: '100%',
       backgroundColor: theme.background,
       color: theme.text
+    },
+    toolbarItem: {
+      marginLeft: '15px'
     }
   });
 
@@ -77,13 +78,9 @@ const App = () => {
       <>
         <header className={classes.titleHeader}>
           <div className={classes.floatRight}>
-            <NavLink to='/about'>about</NavLink>
-            <NavLink to='/settings'>
-              <Icon className={classes.settingsIcon} path={IconSet.settings} viewBox='0 0 50 48' fill={theme.text} />
-            </NavLink>
-            <NavLink to='/'>
-              <Icon className={classes.infoIcon} path={IconSet.info} viewBox='0 0 25 23' fill={theme.text} />
-            </NavLink>
+            <NavLink to='/about' className={classes.toolbarItem}>about</NavLink>
+            <NavLink to='/settings' className={classes.toolbarItem}>settings</NavLink>
+            <NavLink to='/' className={classes.toolbarItem}>tutorial</NavLink>
           </div>
           <h1>
             <NavLink exact to='/'>

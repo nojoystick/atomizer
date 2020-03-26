@@ -1,11 +1,4 @@
 export const viewActions = {
-  setTextVisible: (param, screenSize) => {
-    return {
-      type: 'SET_TEXT_VISIBLE',
-      payload: param,
-      screenSize: screenSize
-    };
-  },
   setMenuVisible: (param, screenSize) => {
     return {
       type: 'SET_MENU_VISIBLE',

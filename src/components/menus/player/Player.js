@@ -137,7 +137,7 @@ const Player = ({ id, left, top, hideSourceOnDrag, setInteractible }) => {
         <Icon className={classes.stopIcon} fill={theme.text} viewBox='0 0 300 300' path={IconSet.stop} />
       </button>
       <div className={classes.sliderGroup}>
-        <label className={classes.sliderLabel} for='masterVolume'>Volume</label>
+        <label className={classes.sliderLabel}>Volume</label>
         <input className={classes.input} 
           type='number'
           id='masterVolume'
@@ -162,7 +162,7 @@ const Player = ({ id, left, top, hideSourceOnDrag, setInteractible }) => {
         />
       </div>
       <div className={classes.sliderGroup}>
-        <label className={classes.sliderLabel} for='masterTempo'>Tempo</label>
+        <label className={classes.sliderLabel}>Tempo</label>
         <input className={classes.input}
           type='number'
           id='masterVolume'

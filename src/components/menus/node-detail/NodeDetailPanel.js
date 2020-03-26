@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { sizeConstants } from '../../../config';
-import ElementTile from './ElementTile';
+import ElementTile from '../../ElementTile';
 import Icon from '../../Icon';
 import IconSet from '../../../constants/icon-set';
 import { useSelector } from 'react-redux';
@@ -139,7 +139,7 @@ const NodeDetailPanel = () => {
             path={IconSet.expandArrow}
           />
         </button>
-        <ElementTile nodeData={nodeData} />
+        <ElementTile nodeData={nodeData && nodeData.options} />
         <button className={classes.scrollButton} onClick={() => updateIndex(1, index)}>
           <Icon
             className={classes.scrollIcon}

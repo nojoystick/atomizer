@@ -1,21 +1,16 @@
-import React, { useState } from 'react';
-import { sizeConstants, useSideMenuData } from '../../../config';
-import { useSelector } from 'react-redux';
+import React from 'react';
+import Select from 'react-dropdown-select';
+import { sizeConstants, useSideMenuData, modalContent } from '../../../config';
+import { useSelector, useDispatch } from 'react-redux';
+import { configActions, networkActions } from '../../../redux/actions';
 import Icon from '../../Icon';
-import IconSet from '../../../constants/icon-set';
-import SideMenuCategoryContainer from './SideMenuCategoryContainer';
 import { makeStyles } from '@material-ui/styles';
-
-const categoryMap = {
-  INTERACT: true,
-  MODE: true,
-  VIEW: true
-};
+import elements from '../../../constants/elements';
+import ElementTile from '../../ElementTile'
 
 const SideMenuPanel = () => {
   const { menuVisible, sideMenuVisible, screenInfo } = useSelector(state => state.view);
-  const theme = useSelector(state => state.network.theme);
-  const [categoryVisible, setCategoryVisible] = useState(categoryMap);
+  const { elementIndex, theme } = useSelector(state => state.network);
 
   const useStyles = makeStyles({
     sideMenuPanel: {
@@ -30,94 +25,119 @@ const SideMenuPanel = () => {
       margin: '0px',
       transition: 'width 0.5s, height 0.5s',
       backgroundColor: theme.background,
-      zIndex: 1
+      zIndex: 1,
+      overflowY: 'scroll'
     },
     editorHeader: {
       padding: '5px',
       whiteSpace: 'nowrap'
     },
-    categoryHeader: {
-      padding: '0px',
-      margin: '0px 0px 0px 5px',
-      textTransform: 'lowercase',
-      width: '100%',
-      backgroundColor: 'transparent',
-      border: 'none',
-      textAlign: 'left',
-      verticalAlign: 'center',
-      height: '30px',
-      fontSize: '0.8em',
-      outline: 'none',
-      color: theme.text,
-      '&:hover': {
-        opacity: '0.4'
-      }
+    icon: {
+      width: '40px',
+      height: '40px',
     },
-    showHideIcon: {
-      float: 'right',
-      margin: '5px 20px 0px 0px',
-      width: '10px',
-      height: '5px',
-      transition: '0.5s'
-    },
-    networkButtons: {
-      overflowY: 'scroll',
-      overflowX: 'hidden',
-      float: 'right'
-    },
-    networkButton: {
-      fontFamily: 'inconsolata',
+    button: {
       display: 'block',
       border: 'none',
-      flexGrow: '1',
-      height: '30px',
-      margin: '5px 5px 5px 10px',
-      fontSize: '20px',
-      fontWeight: '500',
-      textAlign: 'left',
+      height: '60px',
+      width: '65px',
       cursor: 'pointer',
       outline: 'none',
       backgroundColor: theme.background,
       color: theme.text,
-      whiteSpace: 'nowrap',
+      margin: 'auto',
       '&:hover': {
         opacity: '0.4'
       }
+    },
+    selected: {
+      fontWeight: '800'
+    },
+    dropdown: {
+      width: '50px !important',
+      maxWidth: '60px',
+      height: '18px !important',
+      minHeight: '18px !important',
+      fontFamily: 'Inconsolata',
+      fontWeight: '800',
+      zIndex: '3',
+      borderWidth: '0px 0px 2px 0px !important',
+      borderColor: `${theme.text} $important`,
+      outline: 'none !important',
+      boxShadow: 'none !important',
+      padding: '0px !important',
+      margin: 'auto',
+      marginTop: '10px',
+      marginBottom: '10px',
+      '&:hover': {
+        borderColor: `${theme.text} !important`,
+        outline: 'none'
+      },
+      '& div': {
+        '& input': {
+          color: theme.text
+        }
+      }
+    },
+    separator: {
+      width: '60px',
+      height: '2px',
+      margin: 'auto',
+      marginTop: '5px',
+      marginBottom: '5px',
+      backgroundColor: theme.text
     }
   });
 
   const classes = useStyles();
   const sideMenuData = useSideMenuData();
+  const dispatch = useDispatch();
 
-  const toggleCategoryClassName = key => {
-    setCategoryVisible({
-      ...categoryVisible,
-      [key]: (categoryVisible[key] = !categoryVisible[key])
-    });
+  const el = elements(theme).slice();
+  if (el[0].atomicNumber === 0) {
+    el.shift();
+  }
+
+  const onDropdownChange = item => {
+    dispatch(networkActions.setElementIndex(item[0].atomicNumber));
   };
+
+  const onClick = action => {
+    dispatch(action.action());
+    if (action.label === 'delete selected') {
+      dispatch(configActions.setModal(modalContent.header, modalContent.message, networkActions.delete));
+    }
+  };
+
 
   return (
     <div id='sideMenuPanel' className={classes.sideMenuPanel}>
-      <h2 className={classes.editorHeader}>network editor</h2>
       <div className={classes.networkButtons}>
-        {Object.keys(sideMenuData).map((key, i) => {
+      <ElementTile nodeData={el[elementIndex-1]} style={{fontSize: '14px', width: sizeConstants.SIDE_MENU_SIZE-17, height: sizeConstants.SIDE_MENU_SIZE-17, margin: '5px'}}/>
+      <Select
+                options={el}
+                onChange={onDropdownChange}
+                className={classes.dropdown}
+                values={[el[elementIndex - 1]]}
+                dropdownGap={0}
+                dropdownHandle={false}
+                labelField='dropdownLabel'
+                handleKeyDownFn={null}
+                onDropdownOpen={() => dispatch(configActions.setHotkeys(false))}
+                onDropdownClose={() => dispatch(configActions.setHotkeys(true))}
+              />
+        {Object.values(sideMenuData).map((actions, i) => {
           return (
-            <div key={i}>
-              <button className={classes.categoryHeader} onClick={() => toggleCategoryClassName(key)}>
-                <h3>{key}</h3>
-                <Icon
-                  className={classes.showHideIcon}
-                  style={{
-                    transform: `rotate(${categoryVisible[key] ? '180deg' : '0deg'})`,
-                    marginRight: `${sideMenuVisible ? '20px' : '-40px'}`
-                  }}
-                  fill={theme.text}
-                  viewBox='3 5 10 5'
-                  path={IconSet.expandArrow}
-                />
-              </button>
-              <SideMenuCategoryContainer category={key} show={categoryVisible[key]} />
-            </div>
+            <>
+              {actions.map((action, j) => {
+                return(
+                  <button key={j} className={classes.button} onClick={() => onClick(action)}>
+                  <Icon className={classes.icon} path={action.icon.path} viewBox={action.icon.viewBox} fill={action.active ? theme.secondary : theme.text}/>
+                </button>
+                )
+              })}
+              <div className={classes.separator} />
+            </>
           );
         })}
       </div>
