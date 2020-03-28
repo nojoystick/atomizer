@@ -13,7 +13,8 @@ const Theme = {
     postTransitionMetal: '#11856a',
     metalloid: '#7f6e80',
     lanthanide: '#b5620e',
-    actinide: '#942b65'
+    actinide: '#942b65',
+    name: 'dark'
   },
   light: {
     background: '#fafafa',
@@ -29,7 +30,8 @@ const Theme = {
     postTransitionMetal: '#bbbbbb',
     metalloid: '#eeec90',
     lanthanide: '#f3bbf0',
-    actinide: '#ce7777'
+    actinide: '#ce7777',
+    name: 'light'
   }
 };
 

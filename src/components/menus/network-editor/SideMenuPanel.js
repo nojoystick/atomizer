@@ -7,6 +7,10 @@ import Icon from '../../Icon';
 import { makeStyles } from '@material-ui/styles';
 import elements from '../../../constants/elements';
 import ElementTile from '../../ElementTile'
+import Tippy from '@tippyjs/react';
+import 'tippy.js/animations/scale.css';
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/themes/light.css';
 
 const SideMenuPanel = () => {
   const { menuVisible, sideMenuVisible, screenInfo } = useSelector(state => state.view);
@@ -46,6 +50,7 @@ const SideMenuPanel = () => {
       backgroundColor: theme.background,
       color: theme.text,
       margin: 'auto',
+      fontSize: '12px',
       '&:hover': {
         opacity: '0.4'
       }
@@ -86,6 +91,12 @@ const SideMenuPanel = () => {
       marginTop: '5px',
       marginBottom: '5px',
       backgroundColor: theme.text
+    },
+    tooltip: {
+      backgroundColor: theme.name === 'dark' ? 'white' : 'black',
+      color: theme.background,
+      padding: '10px',
+      fontSize: '14px'
     }
   });
 
@@ -131,9 +142,19 @@ const SideMenuPanel = () => {
             <>
               {actions.map((action, j) => {
                 return(
-                  <button key={j} className={classes.button} onClick={() => onClick(action)}>
-                  <Icon className={classes.icon} path={action.icon.path} viewBox={action.icon.viewBox} fill={action.active ? theme.secondary : theme.text}/>
-                </button>
+                  <Tippy 
+                    theme={theme.name === 'dark' ? 'light' : null} 
+                    key={j} placement="left" 
+                    arrow={true} 
+                    animation='scale'
+                    delay={0} 
+                    duration={200} 
+                    content={<p className={classes.tooltip}>{action.label}</p>}
+                  >
+                    <button className={classes.button} onClick={() => onClick(action)}>
+                      <Icon className={classes.icon} path={action.icon.path} viewBox={action.icon.viewBox} fill={action.active ? theme.secondary : theme.text}/>
+                    </button>
+                </Tippy>
                 )
               })}
               <div className={classes.separator} />
