@@ -4,6 +4,7 @@ const defaultState = {
     message: null,
     func: null
   },
+  user: null,
   hotkeys: true
 };
 
@@ -14,6 +15,8 @@ const configReducer = (state = defaultState, action) => {
       return state;
     case 'SET_HOTKEYS':
       return (state = { ...state, hotkeys: action.payload });
+    case 'SET_USER':
+      return state = { ...state, user: action.payload };
     default:
       return state;
   }

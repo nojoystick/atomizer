@@ -1,7 +1,7 @@
 const Theme = {
   dark: {
-    background: '#000000',
-    text: '#ffffff',
+    background: '#121212',
+    text: '#e3e3e3',
     primary: '#f5f5f5',
     secondary: '#777777',
     tertiary: '#e4e4e4', 
@@ -16,8 +16,8 @@ const Theme = {
     actinide: '#942b65'
   },
   light: {
-    background: '#ffffff',
-    text: '#000000',
+    background: '#fafafa',
+    text: '#121212',
     primary: '#f5f5f5',
     secondary: '#a9a9a9',
     tertiary: '#e4e4e4',

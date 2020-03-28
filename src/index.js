@@ -7,13 +7,16 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
+import Firebase, { FirebaseContext } from './firebase';
 
 ReactDOM.render(
-  <Provider store={store}>
-    <DndProvider backend={Backend}>
-      <App />
-    </DndProvider>
-  </Provider>,
+  <FirebaseContext.Provider value={new Firebase()}>
+    <Provider store={store}>
+      <DndProvider backend={Backend}>
+        <App />
+      </DndProvider>
+    </Provider>
+  </FirebaseContext.Provider>,
   document.getElementById('root')
 );
 

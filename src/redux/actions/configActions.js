@@ -10,5 +10,11 @@ export const configActions = {
       type: 'SET_HOTKEYS',
       payload: param
     };
+  },
+  setUser: param => {
+    return {
+      type: 'SET_USER',
+      payload: param
+    }
   }
 };

@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { disableBodyScroll } from 'body-scroll-lock';
 import { HashRouter, Route, NavLink } from 'react-router-dom';
-import Home from './pages/Home';
-import About from './pages/About';
-import Settings from './pages/Settings';
+import { Home, About, Settings, LogIn, SignUp, SignOut, PasswordReset } from './pages';
 import { makeStyles } from '@material-ui/styles';
-import './stylesheets/App.scss';
-import { useSelector } from 'react-redux';
 import Audio from './audio/Audio';
+import * as Routes from './constants/routes';
+import './stylesheets/App.scss';
 
 const App = () => {
+  const user = useSelector(state => state.config.user);
   const theme = useSelector(state => state.network.theme);
   const useStyles = makeStyles({
     titleHeader: {
@@ -43,7 +43,7 @@ const App = () => {
       color: theme.text
     },
     toolbarItem: {
-      marginLeft: '15px'
+      marginLeft: '20px',
     }
   });
 
@@ -78,9 +78,10 @@ const App = () => {
       <>
         <header className={classes.titleHeader}>
           <div className={classes.floatRight}>
-            <NavLink to='/about' className={classes.toolbarItem}>about</NavLink>
-            <NavLink to='/settings' className={classes.toolbarItem}>settings</NavLink>
-            <NavLink to='/' className={classes.toolbarItem}>tutorial</NavLink>
+            <NavLink to={Routes.ABOUT} className={classes.toolbarItem}>about</NavLink>
+            <NavLink to={Routes.SETTINGS} className={classes.toolbarItem}>settings</NavLink>
+            {!user && <NavLink to={Routes.LOG_IN} className={classes.toolbarItem}>log in</NavLink>}
+            {user && <SignOut classes={classes}/>}
           </div>
           <h1>
             <NavLink exact to='/'>
@@ -89,9 +90,12 @@ const App = () => {
           </h1>
         </header>
         <div id='body' className={classes.body}>
-          <Route path='/' exact component={Home} />
-          <Route path='/about' component={About} />
-          <Route path='/settings' component={Settings} />
+          <Route path={Routes.HOME} exact component={Home} />
+          <Route path={Routes.ABOUT} component={About} />
+          <Route path={Routes.SETTINGS} component={Settings} />
+          <Route path={Routes.LOG_IN} component={LogIn} />
+          <Route path={Routes.SIGN_UP} component={SignUp} />
+          <Route path={Routes.PASSWORD_RESET} component={PasswordReset} />
         </div>
       </>
     );
