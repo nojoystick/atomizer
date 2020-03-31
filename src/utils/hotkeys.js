@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { configActions, networkActions, viewActions } from '../redux/actions';
-import { modalContent } from '../config';
+import { modalContent, useSideMenuData } from '../config';
 
 function useResizer() {
   const dispatch = useDispatch();
@@ -121,9 +121,9 @@ function useElementIndexHotkeys() {
 }
 
 function useHotkeys() {
-  const { menuVisible, nodeDetailVisible, sideMenuVisible } = useSelector(state => state.view);
   const { hotkeys } = useSelector(state => state.config);
   const dispatch = useDispatch();
+  const sideMenuData = useSideMenuData();
 
   // ES6 code
   function throttled(delay, fn) {
@@ -138,64 +138,18 @@ function useHotkeys() {
     };
   }
 
-  const _onKeyDown = event => {
+  const _onKeyDown = (event) => {
     if (hotkeys) {
-      switch (event.key) {
-        case 'Backspace':
-          dispatch(configActions.setModal(modalContent.header, modalContent.message, networkActions.delete));
-          dispatch(networkActions.deleteSelected());
-          break;
-        case 'Escape':
-          dispatch(viewActions.closeAll());
-          break;
-        // interact
-        case 'a':
-          dispatch(networkActions.addNodeFromMenu());
-          break;
-        case 's':
-          dispatch(networkActions.selectAll());
-          break;
-        case 'd':
-          dispatch(configActions.setModal(modalContent.header, modalContent.message, networkActions.delete));
-          dispatch(networkActions.deleteSelected());
-          break;
-        case 'f':
-          dispatch(networkActions.editEdge());
-          break;
-        // mode
-        case 'q':
-          dispatch(networkActions.defaultMode());
-          break;
-        case 'w':
-          dispatch(networkActions.toggleSelect());
-          break;
-        case 'e':
-          dispatch(networkActions.addEdge());
-          break;
-        // view
-        case 'z':
-          dispatch(networkActions.organize());
-          break;
-        case 'x':
-          dispatch(viewActions.closeAll());
-          break;
-        // menus
-        case 'b':
-          dispatch(viewActions.setMenuVisible(!menuVisible));
-          break;
-        case 'n':
-          dispatch(viewActions.setNodeDetailVisible(!nodeDetailVisible));
-          break;
-        case 'm':
-          dispatch(viewActions.setSideMenuVisible(!sideMenuVisible));
-          break;
-        // audio
-        case 'Space':
-          dispatch(networkActions.playOrPause());
-          break;
-        default:
-          break;
-      }
+      Object.values(sideMenuData).forEach(type => {
+        type.forEach(action => {
+          if(action.shortcut === event.key){
+            if(action.label === 'delete selected') {
+              dispatch(configActions.setModal(modalContent.header, modalContent.message, networkActions.delete));
+            }
+            dispatch(action.action());
+          }
+        })
+      })
     }
   };
 

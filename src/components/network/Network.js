@@ -32,18 +32,6 @@ const Network = () => {
 
   const events = {
     doubleClick: function(event) {
-      if (!event.nodes.length) {
-        const rootPosition = network.getPositions([0])[0];
-        if (
-          inBounds(
-            event.pointer.canvas,
-            { x: rootPosition.x - 60, y: rootPosition.y + 90 },
-            { x: rootPosition.x + 90, y: rootPosition.y - 60 }
-          )
-        ) {
-          event.nodes.push(0);
-        }
-      }
       dispatch(networkActions.addNodeFromClick(event));
     },
     dragStart: function(event) {
@@ -66,7 +54,7 @@ const Network = () => {
     },
     selectNode: function(event) {
       dispatch(networkActions.filterSelection(event.nodes));
-      if(event.nodes && event.nodes[0] !== 0){
+      if(event.nodes){
         dispatch(viewActions.setNodeDetailVisible(true));
       }
     },
@@ -125,6 +113,9 @@ const Network = () => {
   };
 
   const getMinVal = (data, key) => {
+    if(data.length === 0) {
+      return -200;
+    }
     let min = data[0][key];
     data.forEach(val => {
       if (val[key] < min) {
@@ -135,6 +126,9 @@ const Network = () => {
   };
 
   const getMaxVal = (data, key) => {
+    if(data.length === 0){
+      return 200;
+    }
     let max = data[0][key];
     data.forEach(val => {
       if (val[key] > max) {
@@ -142,21 +136,6 @@ const Network = () => {
       }
     });
     return max;
-  };
-
-  /**
-   * determine if a given position is between the bounds of a start and end point.
-   *
-   * @param {} position
-   * @param {*} start
-   * @param {*} end
-   */
-  const inBounds = (position, start, end) => {
-    return position && start && end && inBoundsOneAxis(position.x, start.x, end.x) && inBoundsOneAxis(position.y, start.y, end.y);
-  };
-
-  const inBoundsOneAxis = (position, start, end) => {
-    return (position < start && position > end) || (position > start && position < end);
   };
 
   return (

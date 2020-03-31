@@ -12,7 +12,8 @@ const useSideMenuData = () => {
         icon: {
           path: IconSet.addNode,
           viewBox: '0 0 510 510'
-        }
+        },
+        shortcut: 'a'
       },
       {
         label: 'select all',
@@ -20,7 +21,8 @@ const useSideMenuData = () => {
         icon: {
           path: IconSet.selectAll,
           viewBox: '0 0 30 30'
-        }
+        },
+        shortcut: 's'
       },
       {
         label: 'delete selected',
@@ -28,7 +30,8 @@ const useSideMenuData = () => {
         icon: {
           path: IconSet.delete,
           viewBox: '0 0 50 50'
-        }
+        },
+        shortcut: 'd'
       },
       {
         label: 'edit edge',
@@ -36,7 +39,8 @@ const useSideMenuData = () => {
         icon: {
           path: IconSet.editEdge,
           viewBox: '0 0 510 510'
-        }
+        },
+        shortcut: 'f'
       }],
       MODE: [
       {
@@ -46,7 +50,8 @@ const useSideMenuData = () => {
         icon: {
           path: IconSet.pointer,
           viewBox: '0 0 25 25'
-        }
+        },
+        shortcut: 'q'
       },
       {
         active: multiSelectState,
@@ -55,7 +60,8 @@ const useSideMenuData = () => {
         icon: {
           path: IconSet.selectMultiple, // edit edge
           viewBox: '0 0 500 500'
-        }
+        },
+        shortcut: 'w'
       },
       {
         active: addEdgeState,
@@ -64,7 +70,8 @@ const useSideMenuData = () => {
         icon: {
           path: IconSet.addEdge,
           viewBox: '0 0 510 510'
-        }
+        },
+        shortcut: 'e'
       }],
       VIEW:[
       {
@@ -74,7 +81,8 @@ const useSideMenuData = () => {
         icon: {
           path: IconSet.organize,
           viewBox: '0 0 510 510'
-        }
+        },
+        shortcut: 'z'
       },
       {
         label: 'fit',
@@ -82,7 +90,8 @@ const useSideMenuData = () => {
         icon: {
           path: IconSet.fit,
           viewBox: '0 0 68 68'
-        }
+        },
+        shortcut: 'x'
       }
     ]
   };

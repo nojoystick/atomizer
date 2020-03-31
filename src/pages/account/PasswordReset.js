@@ -1,14 +1,13 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { withFirebase } from '../../firebase';
 import * as ROUTES from '../../constants/routes';
 import useStyles from './styles';
 import { useSelector } from 'react-redux';
+import { useFirebase } from 'react-redux-firebase'
 
 const PasswordResetPage = () => {
   const theme = useSelector(state => state.network.theme);
   const classes = useStyles({theme: theme});
-  console.log(classes);
   return(
     <div className={`${classes.parent} ${classes.passwordParent}`}>
       <h2>reset password</h2>
@@ -19,53 +18,49 @@ const PasswordResetPage = () => {
 
 const INITIAL_STATE = {
   email: '',
-  error: null,
+  message: null,
 };
 
-class PasswordResetFormBase extends Component {
-  constructor(props) {
-    super(props);
-    this.classes = props.classes;
-    this.state = { ...INITIAL_STATE };
-  }
+const PasswordResetForm = ({classes}) => {
+  const [content, setContent] = useState({...INITIAL_STATE});
 
-  onSubmit = event => {
-    const { email } = this.state;
-    this.props.firebase
-      .doPasswordReset(email)
+  const firebase = useFirebase();
+
+  const onSubmit = event => {
+    const { email } = content;
+    firebase
+      .resetPassword(email)
       .then(() => {
-        this.setState({ ...INITIAL_STATE });
+        setContent({ ...INITIAL_STATE, message: 'an email has been sent.' });
       })
       .catch(error => {
-        this.setState({ error });
+        setContent({ ...content, message: error.message });
       });
     event.preventDefault();
   };
 
-  onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+  const onChange = event => {
+    setContent({ ...content, [event.target.name]: event.target.value });
   };
 
-  render() {
-    const { email, error } = this.state;
-    const isInvalid = email === '';
-    return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          className={this.classes.input}
-          name="email"
-          value={this.state.email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
-        />
-        <button className={this.classes.button} disabled={isInvalid} type="submit">
-          Reset
-        </button>
-        {error && <p className={this.classes.message}>{error.message}</p>}
-      </form>
-    );
-  }
+  const isInvalid = content.email === '';
+
+  return (
+    <form onSubmit={onSubmit}>
+      <input
+        className={classes.input}
+        name="email"
+        value={content.email}
+        onChange={onChange}
+        type="text"
+        placeholder="Email Address"
+      />
+      <button className={classes.button} disabled={isInvalid} type="submit">
+        Reset
+      </button>
+      {content.error && <p className={classes.message}>{content.message}</p>}
+    </form>
+  );
 }
 
 const PasswordResetLink = ({classes}) => {
@@ -77,7 +72,5 @@ const PasswordResetLink = ({classes}) => {
 };
 
 export default PasswordResetPage;
-
-const PasswordResetForm = withFirebase(PasswordResetFormBase);
 
 export { PasswordResetForm, PasswordResetLink };

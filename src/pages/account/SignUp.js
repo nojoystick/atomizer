@@ -1,53 +1,54 @@
-import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
-import { withFirebase} from '../../firebase'
+import React, { useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
 import { makeStyles } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
+import { useFirebase, isLoaded, isEmpty } from 'react-redux-firebase'
 
 const SignUp = () => {
-    const theme = useSelector(state => state.network.theme);
-    const useStyles = makeStyles({
-      input: {
-        backgroundColor: theme.background,
-        color: theme.text,
-        borderWidth: '0px 0px 2px 0px',
-        borderColor: theme.text,
-        fontFamily: 'Inconsolata',
-        fontSize: '20px',
-        display: 'block',
-        margin: '20px'
-        },
-      parent: {
-        display: 'flex',
-        flexDirection: 'column',
-        textAlign: 'center',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '65%'
-        },
-      button: {
-        width: '100px',
-        height: '40px',
-        backgroundColor: theme.background,
-        color: theme.text,
-        border: `2px solid ${theme.text}`,
-        '&:disabled':{
-            visibility: 'hidden'
-        }
+  const theme = useSelector(state => state.network.theme);
+  const useStyles = makeStyles({
+    input: {
+      backgroundColor: theme.background,
+      color: theme.text,
+      borderWidth: '0px 0px 2px 0px',
+      borderColor: theme.text,
+      fontFamily: 'Inconsolata',
+      fontSize: '20px',
+      display: 'block',
+      margin: '20px'
       },
-      message: {
-          maxHeight: '200px',
-          maxWidth: '200px'
+    parent: {
+      display: 'flex',
+      flexDirection: 'column',
+      textAlign: 'center',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '65%'
+      },
+    button: {
+      width: '100px',
+      height: '40px',
+      backgroundColor: theme.background,
+      color: theme.text,
+      border: `2px solid ${theme.text}`,
+      '&:disabled':{
+          visibility: 'hidden'
       }
-    });
+    },
+    message: {
+        maxHeight: '200px',
+        maxWidth: '200px'
+    }
+  });
   const classes = useStyles();
   return(
-    <div className={`${classes.parent} ${classes.signUpParent}`}>
-        <h2>sign up</h2>
-        <SignUpForm classes={classes}/>
-    </div>
+    <>
+      <div className={`${classes.parent} ${classes.signUpParent}`}>
+          <h2>sign up</h2>
+          <SignUpForm classes={classes} />
+      </div>
+    </>
   )
 };
 
@@ -59,89 +60,79 @@ const INITIAL_STATE = {
     error: null,
   };
 
-class SignUpFormBase extends Component {
-  constructor(props) {
-    super(props);
-    this.classes = props.classes;
-    this.state = { ...INITIAL_STATE };
+const SignUpForm = ({classes}) => {
+  const [content, setContent] = useState({...INITIAL_STATE});
+  const firebase = useFirebase();
+  const auth = useSelector(state => state.firebase.auth);
 
-  }
-
-  onSubmit = event => {
-    const { username, email, passwordOne } = this.state;
-    this.props.firebase
-      .doCreateUserWithEmailAndPassword(email, passwordOne)
-      .then(authUser => {
-        this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.HOME);
-      })
+  const onSubmit = event => {
+    const { username, email, passwordOne } = content;
+    firebase
+      .createUser({email: email, password: passwordOne}, {username: username, email: email})
       .catch(error => {
-        this.setState({ error });
+        setContent({ ...content, error });
       });
-    event.preventDefault();
-  }
-
-  onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
   };
 
-  render() {
-    const {
-        username,
-        email,
-        passwordOne,
-        passwordTwo,
-        error,
-      } = this.state;
+  const onChange = event => {
+    setContent({...content, [event.target.name]: event.target.value });
+  };
 
-    const isInvalid =
-      passwordOne !== passwordTwo ||
-      passwordOne === '' ||
-      email === '' ||
-      username === '';
+  const isInvalid =
+    content.passwordOne !== content.passwordTwo ||
+    content.passwordOne === '' ||
+    content.email === '' ||
+    content.username === '';
 
-    return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          className={this.classes.input}
-          name="username"
-          value={username}
-          onChange={this.onChange}
-          type="text"
-          placeholder="username"
-        />
-        <input
-          className={this.classes.input}
-          name="email"
-          value={email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="email address"
-        />
-        <input
-          className={this.classes.input}
-          name="passwordOne"
-          value={passwordOne}
-          onChange={this.onChange}
-          type="password"
-          placeholder="password"
-        />
-        <input
-          className={this.classes.input}
-          name="passwordTwo"
-          value={passwordTwo}
-          onChange={this.onChange}
-          type="password"
-          placeholder="confirm password"
-        />
-        <button className={this.classes.button} disabled={isInvalid} type="submit">
-          Sign Up
-        </button>
+  return (
+    <>
+      {isEmpty(auth) ? 
+        <form onSubmit={onSubmit}>
+          <input
+            className={classes.input}
+            name="username"
+            value={content.username}
+            onChange={onChange}
+            type="text"
+            placeholder="username"
+          />
+          <input
+            className={classes.input}
+            name="email"
+            value={content.email}
+            onChange={onChange}
+            type="text"
+            placeholder="email address"
+          />
+          <input
+            className={classes.input}
+            name="passwordOne"
+            value={content.passwordOne}
+            onChange={onChange}
+            type="password"
+            placeholder="password"
+          />
+          <input
+            className={classes.input}
+            name="passwordTwo"
+            value={content.passwordTwo}
+            onChange={onChange}
+            type="password"
+            placeholder="confirm password"
+          />
+          <button className={classes.button} disabled={isInvalid} type="submit">
+            Sign Up
+          </button>
 
-        {error && <p className={`${this.classes.message} ${this.classes.offset}`}>{error.message}</p>}
-      </form>
-    );
-  }
+          {content.error && <p className={`${classes.message} ${classes.offset}`}>{content.error.message}</p>}
+        </form>
+        :
+        <>
+          {isLoaded(auth) && <Redirect to={ROUTES.HOME} />}
+        </>
+        }
+    </>
+  );
 }
 
 const SignUpLink = ({classes}) => {
@@ -151,11 +142,6 @@ const SignUpLink = ({classes}) => {
     </p>
   )
 };
-
-const SignUpForm = compose(
-    withRouter,
-    withFirebase,
-  )(SignUpFormBase);
 
 export default SignUp;
 export { SignUpForm, SignUpLink };

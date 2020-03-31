@@ -4,3 +4,4 @@ export const LOG_IN = '/login';
 export const SETTINGS = '/settings';
 export const ABOUT= '/about';
 export const PASSWORD_RESET = '/pw-reset';
+export const ADMIN = '/admin';

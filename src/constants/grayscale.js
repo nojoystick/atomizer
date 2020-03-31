@@ -1,0 +1,3 @@
+const Grayscale = ['#fafafa', '#f4f4f4', '#efefef', '#e4e4e4', '#dfdfdf', '#dadada', '#d4d4d4', '#cfcfcf', '#cacaca', '#c4c4c4', '#bfbfbf', '#bababa', '#b4b4b4', '#afafaf', '#aaaaaa', '#a4a4a4', '#9f9f9f', '#9a9a9a', '#949494', '#8f8f8f', '#8a8a8a', '#848484', '#7f7f7f', '#7a7a7a', '#747474', '#6f6f6f', '#6a6a6a', '#646464', '#5f5f5f', '#5a5a5a', '#545454', '#4f4f4f', '#4a4a4a', '#444444', '#3f3f3f', '#3a3a3a', '#343434', '#2f2f2f', '#2a2a2a', '#242424', '#1f1f1f', '#1a1a1a', '#121212']
+
+export default Grayscale;

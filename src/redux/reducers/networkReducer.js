@@ -6,10 +6,10 @@ import Audio from '../../audio/Audio';
 import { frequency, volume } from '../../constants/frequencies';
 
 const defaultState = {
-  theme: Theme.dark,
+  theme: Theme.light,
   network: null,
-  options: networkData.options,
-  graphInfo: networkData.defaultData,
+  options: networkData(Theme.light).options,
+  graphInfo: networkData(Theme.light).defaultData,
   elementIndex: 1,
   selectedNodes: null,
   modalVisible: false,
@@ -37,7 +37,7 @@ const networkReducer = (state = defaultState, action) => {
       const x = action.payload.pointer.canvas.x;
       const y = action.payload.pointer.canvas.y;
       const osc = addOscillatorNode(state, state.elementIndex, id);
-      nodesCopy.push({ ...elements(state.theme)[state.elementIndex], id: id, x: x, y: y, oscillator: osc });
+      nodesCopy.push({ ...elements(state.theme)[state.elementIndex-1], id: id, x: x, y: y, oscillator: osc });
       const edgesCopy = state.graphInfo.edges.slice();
       if (action.payload.nodes.length) {
         edgesCopy.push({ from: action.payload.nodes[0], to: id });
@@ -55,8 +55,8 @@ const networkReducer = (state = defaultState, action) => {
       const nodes = state.graphInfo.nodes.slice();
       const nodeX = state.elementIndex % 2 ? 30 : -30;
       const nodeY = state.elementIndex % 3 ? 30 : -30;
-      const _osc = addOscillatorNode(state, state.elementIndex, _id);
-      nodes.push({ ...elements(state.theme)[state.elementIndex], id: _id, x: nodeX, y: nodeY, oscillator: _osc });
+      const _osc = addOscillatorNode(state, state.elementIndex-1, _id);
+      nodes.push({ ...elements(state.theme)[state.elementIndex-1], id: _id, x: nodeX, y: nodeY, oscillator: _osc });
       return (state = {
         ...state,
         graphInfo: { ...state.graphInfo, nodes: nodes },
@@ -158,7 +158,6 @@ const networkReducer = (state = defaultState, action) => {
 
       if (
         n
-          .filter(id => id !== 0)
           .sort()
           .join(',') ===
         state.network
@@ -251,25 +250,19 @@ const networkReducer = (state = defaultState, action) => {
 const doDeletion = state => {
   state.network.deleteSelected(state.selectedNodes);
   const graphCopy = state.graphInfo;
-  for (var i = graphCopy.nodes.length - 1; i >= 0; i--) {
+  for (var i = graphCopy.nodes.length - 1 ; i > -1; i--) {
     if (state.selectedNodes.includes(graphCopy.nodes[i].id)) {
-      muteOscillatorNode(graphCopy.nodes[i].oscillator);
       graphCopy.nodes.splice(i, 1);
     }
   }
   return (state = { ...state, graphInfo: graphCopy, selectedNodes: null });
 };
 
-/**
- * Make sure the selected nodes list matches the network's list
- * and don't allow the root node to be selected
- */
 const filterSelection = (state, n) => {
   if (n === null) {
     state.network.unselectAll();
   } else {
-    const filteredNodes = n.filter(id => id !== 0);
-    return filteredNodes;
+    return n;
   }
 };
 

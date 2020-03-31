@@ -1,26 +1,20 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
+import React, { useState } from 'react';
 import { SignUpLink } from './SignUp';
 import { PasswordResetLink } from './PasswordReset';
-import { withFirebase } from '../../firebase';
 import * as ROUTES from '../../constants/routes';
+import { Redirect } from 'react-router-dom';
 import useStyles from './styles';
-import { useDispatch, useSelector } from 'react-redux';
-import { configActions } from '../../redux/actions';
+import { useSelector } from 'react-redux';
+import { useFirebase, isLoaded, isEmpty } from 'react-redux-firebase'
 
 const LogIn = () => {
   const theme = useSelector(state => state.network.theme);
   const classes = useStyles({theme: theme});
-  const dispatch = useDispatch();
 
-  const setAuth = (auth) => {
-    dispatch(configActions.setUser(auth))
-  }
   return(
     <div className={classes.parent}>
       <h2>log in</h2>
-      <LogInForm classes={classes} setAuth={setAuth}/>
+      <LogInForm classes={classes}/>
       <PasswordResetLink classes={classes} />
       <SignUpLink classes={classes}/>
     </div>
@@ -33,63 +27,61 @@ const INITIAL_STATE = {
   error: null,
 };
 
-class LogInFormBase extends Component {
-  constructor(props) {
-    super(props);
-    this.classes = props.classes;
-    this.state = { ...INITIAL_STATE };
-  }
-  onSubmit = event => {
-    const { email, password } = this.state;
-    this.props.firebase
-      .doSignInWithEmailAndPassword(email, password)
-      .then(() => {
-        this.props.firebase.auth.onAuthStateChanged(auth => {
-          this.props.setAuth(auth);
-        })
-        this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.HOME);
+const LogInForm = ({classes}) => {
+  const [content, setContent] = useState({...INITIAL_STATE});
+  const auth = useSelector(state => state.firebase.auth);
+  const firebase = useFirebase();
+
+  const onSubmit = event => {
+    const { email, password } = content;
+    firebase.login({email: email, password: password})
+      .then(() => {        
+        setContent({ ...INITIAL_STATE });
       })
       .catch(error => {
-        this.setState({ error });
+        setContent({...content, error });
       });
     event.preventDefault();
   };
-  onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+  
+  const onChange = event => {
+    setContent({ ...content, [event.target.name]: event.target.value });
   };
-  render() {
-    const { email, password, error } = this.state;
-    const isInvalid = password === '' || email === '';
-    return (
-        <form onSubmit={this.onSubmit}>
+
+  const isInvalid = content.password === '' || content.email === '';
+
+  return(
+    <>
+      {isEmpty(auth) ?
+        <form onSubmit={onSubmit}>
           <input
-            className={this.classes.input}
+            className={classes.input}
             name="email"
-            value={email}
-            onChange={this.onChange}
+            value={content.email}
+            onChange={onChange}
             type="text"
             placeholder="email"
           />
           <input
-            className={this.classes.input}
+            className={classes.input}
             name="password"
-            value={password}
-            onChange={this.onChange}
+            value={content.password}
+            onChange={onChange}
             type="password"
             placeholder="password"
           />
-          <button className={this.classes.button} disabled={isInvalid} type="submit">
+          <button className={classes.button} disabled={isInvalid} type="submit">
             Sign In
           </button>
-          {error && <p className={`${this.classes.message} ${this.classes.offset}`}>login error, check your username and password and try again</p>}
+          {content.error && <p className={`${classes.message} ${classes.offset}`}>login error, check your username and password and try again</p>}
         </form>
-    );
-  }
+        :
+        <>
+        {isLoaded(auth) && <Redirect to={ROUTES.HOME} />}
+      </>
+      }
+    </>
+  );
 }
-const LogInForm = compose(
-  withRouter,
-  withFirebase,
-)(LogInFormBase);
+
 export default LogIn;
-export { LogInForm };

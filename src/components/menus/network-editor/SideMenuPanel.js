@@ -93,21 +93,26 @@ const SideMenuPanel = () => {
       backgroundColor: theme.text
     },
     tooltip: {
-      backgroundColor: theme.name === 'dark' ? 'white' : 'black',
+      height: '40px',
+      display: 'flex',
+    },
+    tooltipText: {
+      display: 'block',
       color: theme.background,
-      padding: '10px',
-      fontSize: '14px'
+      fontSize: '14px',
+      height: '35px',
+    },
+    shortcut: {
+      fontSize: '14px',
+      marginLeft: '0px',
+      display: 'block',
+      opacity: '0.6'
     }
   });
 
   const classes = useStyles();
   const sideMenuData = useSideMenuData();
   const dispatch = useDispatch();
-
-  const el = elements(theme).slice();
-  if (el[0].atomicNumber === 0) {
-    el.shift();
-  }
 
   const onDropdownChange = item => {
     dispatch(networkActions.setElementIndex(item[0].atomicNumber));
@@ -120,7 +125,8 @@ const SideMenuPanel = () => {
     }
   };
 
-
+  const el = elements(theme);
+  
   return (
     <div id='sideMenuPanel' className={classes.sideMenuPanel}>
       <div className={classes.networkButtons}>
@@ -149,7 +155,7 @@ const SideMenuPanel = () => {
                     animation='scale'
                     delay={0} 
                     duration={200} 
-                    content={<p className={classes.tooltip}>{action.label}</p>}
+                    content={<span className={classes.tooltip}><p className={classes.tooltipText}>{action.label}</p><p className={classes.shortcut}>{action.shortcut}</p></span>}
                   >
                     <button className={classes.button} onClick={() => onClick(action)}>
                       <Icon className={classes.icon} path={action.icon.path} viewBox={action.icon.viewBox} fill={action.active ? theme.secondary : theme.text}/>

@@ -3,11 +3,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import { networkActions, configActions } from '../redux/actions';
 import Theme from '../stylesheets/Theme';
 import { makeStyles } from '@material-ui/styles';
+import { useFirestore, useFirestoreConnect } from 'react-redux-firebase';
 
 const Settings = () => {
-  const { hotkeys } = useSelector(state => state.config);
-  const theme = useSelector(state => state.network.theme);
+  const { profile } = useSelector(state => state.firebase);
+  const id = !profile.isEmpty ? profile.email : 'default'
+  const firestore = useFirestore();
+  useFirestoreConnect(() => [
+    { collection: 'config',  doc: id }
+  ])
   const screenInfo = useSelector(state => state.view.screenInfo);
+  const hotkeys = useSelector(state => state.config.hotkeys);
+  const theme = useSelector(state => state.network.theme);
+
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
 
@@ -21,7 +29,23 @@ const Settings = () => {
       textAlign: 'center',
       width: '80%',
       marginBottom: '5px'
-    }
+    },
+    toggle: {
+      margin: '20px 20px 20px 0px'
+    },
+    button: {
+      margin: '20px 20px 20px 0px',
+      display: 'block',
+      width: '100px',
+      height: '40px',
+      backgroundColor: theme.background,
+      color: theme.text,
+      borderWidth: '2px',
+      borderColor: theme.text,
+      '&:disabled':{
+      visibility: 'hidden'
+      }
+    },
   });
 
   const classes = useStyles();
@@ -31,30 +55,41 @@ const Settings = () => {
   }, []);
 
   const toggleTheme = () => {
-    dispatch(networkActions.setTheme(theme === Theme.dark ? Theme.light : Theme.dark));
+    const newTheme = theme === Theme.dark ? Theme.light : Theme.dark;
+    dispatch(networkActions.setTheme(newTheme));
+    if(id !== 'default'){
+      firestore.collection('config').doc(id).update({theme: newTheme.name})
+    }
   };
 
   const toggleHotkeys = () => {
     dispatch(configActions.setHotkeys(!hotkeys));
   };
 
+  const restoreDefaults = () => {
+
+  };
+  
   return (
     <div className={show ? 'page show' : 'page hide'}>
       <div className='textContainer center'>
-        <div className={classes.sliderLabel}>theme</div>
-        <label className='switch'>
-          <input type='checkbox' onChange={toggleTheme} defaultChecked={theme === Theme.dark} />
-          <span className='toggleSlider'></span>
-        </label>
+        <span className={classes.toggle}>
+          <p className={classes.sliderLabel}>theme</p>
+          <label className='switch'>
+            <input type='checkbox' onChange={toggleTheme} defaultChecked={theme === Theme.dark} />
+            <span className='toggleSlider'></span>
+          </label>
+        </span>
         {screenInfo.width > 500 && (
-          <>
-            <div className={classes.sliderLabel}>hotkeys</div>
+          <span className={classes.toggle}>
+            <p className={classes.sliderLabel}>hotkeys</p>
             <label className='switch'>
               <input type='checkbox' onChange={toggleHotkeys} defaultChecked={hotkeys} />
               <span className='toggleSlider'></span>
             </label>
-          </>
+          </span>
         )}
+        <button className={classes.button} onClick={restoreDefaults}>restore defaults</button>
       </div>
     </div>
   );

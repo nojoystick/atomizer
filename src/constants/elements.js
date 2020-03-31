@@ -6,16 +6,6 @@ const elements = theme => {
   }
   return [
     {
-      id: 0,
-      atomicNumber: 0,
-      key: 0,
-      label: `<b>root</b>`,
-      dropdownLabel: 'root',
-      title: 'root node',
-      color: theme.root,
-      widthConstraint: 150
-    },
-    {
       atomicNumber: 1,
       key: 1,
       label: `<b>H</b>`,
