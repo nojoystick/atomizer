@@ -13,57 +13,20 @@ import { sizeConstants } from '../config';
 import { useResizer, useHotkeys, useElementIndexHotkeys } from '../utils/hotkeys';
 import { useSelector, useDispatch } from 'react-redux';
 import { viewActions } from '../redux/actions';
-import { makeStyles } from '@material-ui/styles';
+import HomeStyles from './HomeStyles';
 import { setPlayer, usePreciseTimer } from '../audio/startPlayer';
 
 const Home = () => {
   const [show, setShow] = useState(false);
   const { menuVisible, sideMenuVisible, nodeDetailVisible } = useSelector(state => state.view);
   const { theme, audio } = useSelector(state => state.network);
-  const useStyles = makeStyles({
-    expandIcon: {
-      marginBottom: '2px',
-      width: '10px',
-      height: '5px',
-      transition: 'transform 0.5s'
-    },
-    button: {
-      position: 'absolute',
-      outline: 'none',
-      transition: 'bottom 0.5s, left 0.5s, right 0.5s',
-      backgroundColor: theme.background,
-      color: theme.text,
-      zIndex: 3,
-      boxSizing: 'border-box',
-      '&:hover': {
-        opacity: 0.6
-      }
-    },
-    menuButton: {
-      width: '100px',
-      height: '36px',
-      left: '40px',
-      border: `solid ${theme.text}`,
-      borderWidth: '2px 2px 0px 2px',
-      bottom: `${menuVisible ? sizeConstants.BOTTOM_MENU_SIZE - 10 + 'px' : '-10px'}`,
-      right: `${sideMenuVisible ? sizeConstants.SIDE_MENU_SIZE - 5 + 'px' : '40px'}`
-    },
-    sideMenuButton: {
-      top: '52px',
-      width: '36px',
-      height: '100px',
-      marginLeft: '40px',
-      border: `solid ${theme.text}`,
-      borderWidth: '2px 0px 2px 2px',
-      right: `${sideMenuVisible ? sizeConstants.SIDE_MENU_SIZE - 4 + 'px' : '-6px'}`
-    }
-  });
-  const classes = useStyles();
+
+  const classes = HomeStyles({ theme: theme, menuVisible: menuVisible, sideMenuVisible: sideMenuVisible });
   const dispatch = useDispatch();
 
   useEffect(() => {
     setShow(true);
-  }, [dispatch]);
+  }, []);
 
   useHotkeys();
   useResizer();
@@ -75,7 +38,7 @@ const Home = () => {
       <Icon
         className={className}
         style={{ transform: `rotate(${visible ? rotation[0] + 'deg' : rotation[1] + 'deg'})` }}
-        fill={theme.text}
+        fill={theme && theme.text}
         viewBox='3 5 10 5'
         path={IconSet.expandArrow}
       />
@@ -105,7 +68,7 @@ const Home = () => {
       </button>
       <button
         className={`${classes.button} ${classes.menuButton}`}
-        style={getDetailStyle(menuVisible, sideMenuVisible)}
+        style={getDetailStyle(sideMenuVisible)}
         onClick={() => dispatch(viewActions.setNodeDetailVisible(!nodeDetailVisible))}
       >
         {getExpandIcon(classes.expandIcon, [180, 0], nodeDetailVisible)}
@@ -114,7 +77,7 @@ const Home = () => {
   );
 };
 
-const getDetailStyle = (menuVisible, sideMenuVisible) => {
+const getDetailStyle = sideMenuVisible => {
   return {
     left: 'unset',
     right: `${sideMenuVisible ? sizeConstants.SIDE_MENU_SIZE - 5 + 'px' : '40px'}`

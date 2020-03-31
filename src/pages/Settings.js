@@ -3,16 +3,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import { networkActions, configActions } from '../redux/actions';
 import Theme from '../stylesheets/Theme';
 import { makeStyles } from '@material-ui/styles';
-import { useFirestore, useFirestoreConnect } from 'react-redux-firebase';
+import { useFirebase, useFirestore, useFirestoreConnect } from 'react-redux-firebase';
 import { defaultConfig } from '../config';
+import Modal from '../components/Modal';
+import { Redirect } from 'react-router-dom';
+import * as Routes from '../constants/routes';
 
 const Settings = () => {
   const { profile } = useSelector(state => state.firebase);
   const id = !profile.isEmpty ? profile.email : 'default';
   const firestore = useFirestore();
+  const firebase = useFirebase();
   useFirestoreConnect(() => [{ collection: 'config', doc: id }]);
   const screenInfo = useSelector(state => state.view.screenInfo);
-  const hotkeys = useSelector(state => state.config.hotkeys);
+  const { login, hotkeys } = useSelector(state => state.config);
   const theme = useSelector(state => state.network.theme);
 
   const [show, setShow] = useState(false);
@@ -22,7 +26,7 @@ const Settings = () => {
     sliderLabel: {
       display: 'block',
       fontFamily: 'Roboto Condensed',
-      color: theme.text
+      color: theme && theme.text
     },
     vertical: {
       textAlign: 'center',
@@ -37,13 +41,17 @@ const Settings = () => {
       display: 'block',
       width: '100px',
       height: '40px',
-      backgroundColor: theme.background,
-      color: theme.text,
+      backgroundColor: theme && theme.background,
+      color: theme && theme.text,
       borderWidth: '2px',
-      borderColor: theme.text,
+      borderColor: theme && theme.text,
       '&:disabled': {
         visibility: 'hidden'
       }
+    },
+    delete: {
+      color: theme && (theme.name === 'light' ? theme.actinide : theme.alkaliMetal),
+      borderColor: theme && (theme.name === 'light' ? theme.actinide : theme.alkaliMetal)
     }
   });
 
@@ -82,13 +90,30 @@ const Settings = () => {
       firestore
         .collection('config')
         .doc(id)
-        .update({ theme: defaultConfig.theme, hotkeys: defaultConfig.hotkeys });
+        .set(defaultConfig);
     }
+  };
+
+  const deleteAccount = () => {
+    firestore
+      .collection('config')
+      .doc(profile.email)
+      .delete();
+    var user_query = firestore.collection('users').where('email', '==', profile.email);
+    user_query.get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        doc.ref.delete();
+      });
+    });
+    firebase.auth().currentUser.delete();
+    dispatch(configActions.setLogin({ valid: false }));
   };
 
   return (
     <div className={show ? 'page show' : 'page hide'}>
+      <Modal />
       <div className='textContainer center'>
+        {id !== 'default' && <h3>hi, {profile.username}</h3>}
         <span className={classes.toggle}>
           <p className={classes.sliderLabel}>theme</p>
           <label className='switch'>
@@ -108,7 +133,11 @@ const Settings = () => {
         <button className={classes.button} onClick={restoreDefaults}>
           restore defaults
         </button>
+        <button className={`${classes.button} ${classes.delete}`} onClick={deleteAccount}>
+          delete account
+        </button>
       </div>
+      {!login.valid && profile.email && <Redirect to={Routes.HOME} />}
     </div>
   );
 };

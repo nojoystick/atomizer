@@ -6,8 +6,12 @@ const ElementTile = ({ nodeData, style }) => {
   const theme = useSelector(state => state.network.theme);
   const useStyles = makeStyles({
     elementTile: {
-      backgroundColor: nodeData ? nodeData.color.background ? nodeData.color.background : nodeData.color : theme.background,
-      border: `2px solid ${theme.text}`,
+      backgroundColor: nodeData
+        ? nodeData.color.background
+          ? nodeData.color.background
+          : nodeData.color
+        : theme && theme.background,
+      border: `2px solid ${theme && theme.text}`,
       width: '100px',
       height: '100px',
       textAlign: 'center',

@@ -1,74 +1,72 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
-import useStyles from './styles';
-import { useSelector } from 'react-redux';
-import { useFirebase } from 'react-redux-firebase'
+import { useSelector, useDispatch } from 'react-redux';
+import { useFirebase } from 'react-redux-firebase';
+import AccountStyles from './AccountStyles';
+import { configActions } from '../../redux/actions';
+import { LogInLink } from './LogIn';
 
 const PasswordResetPage = () => {
   const theme = useSelector(state => state.network.theme);
-  const classes = useStyles({theme: theme});
-  return(
+  const classes = AccountStyles({ theme: theme });
+  return (
     <div className={`${classes.parent} ${classes.passwordParent}`}>
       <h2>reset password</h2>
-      <PasswordResetForm classes={classes}/>
+      <PasswordResetForm classes={classes} />
     </div>
-  )
+  );
 };
 
-const INITIAL_STATE = {
-  email: '',
-  message: null,
-};
-
-const PasswordResetForm = ({classes}) => {
-  const [content, setContent] = useState({...INITIAL_STATE});
+const PasswordResetForm = ({ classes }) => {
+  const [email, setEmail] = useState('');
+  const login = useSelector(state => state.config.login);
 
   const firebase = useFirebase();
+  const dispatch = useDispatch();
 
   const onSubmit = event => {
-    const { email } = content;
     firebase
       .resetPassword(email)
       .then(() => {
-        setContent({ ...INITIAL_STATE, message: 'an email has been sent.' });
+        dispatch(configActions.setLogin({ valid: false, message: `a message has been sent to ${email}` }));
       })
       .catch(error => {
-        setContent({ ...content, message: error.message });
+        dispatch(configActions.setLogin({ valid: false, message: error.message }));
       });
     event.preventDefault();
   };
 
   const onChange = event => {
-    setContent({ ...content, [event.target.name]: event.target.value });
+    setEmail(event.target.value);
   };
 
-  const isInvalid = content.email === '';
+  const isInvalid = email === '';
+
+  const onChangePage = () => {
+    dispatch(configActions.setLogin({ valid: false, message: null }));
+  };
 
   return (
-    <form onSubmit={onSubmit}>
-      <input
-        className={classes.input}
-        name="email"
-        value={content.email}
-        onChange={onChange}
-        type="text"
-        placeholder="Email Address"
-      />
-      <button className={classes.button} disabled={isInvalid} type="submit">
-        Reset
-      </button>
-      {content.error && <p className={classes.message}>{content.message}</p>}
-    </form>
+    <>
+      <form onSubmit={onSubmit}>
+        <input className={classes.input} name='email' value={email} onChange={onChange} type='text' placeholder='Email Address' />
+        <button className={classes.button} disabled={isInvalid} type='submit'>
+          Reset
+        </button>
+        {login && login.message && <p className={classes.message}>{login.message}</p>}
+      </form>
+      <LogInLink classes={classes} onClick={onChangePage} />
+    </>
   );
-}
+};
 
-const PasswordResetLink = ({classes}) => {
+const PasswordResetLink = ({ classes }) => {
   return (
     <p className={classes.message}>
       <Link to={ROUTES.PASSWORD_RESET}>forgot password?</Link>
     </p>
-  )
+  );
 };
 
 export default PasswordResetPage;

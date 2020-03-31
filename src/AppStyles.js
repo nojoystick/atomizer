@@ -34,24 +34,7 @@ const useStyles = makeStyles({
     transition: 'opacity 4s'
   },
   toolbarItem: {
-    marginLeft: '20px',
-  },
-  loadingContainer: {
-    zIndex: '9999',
-    pointerEvents: 'none',
-    interactible: 'false',
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    backgroundColor: props => props.theme && props.theme.background,
-    display: 'flex',
-    transition: 'opacity 2s'
-  },
-  loading: {
-    width: '400px',
-    height: '400px',
-    margin: 'auto',
-    transition: 'opacity 0.5s'
+    marginLeft: '20px'
   }
 });
 

@@ -15,6 +15,19 @@ export const configActions = {
     return {
       type: 'SET_USER',
       payload: param
-    }
+    };
+  },
+  setLogin: param => {
+    return {
+      type: 'SET_LOGIN',
+      payload: param
+    };
+  },
+  setFormFields: (username, email) => {
+    return {
+      type: 'SET_FORM_FIELDS',
+      username: username,
+      email: email
+    };
   }
 };

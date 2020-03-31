@@ -1,87 +1,95 @@
 import React, { useState } from 'react';
 import { SignUpLink } from './SignUp';
 import { PasswordResetLink } from './PasswordReset';
-import * as ROUTES from '../../constants/routes';
+import * as Routes from '../../constants/routes';
 import { Redirect } from 'react-router-dom';
-import useStyles from './styles';
-import { useSelector } from 'react-redux';
-import { useFirebase, isLoaded, isEmpty } from 'react-redux-firebase'
+import AccountStyles from './AccountStyles';
+import { useSelector, useDispatch } from 'react-redux';
+import { useFirebase } from 'react-redux-firebase';
+import { configActions } from '../../redux/actions';
+import { Link } from 'react-router-dom';
 
 const LogIn = () => {
   const theme = useSelector(state => state.network.theme);
-  const classes = useStyles({theme: theme});
+  const classes = AccountStyles({ theme: theme });
 
-  return(
+  return (
     <div className={classes.parent}>
       <h2>log in</h2>
-      <LogInForm classes={classes}/>
+      <LogInForm />
       <PasswordResetLink classes={classes} />
-      <SignUpLink classes={classes}/>
+      <SignUpLink classes={classes} />
     </div>
-  )
+  );
 };
 
 const INITIAL_STATE = {
   email: '',
-  password: '',
-  error: null,
+  password: ''
 };
 
-const LogInForm = ({classes}) => {
-  const [content, setContent] = useState({...INITIAL_STATE});
-  const auth = useSelector(state => state.firebase.auth);
+const LogInForm = () => {
+  const [content, setContent] = useState({ ...INITIAL_STATE });
+  const theme = useSelector(state => state.network.theme);
+  const login = useSelector(state => state.config.login);
+
+  const classes = AccountStyles({ theme: theme });
   const firebase = useFirebase();
+  const dispatch = useDispatch();
 
   const onSubmit = event => {
     const { email, password } = content;
-    firebase.login({email: email, password: password})
-      .then(() => {        
-        setContent({ ...INITIAL_STATE });
-      })
-      .catch(error => {
-        setContent({...content, error });
-      });
     event.preventDefault();
+    firebase
+      .login({ email: email, password: password })
+      .then(() => {
+        dispatch(configActions.setLogin({ valid: true, message: null }));
+      })
+      .catch(e => {
+        dispatch(configActions.setLogin({ valid: false, message: true }));
+      });
   };
-  
+
   const onChange = event => {
     setContent({ ...content, [event.target.name]: event.target.value });
   };
 
   const isInvalid = content.password === '' || content.email === '';
 
-  return(
+  return (
     <>
-      {isEmpty(auth) ?
-        <form onSubmit={onSubmit}>
-          <input
-            className={classes.input}
-            name="email"
-            value={content.email}
-            onChange={onChange}
-            type="text"
-            placeholder="email"
-          />
-          <input
-            className={classes.input}
-            name="password"
-            value={content.password}
-            onChange={onChange}
-            type="password"
-            placeholder="password"
-          />
-          <button className={classes.button} disabled={isInvalid} type="submit">
-            Sign In
-          </button>
-          {content.error && <p className={`${classes.message} ${classes.offset}`}>login error, check your username and password and try again</p>}
-        </form>
-        :
-        <>
-        {isLoaded(auth) && <Redirect to={ROUTES.HOME} />}
-      </>
-      }
+      <form onSubmit={onSubmit}>
+        <input className={classes.input} name='email' value={content.email} onChange={onChange} type='text' placeholder='email' />
+        <input
+          className={classes.input}
+          name='password'
+          value={content.password}
+          onChange={onChange}
+          type='password'
+          placeholder='password'
+        />
+        <button className={classes.button} disabled={isInvalid} type='submit'>
+          Sign In
+        </button>
+        {login && login.message && (
+          <p className={`${classes.message} ${classes.offset}`}>login error, check your username and password and try again</p>
+        )}
+      </form>
+      {login && login.valid && <Redirect to={Routes.HOME} />}
     </>
   );
-}
+};
+
+const LogInLink = ({ classes, onClick }) => {
+  return (
+    <p className={classes.message}>
+      <Link to={Routes.LOG_IN} onClick={onClick}>
+        back to login
+      </Link>
+    </p>
+  );
+};
 
 export default LogIn;
+
+export { LogInLink };
