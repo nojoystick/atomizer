@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/atomizer/static/css/main.ce2584f4.chunk.css",
-    "main.js": "/atomizer/static/js/main.40dc59dc.chunk.js",
-    "main.js.map": "/atomizer/static/js/main.40dc59dc.chunk.js.map",
+    "main.js": "/atomizer/static/js/main.a2fa2962.chunk.js",
+    "main.js.map": "/atomizer/static/js/main.a2fa2962.chunk.js.map",
     "runtime-main.js": "/atomizer/static/js/runtime-main.94fcc704.js",
     "runtime-main.js.map": "/atomizer/static/js/runtime-main.94fcc704.js.map",
     "static/css/2.550f20f8.chunk.css": "/atomizer/static/css/2.550f20f8.chunk.css",
-    "static/js/2.409da338.chunk.js": "/atomizer/static/js/2.409da338.chunk.js",
-    "static/js/2.409da338.chunk.js.map": "/atomizer/static/js/2.409da338.chunk.js.map",
+    "static/js/2.a12caf0e.chunk.js": "/atomizer/static/js/2.a12caf0e.chunk.js",
+    "static/js/2.a12caf0e.chunk.js.map": "/atomizer/static/js/2.a12caf0e.chunk.js.map",
     "index.html": "/atomizer/index.html",
-    "precache-manifest.7806e90baf25f027b4a8a86699fa4980.js": "/atomizer/precache-manifest.7806e90baf25f027b4a8a86699fa4980.js",
+    "precache-manifest.c8c746856772a99a58d384a59f5fb5a7.js": "/atomizer/precache-manifest.c8c746856772a99a58d384a59f5fb5a7.js",
     "service-worker.js": "/atomizer/service-worker.js",
     "static/css/2.550f20f8.chunk.css.map": "/atomizer/static/css/2.550f20f8.chunk.css.map",
     "static/css/main.ce2584f4.chunk.css.map": "/atomizer/static/css/main.ce2584f4.chunk.css.map",
-    "static/js/2.409da338.chunk.js.LICENSE.txt": "/atomizer/static/js/2.409da338.chunk.js.LICENSE.txt"
+    "static/js/2.a12caf0e.chunk.js.LICENSE.txt": "/atomizer/static/js/2.a12caf0e.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.94fcc704.js",
     "static/css/2.550f20f8.chunk.css",
-    "static/js/2.409da338.chunk.js",
+    "static/js/2.a12caf0e.chunk.js",
     "static/css/main.ce2584f4.chunk.css",
-    "static/js/main.40dc59dc.chunk.js"
+    "static/js/main.a2fa2962.chunk.js"
   ]
 }
