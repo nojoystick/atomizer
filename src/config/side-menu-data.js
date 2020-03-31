@@ -41,8 +41,9 @@ const useSideMenuData = () => {
           viewBox: '0 0 510 510'
         },
         shortcut: 'f'
-      }],
-      MODE: [
+      }
+    ],
+    MODE: [
       {
         active: defaultState,
         label: 'pointer',
@@ -72,8 +73,9 @@ const useSideMenuData = () => {
           viewBox: '0 0 510 510'
         },
         shortcut: 'e'
-      }],
-      VIEW:[
+      }
+    ],
+    VIEW: [
       {
         active: organizeState,
         label: 'organize',
@@ -92,6 +94,35 @@ const useSideMenuData = () => {
           viewBox: '0 0 68 68'
         },
         shortcut: 'x'
+      }
+    ],
+    FILE: [
+      {
+        label: 'save network',
+        action: networkActions.saveNetwork,
+        icon: {
+          path: IconSet.save,
+          viewBox: '0 0 600 600'
+        },
+        shortcut: ''
+      },
+      {
+        label: 'load network',
+        action: networkActions.loadNetwork,
+        icon: {
+          path: IconSet.load,
+          viewBox: '0 0 50 50'
+        },
+        shortcut: ''
+      },
+      {
+        label: 'new network',
+        action: networkActions.newNetwork,
+        icon: {
+          path: IconSet.newFile,
+          viewBox: '0 0 50 50'
+        },
+        shortcut: ''
       }
     ]
   };

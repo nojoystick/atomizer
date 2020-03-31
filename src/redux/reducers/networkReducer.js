@@ -37,7 +37,7 @@ const networkReducer = (state = defaultState, action) => {
       const x = action.payload.pointer.canvas.x;
       const y = action.payload.pointer.canvas.y;
       const osc = addOscillatorNode(state, state.elementIndex, id);
-      nodesCopy.push({ ...elements(state.theme)[state.elementIndex-1], id: id, x: x, y: y, oscillator: osc });
+      nodesCopy.push({ ...elements(state.theme)[state.elementIndex - 1], id: id, x: x, y: y, oscillator: osc });
       const edgesCopy = state.graphInfo.edges.slice();
       if (action.payload.nodes.length) {
         edgesCopy.push({ from: action.payload.nodes[0], to: id });
@@ -55,8 +55,8 @@ const networkReducer = (state = defaultState, action) => {
       const nodes = state.graphInfo.nodes.slice();
       const nodeX = state.elementIndex % 2 ? 30 : -30;
       const nodeY = state.elementIndex % 3 ? 30 : -30;
-      const _osc = addOscillatorNode(state, state.elementIndex-1, _id);
-      nodes.push({ ...elements(state.theme)[state.elementIndex-1], id: _id, x: nodeX, y: nodeY, oscillator: _osc });
+      const _osc = addOscillatorNode(state, state.elementIndex - 1, _id);
+      nodes.push({ ...elements(state.theme)[state.elementIndex - 1], id: _id, x: nodeX, y: nodeY, oscillator: _osc });
       return (state = {
         ...state,
         graphInfo: { ...state.graphInfo, nodes: nodes },
@@ -157,9 +157,7 @@ const networkReducer = (state = defaultState, action) => {
       });
 
       if (
-        n
-          .sort()
-          .join(',') ===
+        n.sort().join(',') ===
         state.network
           .getSelectedNodes()
           .sort()
@@ -217,7 +215,7 @@ const networkReducer = (state = defaultState, action) => {
       return setModalVisible(state, action.payload);
 
     case 'SET_THEME':
-      // todo redraw the existing nodes
+      // todo redraw the existing nodes when the theme changes
       // const el = elements(action.payload);
       // const _nodes = state.network.body.nodes;
       // Object.values(_nodes).forEach(node => {
@@ -242,6 +240,27 @@ const networkReducer = (state = defaultState, action) => {
         defaultState: state.multiSelectState
       };
 
+    case 'SAVE_NETWORK':
+      // login required.
+      // pull up the modal and allow the user to name their network
+      // if they cancel, close it, if they click save:
+      // save the network object to the database, under the current user, in a default state
+      return state;
+
+    case 'LOAD_NETWORK':
+      // login required? or have some default options
+      // pull up the modal and show the list of networks the user has created
+      // if they cancel, close it
+      // if they select one, load it in
+      // also allow them to delete their saved networks from this view
+      return state;
+
+    case 'NEW_NETWORK':
+      // if the current network is unsaved, pull up the modal
+      // prompt them to either save it, abandon it, or cancel
+      // then create a new network
+      return state;
+
     default:
       return state;
   }
@@ -250,7 +269,7 @@ const networkReducer = (state = defaultState, action) => {
 const doDeletion = state => {
   state.network.deleteSelected(state.selectedNodes);
   const graphCopy = state.graphInfo;
-  for (var i = graphCopy.nodes.length - 1 ; i > -1; i--) {
+  for (var i = graphCopy.nodes.length - 1; i > -1; i--) {
     if (state.selectedNodes.includes(graphCopy.nodes[i].id)) {
       graphCopy.nodes.splice(i, 1);
     }

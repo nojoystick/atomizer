@@ -156,5 +156,21 @@ export const networkActions = {
       type: 'SET_BEAT_INDEX',
       payload: param
     };
+  },
+  saveNetwork: () => {
+    return {
+      type: 'SAVE_NETWORK'
+    };
+  },
+  loadNetwork: param => {
+    return {
+      type: 'LOAD_NETWORK',
+      payload: param
+    };
+  },
+  newNetwork: () => {
+    return {
+      type: 'NEW_NETWORK'
+    };
   }
 };

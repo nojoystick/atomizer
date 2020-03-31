@@ -15,16 +15,16 @@ const Network = () => {
   useMultiSelectHotkeys(setCtrl);
 
   useEffect(() => {
-    if (network) {
+    if (network && network.getSelectedNodes().length === 0) {
       if (!menuVisible && !sideMenuVisible && !nodeDetailVisible) {
         network.moveTo(fit(0, 0, 1.0));
       } else if (nodeDetailVisible && screenInfo.width < screenInfo.breakpoint) {
         network.moveTo(fit(0, screenInfo.height * 0.7, 0.3));
-      } else if ((nodeDetailVisible) && menuVisible) {
+      } else if (nodeDetailVisible && menuVisible) {
         network.moveTo(fit(screenInfo.width * 0.7, screenInfo.height * 0.7, 0.3));
       } else if (menuVisible) {
         network.moveTo(fit(0, screenInfo.height * 0.7, 0.3));
-      } else if ((nodeDetailVisible) && !menuVisible) {
+      } else if (nodeDetailVisible && !menuVisible) {
         network.moveTo(fit(screenInfo.width * 0.3, 0, 0.7));
       }
     }
@@ -54,13 +54,13 @@ const Network = () => {
     },
     selectNode: function(event) {
       dispatch(networkActions.filterSelection(event.nodes));
-      if(event.nodes){
+      if (event.nodes) {
         dispatch(viewActions.setNodeDetailVisible(true));
       }
     },
     deselectNode: function(event) {
       dispatch(networkActions.filterSelection(event.nodes));
-      if(event.nodes.length === 0){
+      if (event.nodes.length === 0) {
         dispatch(viewActions.setNodeDetailVisible(false));
       }
     }
@@ -113,7 +113,7 @@ const Network = () => {
   };
 
   const getMinVal = (data, key) => {
-    if(data.length === 0) {
+    if (data.length === 0) {
       return -200;
     }
     let min = data[0][key];
@@ -126,7 +126,7 @@ const Network = () => {
   };
 
   const getMaxVal = (data, key) => {
-    if(data.length === 0){
+    if (data.length === 0) {
       return 200;
     }
     let max = data[0][key];

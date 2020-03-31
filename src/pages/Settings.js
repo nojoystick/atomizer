@@ -4,14 +4,13 @@ import { networkActions, configActions } from '../redux/actions';
 import Theme from '../stylesheets/Theme';
 import { makeStyles } from '@material-ui/styles';
 import { useFirestore, useFirestoreConnect } from 'react-redux-firebase';
+import { defaultConfig } from '../config';
 
 const Settings = () => {
   const { profile } = useSelector(state => state.firebase);
-  const id = !profile.isEmpty ? profile.email : 'default'
+  const id = !profile.isEmpty ? profile.email : 'default';
   const firestore = useFirestore();
-  useFirestoreConnect(() => [
-    { collection: 'config',  doc: id }
-  ])
+  useFirestoreConnect(() => [{ collection: 'config', doc: id }]);
   const screenInfo = useSelector(state => state.view.screenInfo);
   const hotkeys = useSelector(state => state.config.hotkeys);
   const theme = useSelector(state => state.network.theme);
@@ -42,10 +41,10 @@ const Settings = () => {
       color: theme.text,
       borderWidth: '2px',
       borderColor: theme.text,
-      '&:disabled':{
-      visibility: 'hidden'
+      '&:disabled': {
+        visibility: 'hidden'
       }
-    },
+    }
   });
 
   const classes = useStyles();
@@ -57,19 +56,36 @@ const Settings = () => {
   const toggleTheme = () => {
     const newTheme = theme === Theme.dark ? Theme.light : Theme.dark;
     dispatch(networkActions.setTheme(newTheme));
-    if(id !== 'default'){
-      firestore.collection('config').doc(id).update({theme: newTheme.name})
+    if (id !== 'default') {
+      firestore
+        .collection('config')
+        .doc(id)
+        .update({ theme: newTheme.name });
     }
   };
 
   const toggleHotkeys = () => {
-    dispatch(configActions.setHotkeys(!hotkeys));
+    const newHotkeys = !hotkeys;
+    dispatch(configActions.setHotkeys(newHotkeys));
+    if (id !== 'default') {
+      firestore
+        .collection('config')
+        .doc(id)
+        .update({ hotkeys: newHotkeys });
+    }
   };
 
   const restoreDefaults = () => {
-
+    dispatch(networkActions.setTheme(Theme[defaultConfig.theme]));
+    dispatch(configActions.setHotkeys(defaultConfig.hotkeys));
+    if (id !== 'default') {
+      firestore
+        .collection('config')
+        .doc(id)
+        .update({ theme: defaultConfig.theme, hotkeys: defaultConfig.hotkeys });
+    }
   };
-  
+
   return (
     <div className={show ? 'page show' : 'page hide'}>
       <div className='textContainer center'>
@@ -89,7 +105,9 @@ const Settings = () => {
             </label>
           </span>
         )}
-        <button className={classes.button} onClick={restoreDefaults}>restore defaults</button>
+        <button className={classes.button} onClick={restoreDefaults}>
+          restore defaults
+        </button>
       </div>
     </div>
   );
