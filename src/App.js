@@ -19,7 +19,7 @@ const App = () => {
   const [showLoadingScreen, setShowLoadingScreen] = useState(true);
   const auth = useSelector(state => state.firebase.auth);
   const profile = useSelector(state => state.firebase.profile); // todo: fix double render
-  const { login } = useSelector(state => state.config);
+  const login = useSelector(state => state.config.login);
   const id = !profile.isEmpty ? profile.email : 'default';
 
   useFirestoreConnect(() => [{ collection: 'config', doc: id }]);
@@ -45,18 +45,15 @@ const App = () => {
     if (config && config.length === 0) {
       setTheme(Theme[defaultConfig.theme]);
     }
+    if (config && config[0]) {
+      setTimeout(() => setShowLoadingScreen(false), 3000);
+    }
   }, [config]);
 
   useEffect(() => {
     setShowLoadingScreen(true);
     setTimeout(() => setShowLoadingScreen(false), 3000);
   }, [login.valid]);
-
-  useEffect(() => {
-    if (config && config[0]) {
-      setTimeout(() => setShowLoadingScreen(false), 3000);
-    }
-  }, [config]);
 
   useEffect(() => {
     const initializeMasterGain = () => {

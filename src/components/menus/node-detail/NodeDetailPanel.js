@@ -8,7 +8,8 @@ import NodeDetailStyles from './NodeDetailStyles';
 
 const NodeDetailPanel = () => {
   const { menuVisible, sideMenuVisible, nodeDetailVisible, screenInfo } = useSelector(state => state.view);
-  const { network, selectedNodes } = useSelector(state => state.network);
+  const network = useSelector(state => state.network.network);
+  const selectedNodes = useSelector(state => state.network.selectedNodes);
   const [nodeData, setNodeData] = useState(null);
   const [index, setIndex] = useState(0);
 
@@ -17,7 +18,7 @@ const NodeDetailPanel = () => {
   const classes = NodeDetailStyles({
     theme: theme,
     menuVisible: menuVisible,
-    sidemenuVisible: sideMenuVisible,
+    sideMenuVisible: sideMenuVisible,
     nodeDetailVisible: nodeDetailVisible,
     screenInfo: screenInfo
   });

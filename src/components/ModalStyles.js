@@ -50,8 +50,7 @@ const ModalStyles = makeStyles({
   button: {
     width: '60px',
     height: '30px',
-    border: '1.5px',
-    borderColor: props => props.theme && props.theme.text,
+    border: props => `1.5px solid ${props.theme && props.theme.text}`,
     color: props => props.theme && props.theme.text,
     fontFamily: 'inconsolata',
     outline: 'none',

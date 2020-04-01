@@ -14,7 +14,8 @@ import SideMenuStyles from './SideMenuStyles';
 
 const SideMenuPanel = () => {
   const { menuVisible, sideMenuVisible, screenInfo } = useSelector(state => state.view);
-  const { elementIndex, theme } = useSelector(state => state.network);
+  const theme = useSelector(state => state.network.theme);
+  const elementIndex = useSelector(state => state.network.elementIndex);
 
   const classes = SideMenuStyles({
     theme: theme,
@@ -63,12 +64,12 @@ const SideMenuPanel = () => {
       />
       {Object.values(sideMenuData).map((actions, i) => {
         return (
-          <>
+          <div key={i + 200}>
             {actions.map((action, j) => {
               return (
                 <Tippy
                   theme={theme && theme.name === 'dark' ? 'light' : null}
-                  key={j}
+                  key={j + 100}
                   placement='left'
                   arrow={true}
                   animation='scale'
@@ -93,7 +94,7 @@ const SideMenuPanel = () => {
               );
             })}
             <div className={classes.separator} />
-          </>
+          </div>
         );
       })}
     </div>

@@ -21,7 +21,8 @@ const SignUp = () => {
 };
 
 const SignUpForm = ({ classes }) => {
-  const { login, formFields } = useSelector(state => state.config);
+  const login = useSelector(state => state.config.login);
+  const formFields = useSelector(state => state.config.formFields);
   const INITIAL_STATE = {
     username: formFields.username,
     email: formFields.email,

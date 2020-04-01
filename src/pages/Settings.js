@@ -5,7 +5,6 @@ import Theme from '../stylesheets/Theme';
 import { makeStyles } from '@material-ui/styles';
 import { useFirebase, useFirestore, useFirestoreConnect } from 'react-redux-firebase';
 import { defaultConfig } from '../config';
-import Modal from '../components/Modal';
 import { Redirect } from 'react-router-dom';
 import * as Routes from '../constants/routes';
 
@@ -16,7 +15,8 @@ const Settings = () => {
   const firebase = useFirebase();
   useFirestoreConnect(() => [{ collection: 'config', doc: id }]);
   const screenInfo = useSelector(state => state.view.screenInfo);
-  const { login, hotkeys } = useSelector(state => state.config);
+  const login = useSelector(state => state.config.login);
+  const hotkeys = useSelector(state => state.config.hotkeys);
   const theme = useSelector(state => state.network.theme);
 
   const [show, setShow] = useState(false);
@@ -111,7 +111,6 @@ const Settings = () => {
 
   return (
     <div className={show ? 'page show' : 'page hide'}>
-      <Modal />
       <div className='textContainer center'>
         {id !== 'default' && <h3>hi, {profile.username}</h3>}
         <span className={classes.toggle}>

@@ -8,8 +8,8 @@ import { frequency, volume } from '../../constants/frequencies';
 const defaultState = {
   theme: Theme.light,
   network: null,
-  options: networkData(Theme.light).options,
-  graphInfo: networkData(Theme.light).defaultData,
+  options: networkData.options,
+  graphInfo: networkData.defaultData,
   elementIndex: 1,
   selectedNodes: null,
   modalVisible: false,
@@ -181,7 +181,7 @@ const networkReducer = (state = defaultState, action) => {
       return (state = { ...state, graphInfo: action.payload });
 
     case 'SET_ELEMENT_INDEX':
-      if (action.payload > 0 && action.payload < elements(state.theme).length) {
+      if (action.payload > 0 && action.payload <= elements(state.theme).length) {
         return (state = { ...state, elementIndex: action.payload });
       } else return state;
 

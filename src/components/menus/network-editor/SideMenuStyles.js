@@ -15,7 +15,7 @@ const SideMenuStyles = makeStyles({
     margin: '0px',
     transition: 'width 0.5s, height 0.5s',
     backgroundColor: props => props.theme && props.theme.background,
-    zIndex: 1,
+    zIndex: 8001,
     overflowY: 'scroll'
   },
   editorHeader: {

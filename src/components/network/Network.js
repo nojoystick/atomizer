@@ -7,7 +7,10 @@ import { networkActions, viewActions } from '../../redux/actions';
 
 const Network = () => {
   const { menuVisible, sideMenuVisible, nodeDetailVisible, screenInfo } = useSelector(state => state.view);
-  const { network, options, graphInfo, multiSelectState } = useSelector(state => state.network);
+  const network = useSelector(state => state.network.network);
+  const options = useSelector(state => state.network.options);
+  const graphInfo = useSelector(state => state.network.graphInfo);
+  const multiSelectState = useSelector(state => state.network.multiSelectState);
   const [dragStart, setDragStart] = useState({ window: { x: 0, y: 0 } });
   const [cursorPosition, setCursorPosition] = useState(null);
   const [ctrl, setCtrl] = useState(false);

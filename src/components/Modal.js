@@ -9,7 +9,8 @@ import ModalStyles from './ModalStyles';
 const Modal = () => {
   const show = useSelector(state => state.network.modalVisible);
   const { header, message, func } = useSelector(state => state.config.modal);
-  const { theme, selectedNodes } = useSelector(state => state.network);
+  const theme = useSelector(state => state.network.theme);
+  const selectedNodes = useSelector(state => state.network.selectedNodes);
 
   const classes = ModalStyles({ theme: theme, show: show });
   const dispatch = useDispatch();

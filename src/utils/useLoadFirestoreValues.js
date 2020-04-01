@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { configActions, networkActions } from '../redux/actions';
+import { isEmpty } from 'react-redux-firebase';
 
-const useLoadFirestoreValues = (theme, hotkeys, auth) => {
+const useLoadFirestoreValues = (theme, hotkeys, login) => {
+  const auth = useSelector(state => state.firebase.auth);
+  const profile = useSelector(state => state.firebase.profile);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(networkActions.setTheme(theme));
@@ -13,8 +16,10 @@ const useLoadFirestoreValues = (theme, hotkeys, auth) => {
   }, [dispatch, hotkeys]);
 
   useEffect(() => {
-    // dispatch(configActions.setLogin({valid: !auth.isEmpty }))
-  }, [dispatch, auth]);
+    if (!isEmpty(auth) && !isEmpty(profile)) {
+      dispatch(configActions.setLogin({ valid: true }));
+    }
+  }, [dispatch, login, auth, profile]);
 };
 
 export default useLoadFirestoreValues;

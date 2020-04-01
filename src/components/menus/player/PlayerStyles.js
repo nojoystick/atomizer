@@ -7,7 +7,7 @@ const PlayerStyles = makeStyles({
     border: props => props.theme && `3px solid ${props.theme.text}`,
     backgroundColor: props => props.theme && props.theme.background,
     position: 'absolute',
-    zIndex: '9999',
+    zIndex: '8000',
     pointerEvents: 'auto',
     visibility: 'visible'
   },

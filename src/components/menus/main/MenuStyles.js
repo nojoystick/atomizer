@@ -13,7 +13,7 @@ const MenuStyles = makeStyles({
     overflowY: 'scroll',
     display: 'flex',
     boxSizing: 'border-box',
-    zIndex: '3',
+    zIndex: '8001',
     height: props => (props.menuVisible ? sizeConstants.BOTTOM_MENU_SIZE + 'px' : '0px')
   },
   navIcon: {

@@ -19,7 +19,8 @@ import { setPlayer, usePreciseTimer } from '../audio/startPlayer';
 const Home = () => {
   const [show, setShow] = useState(false);
   const { menuVisible, sideMenuVisible, nodeDetailVisible } = useSelector(state => state.view);
-  const { theme, audio } = useSelector(state => state.network);
+  const theme = useSelector(state => state.network.theme);
+  const audio = useSelector(state => state.network.audio);
 
   const classes = HomeStyles({ theme: theme, menuVisible: menuVisible, sideMenuVisible: sideMenuVisible });
   const dispatch = useDispatch();

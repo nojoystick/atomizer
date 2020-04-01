@@ -28,7 +28,8 @@ const endNote = (oscillatorNode, oscillatorGainNode) => {
 };
 
 const usePreciseTimer = (handler, periodInMilliseconds, activityFlag) => {
-  const { network, audio } = useSelector(state => state.network);
+  const network = useSelector(state => state.network.network);
+  const audio = useSelector(state => state.network.audio);
   const [timeDelay, setTimeDelay] = useState(1);
   const savedCallback = useRef();
   const initialTime = useRef();

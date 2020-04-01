@@ -4,7 +4,7 @@ const SubPanelStyles = makeStyles({
   subPanel: {
     boxSizing: 'border-box',
     display: 'inline-block',
-    border: `2px solid ${props => props.theme && props.theme.text}`,
+    border: props => `2px solid ${props.theme && props.theme.text}`,
     width: '285px',
     minWidth: '285px',
     height: '470px',

@@ -3,7 +3,10 @@ import { useSelector } from 'react-redux';
 import IconSet from '../constants/icon-set';
 
 const useSideMenuData = () => {
-  const { defaultState, addEdgeState, multiSelectState, organizeState } = useSelector(state => state.network);
+  const defaultState = useSelector(state => state.network.defaultState);
+  const addEdgeState = useSelector(state => state.network.addEdgeState);
+  const multiSelectState = useSelector(state => state.network.multiSelectState);
+  const organizeState = useSelector(state => state.network.organizeState);
   return {
     INTERACT: [
       {

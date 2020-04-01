@@ -121,7 +121,7 @@ function useElementIndexHotkeys() {
 }
 
 function useHotkeys() {
-  const { hotkeys } = useSelector(state => state.config);
+  const hotkeys = useSelector(state => state.config.hotkeys);
   const dispatch = useDispatch();
   const sideMenuData = useSideMenuData();
 
@@ -138,18 +138,18 @@ function useHotkeys() {
     };
   }
 
-  const _onKeyDown = (event) => {
+  const _onKeyDown = event => {
     if (hotkeys) {
       Object.values(sideMenuData).forEach(type => {
         type.forEach(action => {
-          if(action.shortcut === event.key){
-            if(action.label === 'delete selected') {
+          if (action.shortcut === event.key) {
+            if (action.label === 'delete selected') {
               dispatch(configActions.setModal(modalContent.header, modalContent.message, networkActions.delete));
             }
             dispatch(action.action());
           }
-        })
-      })
+        });
+      });
     }
   };
 

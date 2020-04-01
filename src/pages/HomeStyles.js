@@ -14,7 +14,7 @@ const HomeStyles = makeStyles({
     transition: 'bottom 0.5s, left 0.5s, right 0.5s',
     backgroundColor: props => props.theme && props.theme.background,
     color: props => props.theme && props.theme.text,
-    zIndex: 3,
+    zIndex: 8001,
     boxSizing: 'border-box',
     '&:hover': {
       opacity: 0.6
