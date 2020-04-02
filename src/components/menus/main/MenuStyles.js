@@ -30,7 +30,7 @@ const MenuStyles = makeStyles({
     alignItems: 'center',
     transition: '0.2s',
     border: 'none',
-    borderBottom: `1px solid ${props => props.theme && props.theme.text}`,
+    borderBottom: props => `1px solid ${props.theme && props.theme.text}`,
     cursor: 'pointer',
     outline: 'none',
     '& :hover': {

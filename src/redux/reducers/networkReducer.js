@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Theme from '../../stylesheets/Theme';
 import Audio from '../../audio/Audio';
 import { frequency, volume } from '../../constants/frequencies';
+import Node from '../../audio/Node';
 
 const defaultState = {
   theme: Theme.light,
@@ -36,8 +37,8 @@ const networkReducer = (state = defaultState, action) => {
       const nodesCopy = state.graphInfo.nodes.slice();
       const x = action.payload.pointer.canvas.x;
       const y = action.payload.pointer.canvas.y;
-      const osc = addOscillatorNode(state, state.elementIndex, id);
-      nodesCopy.push({ ...elements(state.theme)[state.elementIndex - 1], id: id, x: x, y: y, oscillator: osc });
+      const audioNode = new Node(state.elementIndex - 1);
+      nodesCopy.push({ ...elements(state.theme)[state.elementIndex - 1], id: id, x: x, y: y, audioNode: audioNode });
       const edgesCopy = state.graphInfo.edges.slice();
       if (action.payload.nodes.length) {
         edgesCopy.push({ from: action.payload.nodes[0], to: id });
@@ -55,8 +56,8 @@ const networkReducer = (state = defaultState, action) => {
       const nodes = state.graphInfo.nodes.slice();
       const nodeX = state.elementIndex % 2 ? 30 : -30;
       const nodeY = state.elementIndex % 3 ? 30 : -30;
-      const _osc = addOscillatorNode(state, state.elementIndex - 1, _id);
-      nodes.push({ ...elements(state.theme)[state.elementIndex - 1], id: _id, x: nodeX, y: nodeY, oscillator: _osc });
+      const _audioNode = new Node(state.elementIndex - 1);
+      nodes.push({ ...elements(state.theme)[state.elementIndex - 1], id: _id, x: nodeX, y: nodeY, audioNode: _audioNode });
       return (state = {
         ...state,
         graphInfo: { ...state.graphInfo, nodes: nodes },
@@ -302,20 +303,6 @@ const inBoundsOneAxis = (position, start, end) => {
 
 const setModalVisible = (state, payload) => {
   return (state = { ...state, modalVisible: payload });
-};
-
-const addOscillatorNode = (state, atomicNumber, id) => {
-  const oscillatorGainNode = Audio.context.createGain();
-  oscillatorGainNode.gain.setValueAtTime(0.3, Audio.context.currentTime);
-  oscillatorGainNode.connect(Audio.preampGainNode);
-
-  const oscillatorValues = {
-    oscillatorGainNode: oscillatorGainNode,
-    gain: 0.3,
-    id: id
-  };
-
-  return oscillatorValues;
 };
 
 const muteOscillatorNode = node => {

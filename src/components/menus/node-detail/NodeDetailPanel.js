@@ -5,6 +5,9 @@ import IconSet from '../../../constants/icon-set';
 import { useSelector } from 'react-redux';
 import { useNodeDetailHotkeys } from '../../../utils/hotkeys';
 import NodeDetailStyles from './NodeDetailStyles';
+import ModeSelector from '../../ModeSelector';
+import NodeDetailData from './node-detail-data';
+import InputSlider from '../../InputSlider';
 
 const NodeDetailPanel = () => {
   const { menuVisible, sideMenuVisible, nodeDetailVisible, screenInfo } = useSelector(state => state.view);
@@ -12,16 +15,18 @@ const NodeDetailPanel = () => {
   const selectedNodes = useSelector(state => state.network.selectedNodes);
   const [nodeData, setNodeData] = useState(null);
   const [index, setIndex] = useState(0);
+  const [mode, setMode] = useState('I');
 
   const theme = useSelector(state => state.network.theme);
-
-  const classes = NodeDetailStyles({
+  const useStylesProps = {
     theme: theme,
     menuVisible: menuVisible,
     sideMenuVisible: sideMenuVisible,
     nodeDetailVisible: nodeDetailVisible,
     screenInfo: screenInfo
-  });
+  };
+
+  const classes = NodeDetailStyles(useStylesProps);
 
   useEffect(() => {
     if (selectedNodes && selectedNodes[0]) {
@@ -81,9 +86,19 @@ const NodeDetailPanel = () => {
         </button>
       </div>
 
-      <div className={`${classes.placeholder} ${nodeData ? null : classes.show}`}>
-        <p className={classes.placeholderText}>no nodes selected</p>
-      </div>
+      {nodeData ? (
+        <>
+          {NodeDetailData(nodeData.options.audioNode).map(inputSlider => {
+            console.log(nodeData);
+            return <InputSlider useStyles={NodeDetailStyles} useStylesProps={useStylesProps} {...inputSlider} />;
+          })}
+          <ModeSelector mode={mode} setMode={setMode} />
+        </>
+      ) : (
+        <div className={`${classes.placeholder} ${nodeData ? null : classes.show}`}>
+          <p className={classes.placeholderText}>no nodes selected</p>
+        </div>
+      )}
     </div>
   );
 };

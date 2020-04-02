@@ -1,6 +1,7 @@
 import React from 'react';
 import Select from 'react-dropdown-select';
-import { sizeConstants, useSideMenuData, modalContent } from '../../../config';
+import { sizeConstants, modalContent } from '../../../config';
+import useSideMenuData from './side-menu-data';
 import { useSelector, useDispatch } from 'react-redux';
 import { configActions, networkActions } from '../../../redux/actions';
 import Icon from '../../Icon';
@@ -58,7 +59,6 @@ const SideMenuPanel = () => {
         dropdownGap={0}
         dropdownHandle={false}
         labelField='dropdownLabel'
-        handleKeyDownFn={null}
         onDropdownOpen={() => dispatch(configActions.setHotkeys(false))}
         onDropdownClose={() => dispatch(configActions.setHotkeys(true))}
       />

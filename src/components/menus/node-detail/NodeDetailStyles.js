@@ -89,6 +89,24 @@ const NodeDetailStyles = makeStyles({
   scrollIcon: {
     width: '20px',
     height: '10px'
+  },
+  sliderLabel: {
+    margin: '20px 0px 0px 20px',
+    display: 'inline-block',
+    fontFamily: 'Inconsolata',
+    fontWeight: '800',
+    color: props => props.theme && props.theme.text
+  },
+  input: {
+    margin: '20px 0px 0px 200px',
+    width: '45px',
+    fontFamily: 'Inconsolata',
+    fontSize: '14px',
+    outline: 'none',
+    border: 'none',
+    display: 'inline-block',
+    backgroundColor: props => props.theme && props.theme.background,
+    color: props => props.theme && props.theme.text
   }
 });
 

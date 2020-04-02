@@ -127,7 +127,7 @@ body,
 }
 
 .sliderContainer {
-  margin: 20px 0px 0px 20px;
+  padding: 20px;
 }
 
 .toggleParent {
@@ -137,8 +137,8 @@ body,
 
 .slider {
   -webkit-appearance: none;
-  margin: 18px 0;
-  width: 85%;
+  width: 90%;
+  margin: 18px 0px 0px 10px;
   align-self: center;
   &:focus {
     outline: none;

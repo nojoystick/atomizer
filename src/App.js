@@ -56,6 +56,11 @@ const App = () => {
   }, [login.valid]);
 
   useEffect(() => {
+    if (!isEmpty(auth) && !isEmpty(profile)) {
+    }
+  }, [auth, profile]);
+
+  useEffect(() => {
     const initializeMasterGain = () => {
       Audio.masterGainNode.gain.setValueAtTime(0.0, Audio.context.currentTime);
       Audio.preampGainNode.connect(Audio.hpFilter);

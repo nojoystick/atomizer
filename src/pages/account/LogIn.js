@@ -32,6 +32,9 @@ const LogInForm = () => {
   const [content, setContent] = useState({ ...INITIAL_STATE });
   const theme = useSelector(state => state.network.theme);
   const login = useSelector(state => state.config.login);
+  if (login && typeof login.message !== 'boolean') {
+    login.message = null;
+  }
 
   const classes = AccountStyles({ theme: theme });
   const firebase = useFirebase();

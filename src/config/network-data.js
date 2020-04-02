@@ -21,7 +21,7 @@ const networkData = {
       enabled: true,
       barnesHut: {
         avoidOverlap: 0.5,
-        centralGravity: 0.15
+        centralGravity: 0.1
       },
       minVelocity: -1,
       stabilization: {

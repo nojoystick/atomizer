@@ -1,6 +1,6 @@
-import { networkActions, viewActions } from '../redux/actions';
+import { networkActions, viewActions } from '../../../redux/actions';
 import { useSelector } from 'react-redux';
-import IconSet from '../constants/icon-set';
+import IconSet from '../../../constants/icon-set';
 
 const useSideMenuData = () => {
   const defaultState = useSelector(state => state.network.defaultState);
@@ -131,4 +131,4 @@ const useSideMenuData = () => {
   };
 };
 
-export { useSideMenuData };
+export default useSideMenuData;

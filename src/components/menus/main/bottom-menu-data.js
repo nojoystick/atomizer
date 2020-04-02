@@ -1,9 +1,7 @@
-import { networkActions } from '../redux/actions';
+import { networkActions } from '../../../redux/actions';
 import { useSelector } from 'react-redux';
 const useSubPanelData = () => {
-  const { lpFilterFrequency, lpFilterQ, hpFilterFrequency, hpFilterQ } = useSelector(
-    state => state.network.audio
-  );
+  const { lpFilterFrequency, lpFilterQ, hpFilterFrequency, hpFilterQ } = useSelector(state => state.network.audio);
   return [
     {
       title: '∆t',
