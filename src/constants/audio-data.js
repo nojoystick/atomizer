@@ -1,6 +1,6 @@
 const defaultAudioData = {
   volume: 0.3,
-  intensity: 0.5,
+  intensity: 100,
   mode: 'I'
 };
 
@@ -14,5 +14,10 @@ const volumeBounds = {
   max: 127
 };
 
+const midiBounds = {
+  min: 0,
+  max: 127
+};
+
 export default defaultAudioData;
-export { tempoBounds, volumeBounds };
+export { tempoBounds, volumeBounds, midiBounds };

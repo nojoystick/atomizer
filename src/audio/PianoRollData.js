@@ -2,10 +2,20 @@ import Note from './Note';
 
 const PianoRollData = {
   1: {
-    0: new Note(50, 100, 'whole', false)
+    0: new Note(50, 100, 'quarter', false),
+    8: new Note(54, 100, 'quarter', false),
+    16: new Note(57, 100, 'quarter', false),
+    24: new Note(54, 100, 'quarter', false)
   },
   2: {
-    0: new Note(52, 100, 'whole', false)
+    0: new Note(52, 100, 'whole', false),
+    4: new Note(54, 100, 'quarter', false),
+    8: new Note(57, 100, 'quarter', false),
+    12: new Note(54, 100, 'quarter', false),
+    16: new Note(52, 100, 'whole', false),
+    20: new Note(54, 100, 'quarter', false),
+    24: new Note(57, 100, 'quarter', false),
+    28: new Note(54, 100, 'quarter', false)
   },
   3: {
     0: new Note(54, 100, 'whole', false)

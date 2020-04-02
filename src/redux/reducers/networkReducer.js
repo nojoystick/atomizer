@@ -37,34 +37,34 @@ const networkReducer = (state = defaultState, action) => {
       const nodesCopy = state.graphInfo.nodes.slice();
       const x = action.payload.pointer.canvas.x;
       const y = action.payload.pointer.canvas.y;
-      const audioNode = new Node(state.elementIndex - 1);
+      const audioNode = new Node(state.elementIndex);
       nodesCopy.push({ ...elements(state.theme)[state.elementIndex - 1], id: id, x: x, y: y, audioNode: audioNode });
       const edgesCopy = state.graphInfo.edges.slice();
       if (action.payload.nodes.length) {
         edgesCopy.push({ from: action.payload.nodes[0], to: id });
       }
-      return (state = {
+      return {
         ...state,
         graphInfo: { nodes: nodesCopy, edges: edgesCopy },
         defaultState: true,
         addEdgeState: false,
         multiSelectState: false
-      });
+      };
 
     case 'ADD_NODE_MENU':
       const _id = uuidv4();
       const nodes = state.graphInfo.nodes.slice();
       const nodeX = state.elementIndex % 2 ? 30 : -30;
       const nodeY = state.elementIndex % 3 ? 30 : -30;
-      const _audioNode = new Node(state.elementIndex - 1);
+      const _audioNode = new Node(state.elementIndex);
       nodes.push({ ...elements(state.theme)[state.elementIndex - 1], id: _id, x: nodeX, y: nodeY, audioNode: _audioNode });
-      return (state = {
+      return {
         ...state,
         graphInfo: { ...state.graphInfo, nodes: nodes },
         defaultState: true,
         addEdgeState: false,
         multiSelectState: false
-      });
+      };
 
     case 'ADD_EDGE':
       const opt = state.addEdgeState
@@ -89,7 +89,7 @@ const networkReducer = (state = defaultState, action) => {
           };
       state.network.setOptions(opt);
       state.addEdgeState ? state.network.disableEditMode() : state.network.addEdgeMode();
-      return (state = { ...state, addEdgeState: !state.addEdgeState, multiSelectState: false, defaultState: state.addEdgeState });
+      return { ...state, addEdgeState: !state.addEdgeState, multiSelectState: false, defaultState: state.addEdgeState };
 
     case 'DEFAULT_MODE':
       state.network.disableEditMode();

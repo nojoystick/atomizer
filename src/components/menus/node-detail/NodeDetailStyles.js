@@ -90,6 +90,9 @@ const NodeDetailStyles = makeStyles({
     width: '20px',
     height: '10px'
   },
+  sliderGroup: {
+    position: 'relative'
+  },
   sliderLabel: {
     margin: '20px 0px 0px 20px',
     display: 'inline-block',
@@ -98,7 +101,9 @@ const NodeDetailStyles = makeStyles({
     color: props => props.theme && props.theme.text
   },
   input: {
-    margin: '20px 0px 0px 200px',
+    position: 'absolute',
+    top: '20px',
+    right: '40px',
     width: '45px',
     fontFamily: 'Inconsolata',
     fontSize: '14px',

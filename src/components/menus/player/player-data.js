@@ -10,7 +10,7 @@ const PlayerData = [
     defaultValue: 'masterGain',
     defaultValueConversion: 127,
     onChange: networkActions.setMasterVolume,
-    global: true
+    globalValue: true
   },
   {
     label: 'tempo',
@@ -20,7 +20,7 @@ const PlayerData = [
     defaultValue: 'masterTempo',
     defaultValueConversion: 1,
     onChange: networkActions.setTempo,
-    global: true
+    globalValue: true
   }
 ];
 

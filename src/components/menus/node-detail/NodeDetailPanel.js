@@ -89,10 +89,11 @@ const NodeDetailPanel = () => {
       {nodeData ? (
         <>
           {NodeDetailData(nodeData.options.audioNode).map(inputSlider => {
-            console.log(nodeData);
-            return <InputSlider useStyles={NodeDetailStyles} useStylesProps={useStylesProps} {...inputSlider} />;
+            return (
+              <InputSlider key={inputSlider.key} useStyles={NodeDetailStyles} useStylesProps={useStylesProps} {...inputSlider} />
+            );
           })}
-          <ModeSelector mode={mode} setMode={setMode} />
+          <ModeSelector key={nodeData.options.audioNode.mode} mode={mode} setMode={setMode} />
         </>
       ) : (
         <div className={`${classes.placeholder} ${nodeData ? null : classes.show}`}>

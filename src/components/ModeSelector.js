@@ -8,7 +8,6 @@ const ModeSelector = ({ mode, setMode }) => {
   const labels = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii'];
 
   const onClick = e => {
-    console.log(e.target.value);
     setMode(e.target.value);
   };
 
@@ -16,7 +15,12 @@ const ModeSelector = ({ mode, setMode }) => {
     <div className={classes.parent}>
       {labels.map(label => {
         return (
-          <button className={`${classes.button} ${label === mode && classes.selected}`} onClick={onClick} value={label}>
+          <button
+            key={label}
+            className={`${classes.button} ${label === mode && classes.selected}`}
+            onClick={onClick}
+            value={label}
+          >
             {label}
           </button>
         );

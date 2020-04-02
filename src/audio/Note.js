@@ -1,4 +1,4 @@
-import { frequency, volume } from '../constants/frequencies';
+import { volume } from '../constants/frequencies';
 
 const lengthMap = {
   sixteenth: 1,
@@ -17,7 +17,7 @@ class Note {
    * @param {*} dotted - boolean, is it a dotted note
    */
   constructor(pitch, vol, length, dotted) {
-    this.pitch = frequency[pitch];
+    this.pitch = pitch;
     this.volume = volume[vol];
     this.length = lengthMap[length] + (dotted && length !== 'whole' && lengthMap[length] / 2);
   }

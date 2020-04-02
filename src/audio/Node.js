@@ -1,34 +1,35 @@
 import PianoRollData from './PianoRollData';
 import defaultAudioData from '../constants/audio-data';
 import Audio from './Audio';
-import { volume } from '../constants/frequencies';
 
 class Node {
   constructor(elementIndex) {
-    this.osc = this.addOscillatorNode();
+    this.osc = addOscillatorNode();
     this.volume = defaultAudioData.volume;
     this.intensity = defaultAudioData.intensity;
     this.mode = defaultAudioData.mode;
-    if (elementIndex && PianoRollData[elementIndex]) {
-      this.notes = PianoRollData[elementIndex];
-    }
+    this.notes = PianoRollData[elementIndex] ? PianoRollData[elementIndex] : null;
   }
 
-  addOscillatorNode = () => {
-    const oscillatorGainNode = Audio.context.createGain();
-    oscillatorGainNode.gain.setValueAtTime(defaultAudioData.volume, Audio.context.currentTime);
-    oscillatorGainNode.connect(Audio.preampGainNode);
-    return oscillatorGainNode;
-  };
-
-  setVolume(vol) {
-    console.log(vol);
-    this.volume = volume[vol];
+  setVolume(_volume) {
+    this.volume = _volume;
   }
-
-  setIntensity = intensity => {
-    this.intensity = intensity;
-  };
+  setIntensity(_intensity) {
+    this.intensity = _intensity;
+  }
+  setMode(_mode) {
+    this.mode = _mode;
+  }
+  setNotes(_notes) {
+    this.notes = _notes;
+  }
 }
+
+const addOscillatorNode = () => {
+  const oscillatorGainNode = Audio.context.createGain();
+  oscillatorGainNode.gain.setValueAtTime(defaultAudioData.volume, Audio.context.currentTime);
+  oscillatorGainNode.connect(Audio.preampGainNode);
+  return oscillatorGainNode;
+};
 
 export default Node;

@@ -1,25 +1,32 @@
 import Audio from './Audio';
-import { frequency, toPenta } from '../constants/frequencies';
+import { frequency } from '../constants/frequencies';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { networkActions } from '../redux/actions';
 
 const setPlayer = (time, network, audio) => {
-  const nodes = network.getConnectedNodes(0, 'to');
-  nodes.forEach(id => {
-    const { atomicNumber, oscillator } = network.body.nodes[id].options;
-    if (oscillator) {
+  const nodes = getRootNodes(network); // todo: for better performance, maintain this as part of the redux state
+  nodes.forEach(audioNode => {
+    if (audioNode && audioNode.notes && audioNode.notes[audio.beatIndex]) {
       const oscillatorNode = Audio.context.createOscillator();
-      oscillatorNode.connect(oscillator.oscillatorGainNode);
-      oscillator.oscillatorGainNode.gain.setValueAtTime(0.3, Audio.context.currentTime, 0.05);
-      oscillatorNode.frequency.setValueAtTime(
-        frequency[toPenta[Math.floor(atomicNumber / 2) + 20 + audio.beatIndex]],
-        Audio.context.currentTime
-      );
+      oscillatorNode.connect(audioNode.osc);
+      audioNode.osc.gain.setValueAtTime(audioNode.volume * audioNode.notes[audio.beatIndex].volume, Audio.context.currentTime);
+
+      oscillatorNode.frequency.setValueAtTime(frequency[audioNode.notes[audio.beatIndex].pitch], Audio.context.currentTime);
       oscillatorNode.start();
-      setTimeout(() => endNote(oscillatorNode, oscillator.oscillatorGainNode), time * 800);
+      setTimeout(() => endNote(oscillatorNode, audioNode.osc), time * 800);
     }
   });
+};
+
+const getRootNodes = network => {
+  const rootNodes = [];
+  Object.values(network.body.nodes).forEach(node => {
+    if (network.getConnectedNodes(node.id, 'to').length === 0) {
+      rootNodes.push(node.options.audioNode);
+    }
+  });
+  return rootNodes;
 };
 
 const endNote = (oscillatorNode, oscillatorGainNode) => {

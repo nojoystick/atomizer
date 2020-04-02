@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { networkActions } from '../redux/actions';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { volume } from '../constants/frequencies';
 
@@ -14,31 +13,40 @@ const InputSlider = ({
   defaultValueConversion,
   onChange,
   setDraggable,
-  global
+  globalValue
 }) => {
   const audio = useSelector(state => state.network.audio);
   const theme = useSelector(state => state.network.theme);
   const [renderSlider, setRenderSlider] = useState(Math.random());
-  const [localAudio, setLocalAudio] = useState(global ? audio[defaultValue] : defaultValue);
+  const [localAudio, setLocalAudio] = useState(globalValue ? audio[defaultValue] : defaultValue);
 
   const dispatch = useDispatch();
   const classes = useStyles(useStylesProps ? useStylesProps : { theme: theme });
 
   /** only pass the value to redux on mouseUp/keyUp */
   function sliderUp(action, e) {
-    dispatch(action(e.target.value, e.target.id === 'masterVolume' ? 'MIDI' : null));
+    dispatch(action(e.target.value, e.target.id === 'volume' ? 'MIDI' : null));
+  }
+
+  function sliderChange(action, e) {
+    const val = defaultValueConversion === 1 ? e.target.value : volume[e.target.value];
+    setLocalAudio(val);
+    if (!globalValue) {
+      action(val);
+    }
   }
 
   const verify = (action, min, max, e) => {
     if (e.key === 'Enter') {
-      let val = e.target.id === 'masterVolume' ? parseFloat(e.target.value) : parseInt(e.target.value);
+      let val = e.target.id === 'volume' ? parseFloat(e.target.value) : parseInt(e.target.value);
       if (val > max) {
         val = max;
       } else if (val < min) {
         val = min;
       }
-      dispatch(action(val));
-      setRenderSlider(Math.random());
+      globalValue ? dispatch(action(val)) : action(val);
+      setLocalAudio(val);
+      setRenderSlider(Math.random() * 1000);
     }
   };
 
@@ -62,12 +70,12 @@ const InputSlider = ({
         key={renderSlider}
         min={min}
         max={max}
-        defaultValue={parseInt(defaultValue * defaultValueConversion)}
+        defaultValue={localAudio * defaultValueConversion}
         onFocus={setDraggable ? () => setDraggable(false) : null}
         onBlur={setDraggable ? () => setDraggable(true) : null}
-        onChange={e => setLocalAudio(defaultValueConversion === 1 ? e.target.value : volume[e.target.value])}
-        onMouseUp={global ? e => sliderUp(networkActions.setMasterVolume, e) : null}
-        onKeyUp={global ? e => sliderUp(networkActions.setMasterVolume, e) : null}
+        onChange={e => sliderChange(onChange, e)}
+        onMouseUp={globalValue ? e => sliderUp(onChange, e) : null}
+        onKeyUp={globalValue ? e => sliderUp(onChange, e) : null}
       />
     </div>
   );

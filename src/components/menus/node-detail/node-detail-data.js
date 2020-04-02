@@ -1,16 +1,30 @@
-import { volumeBounds } from '../../../constants/audio-data';
+import { volumeBounds, midiBounds } from '../../../constants/audio-data';
 
-const NodeDetailData = audioNode => [
-  {
-    label: 'volume',
-    onChange: audioNode.setVolume,
-    min: volumeBounds.min,
-    max: volumeBounds.max,
-    decimals: 2,
-    defaultValue: audioNode.volume,
-    defaultValueConversion: 127,
-    global: false
-  }
-];
+const NodeDetailData = audioNode => {
+  return [
+    {
+      label: 'volume',
+      onChange: audioNode.setVolume.bind(audioNode),
+      min: volumeBounds.min,
+      max: volumeBounds.max,
+      decimals: 2,
+      defaultValue: audioNode.volume,
+      defaultValueConversion: 127,
+      globalValue: false,
+      key: audioNode.volume
+    },
+    {
+      label: 'intensity',
+      onChange: audioNode.setIntensity.bind(audioNode),
+      min: midiBounds.min,
+      max: midiBounds.max,
+      decimals: 0,
+      defaultValue: audioNode.intensity,
+      defaultValueConversion: 1,
+      globalValue: false,
+      key: audioNode.intensity
+    }
+  ];
+};
 
 export default NodeDetailData;

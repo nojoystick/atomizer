@@ -53,7 +53,7 @@ const Player = ({ id, left, top, hideSourceOnDrag, setInteractible }) => {
       </button>
 
       {PlayerData.map(inputSlider => {
-        return <InputSlider useStyles={PlayerStyles} {...inputSlider} setDraggable={setIsDraggable} />;
+        return <InputSlider key={inputSlider.max} useStyles={PlayerStyles} {...inputSlider} setDraggable={setIsDraggable} />;
       })}
     </div>
   );
