@@ -1,37 +1,11 @@
 import { makeStyles } from '@material-ui/styles';
-import { sizeConstants } from '../../../config';
 
 const NodeDetailStyles = makeStyles({
   nodeDetailPanel: {
-    position: 'absolute',
     borderStyle: 'solid',
-    borderColor: props => props.theme && props.theme.text,
-    borderWidth: '3px 3px 0px 3px',
-    height: props =>
-      `${
-        props.nodeDetailVisible
-          ? props.menuVisible
-            ? props.screenInfo.height - sizeConstants.BOTTOM_MENU_SIZE - sizeConstants.HEADER_SIZE + 21 + 'px'
-            : sizeConstants.BOTTOM_MENU_SIZE + 'px'
-          : '0px'
-      }`,
-    right: props =>
-      `${
-        props.screenInfo.width < props.screenInfo.breakpoint
-          ? '-3px'
-          : props.sideMenuVisible
-          ? sizeConstants.SIDE_MENU_SIZE - 5 + 'px'
-          : '0px'
-      }`,
-    bottom: props =>
-      `${
-        props.menuVisible
-          ? props.nodeDetailVisible
-            ? sizeConstants.BOTTOM_MENU_SIZE - 13 + 'px'
-            : sizeConstants.BOTTOM_MENU_SIZE - 16 + 'px'
-          : '-10px'
-      }`,
-    width: props => `${props.screenInfo.width < props.screenInfo.breakpoint ? '100%' : '350px'}`,
+    border: props => `3px solid ${props.theme && props.theme.text}`,
+    height: '400px',
+    width: '350px',
     margin: '0px',
     transition: '0.5s',
     backgroundColor: props => props.theme && props.theme.background,
@@ -68,13 +42,7 @@ const NodeDetailStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    opacity: '0',
-    transition: '0.5s',
-    visibility: 'hidden'
-  },
-  show: {
-    opacity: '1',
-    visibility: 'visible'
+    transition: '0.5s'
   },
   scrollButton: {
     flexGrow: '1',

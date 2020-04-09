@@ -1,5 +1,5 @@
 import Audio from './Audio';
-import { frequency } from '../constants/frequencies';
+import { frequency, modeMap } from '../constants/frequencies';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { networkActions } from '../redux/actions';
@@ -11,8 +11,10 @@ const setPlayer = (time, network, audio) => {
       const oscillatorNode = Audio.context.createOscillator();
       oscillatorNode.connect(audioNode.osc);
       audioNode.osc.gain.setValueAtTime(audioNode.volume * audioNode.notes[audio.beatIndex].volume, Audio.context.currentTime);
-
-      oscillatorNode.frequency.setValueAtTime(frequency[audioNode.notes[audio.beatIndex].pitch], Audio.context.currentTime);
+      oscillatorNode.frequency.setValueAtTime(
+        audio.key.value + frequency[audioNode.octave * 12 + modeMap[audioNode.mode][audioNode.notes[audio.beatIndex].pitch]],
+        Audio.context.currentTime
+      );
       oscillatorNode.start();
       setTimeout(() => endNote(oscillatorNode, audioNode.osc), time * 800);
     }

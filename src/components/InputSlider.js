@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { volume } from '../constants/frequencies';
 
@@ -39,6 +39,9 @@ const InputSlider = ({
   const verify = (action, min, max, e) => {
     if (e.key === 'Enter') {
       let val = e.target.id === 'volume' ? parseFloat(e.target.value) : parseInt(e.target.value);
+      if (typeof val !== 'number') {
+        return;
+      }
       if (val > max) {
         val = max;
       } else if (val < min) {

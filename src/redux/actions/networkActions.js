@@ -114,6 +114,18 @@ export const networkActions = {
       type: 'STOP'
     };
   },
+  setKey: param => {
+    return {
+      type: 'SET_KEY',
+      payload: param
+    };
+  },
+  setDisposition: param => {
+    return {
+      type: 'SET_DISPOSITION',
+      payload: param
+    };
+  },
   setMasterVolume: (param, scale) => {
     return {
       type: 'SET_MASTER_VOLUME',
@@ -166,6 +178,11 @@ export const networkActions = {
     return {
       type: 'LOAD_NETWORK',
       payload: param
+    };
+  },
+  sendToLab: () => {
+    return {
+      type: 'SEND_TO_LAB'
     };
   },
   newNetwork: () => {

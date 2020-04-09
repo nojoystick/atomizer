@@ -11,7 +11,7 @@ const lengthMap = {
 class Note {
   /**
    *
-   * @param {*} pitch - MIDI note to play
+   * @param {*} pitch - scale degree of the note to play
    * @param {*} velocity - MIDI velocity to play it at
    * @param {*} length - string between 'sixteenth' and 'whole'
    * @param {*} dotted - boolean, is it a dotted note

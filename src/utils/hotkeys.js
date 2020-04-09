@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { configActions, networkActions, viewActions } from '../redux/actions';
-import { modalContent } from '../config';
+import { DeleteModal } from '../components/modals';
 import useSideMenuData from '../components/menus/network-editor/side-menu-data';
 
 function useResizer() {
@@ -145,7 +145,7 @@ function useHotkeys() {
         type.forEach(action => {
           if (action.shortcut === event.key) {
             if (action.label === 'delete selected') {
-              dispatch(configActions.setModal(modalContent.header, modalContent.message, networkActions.delete));
+              dispatch(configActions.setModal(DeleteModal, networkActions.delete));
             }
             dispatch(action.action());
           }

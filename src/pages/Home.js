@@ -6,7 +6,7 @@ import MenuPanel from '../components/menus/main/MenuPanel';
 import SideMenuPanel from '../components/menus/network-editor/SideMenuPanel';
 import NodeDetailPanel from '../components/menus/node-detail/NodeDetailPanel';
 import PlayerContainer from '../components/menus/player/PlayerContainer';
-import Modal from '../components/Modal';
+import Modal from '../components/modals/Modal';
 import Icon from '../components/Icon';
 import IconSet from '../constants/icon-set';
 import { sizeConstants } from '../config';
@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { viewActions } from '../redux/actions';
 import HomeStyles from './HomeStyles';
 import { setPlayer, usePreciseTimer } from '../audio/startPlayer';
+import { disableBodyScroll } from 'body-scroll-lock';
 
 const Home = () => {
   const [show, setShow] = useState(false);
@@ -27,6 +28,9 @@ const Home = () => {
 
   useEffect(() => {
     setShow(true);
+    window.scrollTo(0, 0);
+    const targetElement = document.querySelector('#root');
+    disableBodyScroll(targetElement);
   }, []);
 
   useHotkeys();

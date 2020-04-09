@@ -5,6 +5,7 @@ import Theme from '../../stylesheets/Theme';
 import Audio from '../../audio/Audio';
 import { frequency, volume } from '../../constants/frequencies';
 import Node from '../../audio/Node';
+import PianoRollData from '../../audio/PianoRollData';
 
 const defaultState = {
   theme: Theme.light,
@@ -20,6 +21,8 @@ const defaultState = {
   organizeState: false,
   audio: {
     playing: false,
+    key: { label: 'A', value: 21 },
+    disposition: 'M',
     beatIndex: 0,
     masterGain: 0.5,
     masterTempo: 120,
@@ -182,7 +185,7 @@ const networkReducer = (state = defaultState, action) => {
       return (state = { ...state, graphInfo: action.payload });
 
     case 'SET_ELEMENT_INDEX':
-      if (action.payload > 0 && action.payload <= elements(state.theme).length) {
+      if (action.payload > 0 && action.payload <= elements(state.theme).length && PianoRollData[action.payload]) {
         return (state = { ...state, elementIndex: action.payload });
       } else return state;
 
@@ -212,8 +215,15 @@ const networkReducer = (state = defaultState, action) => {
 
     case 'SET_TEMPO':
       return { ...state, audio: { ...state.audio, masterTempo: action.payload } };
+
     case 'SET_MODAL_VISIBLE':
       return setModalVisible(state, action.payload);
+
+    case 'SET_KEY':
+      return { ...state, audio: { ...state.audio, key: action.payload } };
+
+    case 'SET_DISPOSITION':
+      return { ...state, audio: { ...state.audio, disposition: action.payload } };
 
     case 'SET_THEME':
       // todo redraw the existing nodes when the theme changes
@@ -262,6 +272,10 @@ const networkReducer = (state = defaultState, action) => {
       // then create a new network
       return state;
 
+    case 'SEND_TO_LAB':
+      // right now this is a no-op
+      return state;
+
     default:
       return state;
   }
@@ -303,10 +317,6 @@ const inBoundsOneAxis = (position, start, end) => {
 
 const setModalVisible = (state, payload) => {
   return (state = { ...state, modalVisible: payload });
-};
-
-const muteOscillatorNode = node => {
-  node.oscillatorGainNode.gain.setTargetAtTime(0, Audio.context.currentTime, 0.05);
 };
 
 const playOrPause = state => {

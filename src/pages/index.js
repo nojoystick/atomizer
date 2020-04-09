@@ -6,5 +6,6 @@ import LogIn from './account/LogIn';
 import SignUp from './account/SignUp';
 import SignOut from './account/SignOut';
 import PasswordReset from './account/PasswordReset';
+import Lab from './Lab';
 
-export { About, Home, Settings, LogIn, SignUp, SignOut, PasswordReset, Admin };
+export { About, Home, Settings, LogIn, SignUp, SignOut, PasswordReset, Admin, Lab };

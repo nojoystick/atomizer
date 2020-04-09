@@ -11,6 +11,7 @@ import IconSet from '../../../constants/icon-set';
 import { networkActions } from '../../../redux/actions';
 import PlayerStyles from './PlayerStyles';
 import InputSlider from '../../InputSlider';
+import KeyDropdowns from '../../KeyDropdowns';
 import PlayerData from './player-data';
 
 const Player = ({ id, left, top, hideSourceOnDrag, setInteractible }) => {
@@ -51,7 +52,7 @@ const Player = ({ id, left, top, hideSourceOnDrag, setInteractible }) => {
       <button className={classes.button} onClick={() => dispatch(networkActions.stop())}>
         <Icon className={classes.stopIcon} fill={theme && theme.text} viewBox='0 0 300 300' path={IconSet.stop} />
       </button>
-
+      <KeyDropdowns />
       {PlayerData.map(inputSlider => {
         return <InputSlider key={inputSlider.max} useStyles={PlayerStyles} {...inputSlider} setDraggable={setIsDraggable} />;
       })}

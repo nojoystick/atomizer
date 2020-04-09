@@ -18,28 +18,48 @@ const SideMenuStyles = makeStyles({
     zIndex: 8001,
     overflowY: 'scroll'
   },
-  editorHeader: {
-    padding: '5px',
-    whiteSpace: 'nowrap'
-  },
   icon: {
     width: '40px',
     height: '40px'
   },
+  smallIcon: {
+    width: '15px',
+    height: '15px'
+  },
   button: {
     display: 'block',
     border: 'none',
-    height: '60px',
+    height: '58px',
     width: '65px',
     cursor: 'pointer',
     outline: 'none',
-    backgroundColor: props => props.theme && props.theme.background,
+    backgroundColor: 'transparent',
     color: props => props.theme && props.theme.text,
     margin: 'auto',
     fontSize: '12px',
     '&:hover': {
       opacity: '0.4'
     }
+  },
+  nodeCreatorButton: {
+    opacity: '0.0',
+    width: '85px',
+    height: '85px',
+    margin: '0px 8px 0px 8px',
+    padding: '0px',
+    position: 'absolute',
+    backgroundColor: '#e3e3e3',
+    left: '-3px',
+    top: '5px',
+    transition: 'opacity 0.5s',
+    '&:hover': {
+      opacity: '0.4'
+    }
+  },
+  bottomRight: {
+    position: 'absolute',
+    bottom: '2px',
+    right: '2px'
   },
   selected: {
     fontWeight: '800'

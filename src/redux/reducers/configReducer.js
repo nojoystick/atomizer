@@ -18,7 +18,7 @@ const defaultState = {
 const configReducer = (state = defaultState, action) => {
   switch (action.type) {
     case 'SET_MODAL':
-      state = { ...state, modal: { header: action.payload.header, message: action.payload.message, func: action.payload.func } };
+      state = { ...state, modal: { component: action.payload.component, func: action.payload.func } };
       return state;
     case 'SET_HOTKEYS':
       return { ...state, hotkeys: action.payload };

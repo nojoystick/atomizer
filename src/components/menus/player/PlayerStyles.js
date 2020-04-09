@@ -2,14 +2,16 @@ import { makeStyles } from '@material-ui/styles';
 
 const PlayerStyles = makeStyles({
   player: {
-    width: '400px',
+    width: '500px',
     height: '80px',
     border: props => props.theme && `3px solid ${props.theme.text}`,
     backgroundColor: props => props.theme && props.theme.background,
     position: 'absolute',
     zIndex: '8000',
     pointerEvents: 'auto',
-    visibility: 'visible'
+    visibility: 'visible',
+    display: 'flex',
+    alignItems: 'center'
   },
   button: {
     width: '50px',
@@ -34,6 +36,7 @@ const PlayerStyles = makeStyles({
   },
   sliderGroup: {
     display: 'inline-block',
+    marginLeft: '10px',
     padding: '5px 5px 0px 5px',
     width: '140px'
   },
@@ -56,7 +59,38 @@ const PlayerStyles = makeStyles({
   },
   slider: {
     width: '120px',
-    display: 'inline'
+    display: 'inline',
+    marginBottom: '20px'
+  },
+  dropdown: {
+    width: '50px',
+    maxWidth: '60px',
+    height: '18px !important',
+    minHeight: '18px !important',
+    fontFamily: 'Inconsolata',
+    fontWeight: '800',
+    zIndex: '3',
+    borderWidth: '0px 0px 2px 0px !important',
+    borderColor: `${props => props.theme && props.theme.text} $important`,
+    outline: 'none !important',
+    boxShadow: 'none !important',
+    padding: '0px !important',
+    margin: 'auto',
+    marginTop: '10px',
+    marginBottom: '10px',
+    display: 'inline',
+    '&:hover': {
+      borderColor: `${props => props.theme && props.theme.text} !important`,
+      outline: 'none'
+    },
+    '> & span': {
+      width: '23px'
+    },
+    '& div': {
+      '& input': {
+        color: props => props.theme && props.theme.text
+      }
+    }
   }
 });
 

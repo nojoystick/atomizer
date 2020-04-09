@@ -13,8 +13,7 @@ const useStyles = makeStyles({
     transition: 'opacity 4s'
   },
   floatRight: {
-    float: 'right',
-    verticalAlign: 'middle'
+    float: 'right'
   },
   settingsIcon: {
     margin: '0px 0px 0px 30px',
@@ -34,7 +33,13 @@ const useStyles = makeStyles({
     transition: 'opacity 4s'
   },
   toolbarItem: {
-    marginLeft: '20px'
+    marginLeft: '10px',
+    padding: '10px'
+  },
+  active: {
+    backgroundColor: props => props.theme && props.theme.tertiary,
+    color: props => props.theme && (props.theme.name === 'dark' ? props.theme.background : props.theme.text),
+    transition: '1s'
   }
 });
 

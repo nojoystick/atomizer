@@ -87,7 +87,7 @@ body,
   span {
     height: 18px !important;
     width: 18px;
-    max-width: 15px;
+    max-width: 18px;
     overflow: hidden;
   }
 }
@@ -110,6 +110,45 @@ body,
 }
 .react-dropdown-select-no-data {
   color: black !important;
+}
+
+.small-dropdown-no-search {
+  width: 25px !important;
+  text-align: center;
+  div {
+    width: 25px !important;
+    height: 90px !important;
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none;
+    .css-148o527-ItemComponent {
+      padding: 5px !important;
+    }
+  }
+  input {
+    display: none;
+  }
+}
+
+.wide-dropdown-no-search {
+  width: 50px !important;
+  .react-dropdown-select-content {
+    align-items: center;
+    span {
+      height: 18px !important;
+      width: 40px;
+      max-width: 40px;
+      overflow: hidden;
+      margin: 0px 0px -20px 5px;
+    }
+    div {
+      .css-148o527-ItemComponent {
+        padding: 5px !important;
+      }
+    }
+  }
 }
 
 .toggleContainer {

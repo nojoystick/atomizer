@@ -390,7 +390,146 @@ const volume = [
   0.992,
   0.993,
   0.994,
-  1.000
+  1.0
 ];
 
-export { frequency, toPenta, volume };
+const modeMap = {
+  // Ionian
+  I: [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24],
+  // Dorian
+  ii: [2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24, 26],
+  //, Phrygian
+  iii: [4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24, 26, 28],
+  //, Lydian
+  IV: [5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24, 26, 28, 29],
+  //, Mixolydian
+  V: [7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24, 26, 28, 29, 31],
+  //, Aeolian
+  vi: [9, 11, 12, 14, 16, 17, 19, 21, 23, 24, 26, 28, 29, 31, 33],
+  //, Locrian
+  vii: [11, 12, 14, 16, 17, 19, 21, 23, 24, 26, 28, 29, 31, 33, 35]
+};
+
+const keyMap = {
+  M: {
+    A: { label: 'A', value: 21 },
+    Bb: { label: 'Bb', value: 22 },
+    B: { label: 'B', value: 23 },
+    C: { label: 'C', value: 24 },
+    Db: { label: 'Db', value: 25 },
+    D: { label: 'D', value: 26 },
+    Eb: { label: 'Eb', value: 27 },
+    E: { label: 'E', value: 28 },
+    F: { label: 'F', value: 29 },
+    Gb: { label: 'Gb', value: 30 },
+    G: { label: 'G', value: 31 },
+    Ab: { label: 'Ab', value: 32 },
+    '*': { label: '&#', value: 21 }
+  },
+  m: {
+    A: { label: 'A', value: 21 },
+    Bb: { label: 'Bb', value: 22 },
+    B: { label: 'B', value: 23 },
+    C: { label: 'C', value: 24 },
+    'C#': { label: 'C#', value: 25 },
+    D: { label: 'D', value: 26 },
+    Eb: { label: 'Eb', value: 27 },
+    E: { label: 'E', value: 28 },
+    F: { label: 'F', value: 29 },
+    'F#': { label: 'F#', value: 30 },
+    G: { label: 'G', value: 31 },
+    'G#': { label: 'G#', value: 32 },
+    '*': { label: '&#', value: 21 }
+  }
+};
+
+const keyArrs = {
+  M: [
+    { label: 'A', value: 21 },
+    { label: 'Bb', value: 22 },
+    { label: 'B', value: 23 },
+    { label: 'C', value: 24 },
+    { label: 'Db', value: 25 },
+    { label: 'D', value: 26 },
+    { label: 'Eb', value: 27 },
+    { label: 'E', value: 28 },
+    { label: 'F', value: 29 },
+    { label: 'Gb', value: 30 },
+    { label: 'G', value: 31 },
+    { label: 'Ab', value: 32 },
+    { label: '*', value: 0 }
+  ],
+  m: [
+    { label: 'A', value: 21 },
+    { label: 'Bb', value: 22 },
+    { label: 'B', value: 23 },
+    { label: 'C', value: 24 },
+    { label: 'C#', value: 25 },
+    { label: 'D', value: 26 },
+    { label: 'Eb', value: 27 },
+    { label: 'E', value: 28 },
+    { label: 'F', value: 29 },
+    { label: 'F#', value: 30 },
+    { label: 'G', value: 31 },
+    { label: 'G#', value: 32 },
+    { label: '*', value: 0 }
+  ]
+};
+
+const majorMinor = [
+  { label: 'Major', value: 'M' },
+  { label: 'Minor', value: 'm' }
+];
+
+const keysToNotesMap = {
+  M: {
+    A: ['A', 'B', 'C#', 'D', 'E', 'F#', 'G#', 'A'],
+    Bb: ['Bb', 'C', 'D', 'Eb', 'F', 'G', 'A', 'Bb'],
+    B: ['B', 'C#', 'D#', 'E', 'F#', 'G#', 'A#', 'B'],
+    C: ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C'],
+    Db: ['Db', 'Eb', 'F', 'Gb', 'Ab', 'Bb', 'C', 'Db'],
+    D: ['D', 'E', 'F#', 'G', 'A', 'B', 'C#', 'D'],
+    Eb: ['Eb', 'F', 'G', 'Ab', 'Bb', 'C', 'D', 'Eb'],
+    E: ['E', 'F#', 'G#', 'A', 'B', 'C#', 'D#', 'E'],
+    F: ['F', 'G', 'A', 'Bb', 'C', 'D', 'E', 'F'],
+    Gb: ['Gb', 'Ab', 'Bb', 'Cb', 'Db', 'Eb', 'F', 'Gb'],
+    G: ['G', 'A', 'B', 'C', 'D', 'E', 'F#', 'G'],
+    Ab: ['Ab', 'Bb', 'C', 'Db', 'Eb', 'F', 'G', 'Ab'],
+    '*': ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A']
+  },
+  m: {
+    A: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'A'],
+    Bb: ['Bb', 'C', 'DB', 'Eb', 'F', 'Gb', 'Ab', 'Bb'],
+    B: ['B', 'C#', 'D', 'E', 'F#', 'G', 'A', 'B'],
+    C: ['C', 'D', 'Eb', 'F', 'G', 'Ab', 'Bb', 'C'],
+    'C#': ['C#', 'D#', 'E', 'F#', 'G#', 'A', 'B', 'C#'],
+    D: ['D', 'E', 'F', 'G', 'A', 'Bb', 'C', 'D'],
+    Eb: ['Eb', 'F', 'Gb', 'Ab', 'Bb', 'C', 'Db', 'Eb'],
+    E: ['E', 'F#', 'G', 'A', 'B', 'C', 'D', 'E'],
+    F: ['F', 'G', 'Ab', 'Bb', 'C', 'Db', 'Eb', 'F'],
+    'F#': ['F#', 'G#', 'A', 'B', 'C#', 'D', 'E', 'F#'],
+    G: ['G', 'A', 'Bb', 'C', 'D', 'Eb', 'F', 'G'],
+    'G#': ['G#', 'A#', 'B', 'C#', 'D#', 'E', 'F#', 'G#'],
+    '*': ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A']
+  }
+};
+
+const modeToOffsetMap = {
+  I: 0,
+  ii: 1,
+  iii: 2,
+  IV: 3,
+  V: 4,
+  vi: 5,
+  vii: 6
+};
+
+const noteToWidth = {
+  sixteenth: 16,
+  eighth: 8,
+  quarter: 4,
+  half: 2,
+  whole: 1
+};
+
+export { frequency, toPenta, volume, modeMap, keyMap, keyArrs, majorMinor, keysToNotesMap, modeToOffsetMap, noteToWidth };

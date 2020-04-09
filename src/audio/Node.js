@@ -9,6 +9,7 @@ class Node {
     this.intensity = defaultAudioData.intensity;
     this.mode = defaultAudioData.mode;
     this.notes = PianoRollData[elementIndex] ? PianoRollData[elementIndex] : null;
+    this.octave = 4;
   }
 
   setVolume(_volume) {
@@ -22,6 +23,9 @@ class Node {
   }
   setNotes(_notes) {
     this.notes = _notes;
+  }
+  setOctave(_octave) {
+    this.octave = _octave;
   }
 }
 

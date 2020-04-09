@@ -131,4 +131,14 @@ const useSideMenuData = () => {
   };
 };
 
+const nodeEditorData = {
+  label: 'send to node editor',
+  action: networkActions.sendToLab,
+  icon: IconSet.edit,
+  viewBox: '0 0 30 30',
+  shortcut: ''
+};
+
 export default useSideMenuData;
+
+export { nodeEditorData };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { disableBodyScroll } from 'body-scroll-lock';
-import { HashRouter, Route, NavLink } from 'react-router-dom';
+import { HashRouter, Route, NavLink, useLocation } from 'react-router-dom';
 import * as Components from './pages';
 import LoadingScreen from './components/LoadingScreen';
 import Theme from './stylesheets/Theme';
@@ -13,12 +13,72 @@ import useLoadFirestoreValues from './utils/useLoadFirestoreValues';
 import useStyles from './AppStyles.js';
 import './stylesheets/App.scss';
 
+const Header = () => {
+  const theme = useSelector(state => state.network.theme);
+  const auth = useSelector(state => state.firebase.auth);
+  const profile = useSelector(state => state.firebase.profile);
+  const classes = useStyles({ theme: theme });
+  const location = useLocation();
+
+  const getClassName = route => {
+    return `${classes.toolbarItem} ${location.pathname === route && classes.active}`;
+  };
+
+  return (
+    <>
+      <header className={classes.titleHeader}>
+        <div className={classes.floatRight}>
+          <NavLink exact to={Routes.HOME} className={getClassName(Routes.HOME)}>
+            home
+          </NavLink>
+          <NavLink to={Routes.LAB} className={getClassName(Routes.LAB)}>
+            lab
+          </NavLink>
+          <NavLink to={Routes.ABOUT} className={getClassName(Routes.ABOUT)}>
+            about
+          </NavLink>
+          <NavLink to={Routes.SETTINGS} className={getClassName(Routes.SETTINGS)}>
+            settings
+          </NavLink>
+          {isEmpty(auth) && (
+            <NavLink to={Routes.LOG_IN} className={getClassName(Routes.LOG_IN)}>
+              log in
+            </NavLink>
+          )}
+          {!isEmpty(auth) && <Components.SignOut classes={classes} />}
+          {!isEmpty(auth) && profile.admin && (
+            <NavLink to={Routes.ADMIN} className={getClassName(Routes.ADMIN)}>
+              admin
+            </NavLink>
+          )}
+        </div>
+        <h1>
+          <NavLink exact to='/'>
+            atomizer
+          </NavLink>
+        </h1>
+      </header>
+      <div id='body' className={classes.body}>
+        <Route path={Routes.HOME} exact component={Components.Home} />
+        <Route path={Routes.LAB} component={Components.Lab} />
+        <Route path={Routes.ABOUT} component={Components.About} />
+        <Route path={Routes.SETTINGS} component={Components.Settings} />
+        <Route path={Routes.LOG_IN} component={Components.LogIn} />
+        <Route path={Routes.SIGN_UP} component={Components.SignUp} />
+        <Route path={Routes.PASSWORD_RESET} component={Components.PasswordReset} />
+        {!isEmpty(auth) && profile.admin && <Route path={Routes.ADMIN} component={Components.Admin} />}
+      </div>
+    </>
+  );
+};
+
 const App = () => {
   const [_theme, setTheme] = useState(null);
   const [_hotkeys, setHotkeys] = useState(null);
   const [showLoadingScreen, setShowLoadingScreen] = useState(true);
+
   const auth = useSelector(state => state.firebase.auth);
-  const profile = useSelector(state => state.firebase.profile); // todo: fix double render
+  const profile = useSelector(state => state.firebase.profile);
   const login = useSelector(state => state.config.login);
   const id = !profile.isEmpty ? profile.email : 'default';
 
@@ -27,7 +87,6 @@ const App = () => {
   useLoadFirestoreValues(_theme, _hotkeys, auth);
 
   const theme = useSelector(state => state.network.theme);
-  const classes = useStyles({ theme: theme });
   const targetElement = document.querySelector('#root');
   targetElement.style.backgroundColor = theme && theme.background;
   disableBodyScroll(targetElement);
@@ -81,55 +140,11 @@ const App = () => {
     initializeMasterGain();
   }, []);
 
-  const Header = () => {
-    return (
-      <>
-        <header className={classes.titleHeader}>
-          <div className={classes.floatRight}>
-            <NavLink to={Routes.ABOUT} className={classes.toolbarItem}>
-              about
-            </NavLink>
-            <NavLink to={Routes.SETTINGS} className={classes.toolbarItem}>
-              settings
-            </NavLink>
-            {isEmpty(auth) && (
-              <NavLink to={Routes.LOG_IN} className={classes.toolbarItem}>
-                log in
-              </NavLink>
-            )}
-            {!isEmpty(auth) && <Components.SignOut classes={classes} />}
-            {!isEmpty(auth) && profile.admin && (
-              <NavLink to={Routes.ADMIN} className={classes.toolbarItem}>
-                admin
-              </NavLink>
-            )}
-          </div>
-          <h1>
-            <NavLink exact to='/'>
-              atomizer
-            </NavLink>
-          </h1>
-        </header>
-        <div id='body' className={classes.body}>
-          <Route path={Routes.HOME} exact component={Components.Home} />
-          <Route path={Routes.ABOUT} component={Components.About} />
-          <Route path={Routes.SETTINGS} component={Components.Settings} />
-          <Route path={Routes.LOG_IN} component={Components.LogIn} />
-          <Route path={Routes.SIGN_UP} component={Components.SignUp} />
-          <Route path={Routes.PASSWORD_RESET} component={Components.PasswordReset} />
-          {!isEmpty(auth) && profile.admin && <Route path={Routes.ADMIN} component={Components.Admin} />}
-        </div>
-      </>
-    );
-  };
-
   return (
-    <>
-      <HashRouter>
-        <LoadingScreen show={showLoadingScreen} />
-        {!showLoadingScreen && <Header />}
-      </HashRouter>
-    </>
+    <HashRouter>
+      <LoadingScreen show={showLoadingScreen} />
+      {!showLoadingScreen && <Header />}
+    </HashRouter>
   );
 };
 

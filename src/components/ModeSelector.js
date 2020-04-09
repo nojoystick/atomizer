@@ -2,13 +2,13 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
 
-const ModeSelector = ({ mode, setMode }) => {
+const ModeSelector = ({ mode, audioNode, setMode }) => {
   const theme = useSelector(state => state.network.theme);
   const classes = useStyles({ theme: theme });
   const labels = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii'];
 
   const onClick = e => {
-    setMode(e.target.value);
+    audioNode ? audioNode.setMode(e.target.value) : setMode(e.target.value);
   };
 
   return (
@@ -31,7 +31,10 @@ const ModeSelector = ({ mode, setMode }) => {
 
 const useStyles = makeStyles({
   parent: {
-    padding: '20px'
+    padding: '10px',
+    width: '70%',
+    margin: '0px',
+    display: 'inline-block'
   },
   button: {
     fontFamily: 'Inconsolata',

@@ -2,12 +2,24 @@ import React, { useEffect, useState } from 'react';
 import ElementTile from '../../ElementTile';
 import Icon from '../../Icon';
 import IconSet from '../../../constants/icon-set';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNodeDetailHotkeys } from '../../../utils/hotkeys';
 import NodeDetailStyles from './NodeDetailStyles';
 import ModeSelector from '../../ModeSelector';
 import NodeDetailData from './node-detail-data';
 import InputSlider from '../../InputSlider';
+import Select from 'react-dropdown-select';
+import { configActions } from '../../../redux/actions';
+
+const octaves = [
+  { id: 0, dropdownLabel: '0', value: 0 },
+  { id: 1, dropdownLabel: '1', value: 1 },
+  { id: 2, dropdownLabel: '2', value: 2 },
+  { id: 3, dropdownLabel: '3', value: 3 },
+  { id: 4, dropdownLabel: '4', value: 4 },
+  { id: 5, dropdownLabel: '5', value: 5 },
+  { id: 6, dropdownLabel: '6', value: 6 }
+];
 
 const NodeDetailPanel = () => {
   const { menuVisible, sideMenuVisible, nodeDetailVisible, screenInfo } = useSelector(state => state.view);
@@ -15,7 +27,7 @@ const NodeDetailPanel = () => {
   const selectedNodes = useSelector(state => state.network.selectedNodes);
   const [nodeData, setNodeData] = useState(null);
   const [index, setIndex] = useState(0);
-  const [mode, setMode] = useState('I');
+  const dispatch = useDispatch();
 
   const theme = useSelector(state => state.network.theme);
   const useStylesProps = {
@@ -93,7 +105,24 @@ const NodeDetailPanel = () => {
               <InputSlider key={inputSlider.key} useStyles={NodeDetailStyles} useStylesProps={useStylesProps} {...inputSlider} />
             );
           })}
-          <ModeSelector key={nodeData.options.audioNode.mode} mode={mode} setMode={setMode} />
+          <div className={classes.row}>
+            <ModeSelector
+              key={nodeData.options.audioNode.mode}
+              mode={nodeData.options.audioNode.mode}
+              audioNode={nodeData.options.audioNode}
+            />
+            <Select
+              options={octaves}
+              onChange={e => nodeData.options.audioNode.setOctave(e[0].value)}
+              className={classes.dropdown}
+              values={[octaves[4]]}
+              dropdownGap={0}
+              dropdownHandle={false}
+              labelField='dropdownLabel'
+              onDropdownOpen={() => dispatch(configActions.setHotkeys(false))}
+              onDropdownClose={() => dispatch(configActions.setHotkeys(true))}
+            />
+          </div>
         </>
       ) : (
         <div className={`${classes.placeholder} ${nodeData ? null : classes.show}`}>
