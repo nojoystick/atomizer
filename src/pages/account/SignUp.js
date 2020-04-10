@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
 import { useSelector, useDispatch } from 'react-redux';
-import { useFirestore, useFirebase } from 'react-redux-firebase';
-import { defaultConfig } from '../../config';
+import { useFirebase } from 'react-redux-firebase';
 import AccountStyles from './AccountStyles';
 import { configActions } from '../../redux/actions';
 
@@ -32,7 +31,6 @@ const SignUpForm = ({ classes }) => {
   };
   const [content, setContent] = useState({ ...INITIAL_STATE });
   const firebase = useFirebase();
-  const firestore = useFirestore();
   const dispatch = useDispatch();
 
   const onSubmit = event => {
@@ -56,15 +54,6 @@ const SignUpForm = ({ classes }) => {
 
   const isInvalid =
     content.passwordOne !== content.passwordTwo || content.passwordOne === '' || content.email === '' || content.username === '';
-
-  useEffect(() => {
-    if (login.valid && firestore.collection('config').doc(formFields.email)) {
-      firestore
-        .collection('config')
-        .doc(formFields.email)
-        .set(defaultConfig);
-    }
-  }, [firestore, formFields.email, login.valid]);
 
   return (
     <>

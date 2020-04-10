@@ -1,14 +1,13 @@
-import PianoRollData from './PianoRollData';
 import defaultAudioData from '../constants/audio-data';
 import Audio from './Audio';
 
 class Node {
-  constructor(elementIndex) {
+  constructor(pianoRoll) {
     this.osc = addOscillatorNode();
     this.volume = defaultAudioData.volume;
     this.intensity = defaultAudioData.intensity;
     this.mode = defaultAudioData.mode;
-    this.notes = PianoRollData[elementIndex] ? PianoRollData[elementIndex] : null;
+    this.notes = pianoRoll;
     this.octave = 4;
   }
 

@@ -15,7 +15,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { viewActions } from '../redux/actions';
 import HomeStyles from './HomeStyles';
 import { setPlayer, usePreciseTimer } from '../audio/startPlayer';
-import { disableBodyScroll } from 'body-scroll-lock';
 
 const Home = () => {
   const [show, setShow] = useState(false);
@@ -28,9 +27,6 @@ const Home = () => {
 
   useEffect(() => {
     setShow(true);
-    window.scrollTo(0, 0);
-    const targetElement = document.querySelector('#root');
-    disableBodyScroll(targetElement);
   }, []);
 
   useHotkeys();

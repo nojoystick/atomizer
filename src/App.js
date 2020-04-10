@@ -8,7 +8,8 @@ import Theme from './stylesheets/Theme';
 import Audio from './audio/Audio';
 import * as Routes from './constants/routes';
 import { defaultConfig } from './config';
-import { useFirestoreConnect, isEmpty } from 'react-redux-firebase';
+import PianoRollData, { transformToPureObject } from './audio/PianoRollData';
+import { useFirestore, useFirestoreConnect, isEmpty } from 'react-redux-firebase';
 import useLoadFirestoreValues from './utils/useLoadFirestoreValues';
 import useStyles from './AppStyles.js';
 import './stylesheets/App.scss';
@@ -45,12 +46,12 @@ const Header = () => {
               log in
             </NavLink>
           )}
-          {!isEmpty(auth) && <Components.SignOut classes={classes} />}
           {!isEmpty(auth) && profile.admin && (
             <NavLink to={Routes.ADMIN} className={getClassName(Routes.ADMIN)}>
               admin
             </NavLink>
           )}
+          {!isEmpty(auth) && <Components.SignOut classes={classes} />}
         </div>
         <h1>
           <NavLink exact to='/'>
@@ -82,9 +83,14 @@ const App = () => {
   const login = useSelector(state => state.config.login);
   const id = !profile.isEmpty ? profile.email : 'default';
 
-  useFirestoreConnect(() => [{ collection: 'config', doc: id }]);
+  useFirestoreConnect(() => [
+    { collection: 'config', doc: id },
+    { collection: 'pianoRollData', doc: id }
+  ]);
   const config = useSelector(state => state.firestore.ordered.config);
-  useLoadFirestoreValues(_theme, _hotkeys, auth);
+  const pianoRollData = useSelector(state => state.firestore.ordered.pianoRollData);
+  useLoadFirestoreValues(_theme, _hotkeys, auth, pianoRollData);
+  const firestore = useFirestore();
 
   const theme = useSelector(state => state.network.theme);
   const targetElement = document.querySelector('#root');
@@ -112,7 +118,25 @@ const App = () => {
   useEffect(() => {
     setShowLoadingScreen(true);
     setTimeout(() => setShowLoadingScreen(false), 3000);
-  }, [login.valid]);
+
+    // if it's a first time login, initialize values
+    if (login.valid) {
+      const configRef = firestore.collection('config').doc(id);
+      const pianoRollRef = firestore.collection('pianoRollData').doc(id);
+
+      configRef.get().then(docSnapshot => {
+        if (!docSnapshot.exists) {
+          configRef.set(defaultConfig);
+        }
+      });
+
+      pianoRollRef.get().then(docSnapshot => {
+        if (!docSnapshot.exists) {
+          pianoRollRef.set(transformToPureObject(PianoRollData));
+        }
+      });
+    }
+  }, [firestore, id, login, login.valid]);
 
   useEffect(() => {
     if (!isEmpty(auth) && !isEmpty(profile)) {

@@ -29,7 +29,8 @@ const defaultState = {
     lpFilterFrequency: 0.1,
     lpFilterQ: 0.1,
     hpFilterFrequency: 0.1,
-    hpFilterQ: 0.1
+    hpFilterQ: 0.1,
+    pianoRollData: PianoRollData
   }
 };
 
@@ -40,7 +41,7 @@ const networkReducer = (state = defaultState, action) => {
       const nodesCopy = state.graphInfo.nodes.slice();
       const x = action.payload.pointer.canvas.x;
       const y = action.payload.pointer.canvas.y;
-      const audioNode = new Node(state.elementIndex);
+      const audioNode = new Node(state.audio.pianoRollData[state.elementIndex]);
       nodesCopy.push({ ...elements(state.theme)[state.elementIndex - 1], id: id, x: x, y: y, audioNode: audioNode });
       const edgesCopy = state.graphInfo.edges.slice();
       if (action.payload.nodes.length) {
@@ -59,7 +60,7 @@ const networkReducer = (state = defaultState, action) => {
       const nodes = state.graphInfo.nodes.slice();
       const nodeX = state.elementIndex % 2 ? 30 : -30;
       const nodeY = state.elementIndex % 3 ? 30 : -30;
-      const _audioNode = new Node(state.elementIndex);
+      const _audioNode = new Node(state.audio.pianoRollData[state.elementIndex]);
       nodes.push({ ...elements(state.theme)[state.elementIndex - 1], id: _id, x: nodeX, y: nodeY, audioNode: _audioNode });
       return {
         ...state,
@@ -224,6 +225,12 @@ const networkReducer = (state = defaultState, action) => {
 
     case 'SET_DISPOSITION':
       return { ...state, audio: { ...state.audio, disposition: action.payload } };
+
+    case 'SET_PIANO_ROLL_DATA':
+      return { ...state, audio: { ...state.audio, pianoRollData: action.payload } };
+
+    case 'SET_PIANO_ROLL_FOR_ELEMENT':
+      return { ...state, audio: { ...state.audio, pianoRollData: { ...state.pianoRollData, [action.index]: action.payload } } };
 
     case 'SET_THEME':
       // todo redraw the existing nodes when the theme changes

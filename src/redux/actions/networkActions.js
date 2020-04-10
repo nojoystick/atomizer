@@ -189,5 +189,18 @@ export const networkActions = {
     return {
       type: 'NEW_NETWORK'
     };
+  },
+  setPianoRollData: param => {
+    return {
+      type: 'SET_PIANO_ROLL_DATA',
+      payload: param
+    };
+  },
+  setPianoRollForElement: (index, payload) => {
+    return {
+      type: 'SET_PIANO_ROLL_FOR_ELEMENT',
+      index: index,
+      payload: payload
+    };
   }
 };

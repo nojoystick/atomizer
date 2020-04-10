@@ -8,15 +8,17 @@ const setPlayer = (time, network, audio) => {
   const nodes = getRootNodes(network); // todo: for better performance, maintain this as part of the redux state
   nodes.forEach(audioNode => {
     if (audioNode && audioNode.notes && audioNode.notes[audio.beatIndex]) {
-      const oscillatorNode = Audio.context.createOscillator();
-      oscillatorNode.connect(audioNode.osc);
-      audioNode.osc.gain.setValueAtTime(audioNode.volume * audioNode.notes[audio.beatIndex].volume, Audio.context.currentTime);
-      oscillatorNode.frequency.setValueAtTime(
-        audio.key.value + frequency[audioNode.octave * 12 + modeMap[audioNode.mode][audioNode.notes[audio.beatIndex].pitch]],
-        Audio.context.currentTime
-      );
-      oscillatorNode.start();
-      setTimeout(() => endNote(oscillatorNode, audioNode.osc), time * 800);
+      audioNode.notes[audio.beatIndex].forEach(note => {
+        const oscillatorNode = Audio.context.createOscillator();
+        oscillatorNode.connect(audioNode.osc);
+        audioNode.osc.gain.setValueAtTime(audioNode.volume * note.volume, Audio.context.currentTime);
+        oscillatorNode.frequency.setValueAtTime(
+          audio.key.value + frequency[audioNode.octave * 12 + modeMap[audioNode.mode][note.pitch]],
+          Audio.context.currentTime
+        );
+        oscillatorNode.start();
+        setTimeout(() => endNote(oscillatorNode, audioNode.osc), time * 800);
+      });
     }
   });
 };

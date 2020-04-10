@@ -14,13 +14,14 @@ import 'tippy.js/dist/tippy.css';
 import 'tippy.js/themes/light.css';
 import SideMenuStyles from './SideMenuStyles';
 import { DeleteModal } from '../../modals';
-import PianoRollData from '../../../audio/PianoRollData';
 import * as Routes from '../../../constants/routes';
+import PianoRollData from '../../../audio/PianoRollData';
 
 const SideMenuPanel = () => {
   const { menuVisible, sideMenuVisible, screenInfo } = useSelector(state => state.view);
   const theme = useSelector(state => state.network.theme);
   const elementIndex = useSelector(state => state.network.elementIndex);
+  const pianoRollData = useSelector(state => state.network.audio.pianoRollData);
   const [redirectToLab, setRedirectToLab] = useState(false);
 
   const classes = SideMenuStyles({
@@ -46,7 +47,7 @@ const SideMenuPanel = () => {
     }
   };
 
-  const el = elements(theme).filter(el => PianoRollData[el.atomicNumber]);
+  const el = elements(theme).filter(el => (pianoRollData ? pianoRollData[el.atomicNumber] : PianoRollData[el.atomicNumber]));
 
   const Tooltip = ({ action, child, delay }) => (
     <Tippy

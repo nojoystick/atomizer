@@ -42,6 +42,7 @@ const Grid = ({ width, mode, pianoRoll, setPianoRoll, height }) => {
                 )
               : pianoRoll[i] &&
                 pianoRoll[i][j] &&
+                (pianoRoll[i][j] === -1 || pianoRoll[i][j] === 1) &&
                 children.push(
                   <td className={classes.tableCell} key={j}>
                     <button

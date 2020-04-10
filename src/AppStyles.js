@@ -37,8 +37,8 @@ const useStyles = makeStyles({
     padding: '10px'
   },
   active: {
-    backgroundColor: props => props.theme && props.theme.tertiary,
-    color: props => props.theme && (props.theme.name === 'dark' ? props.theme.background : props.theme.text),
+    backgroundColor: 'rgba(100, 100, 100, 0.2)',
+    color: props => props.theme && props.theme.text,
     transition: '1s'
   }
 });

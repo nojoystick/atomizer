@@ -48,7 +48,6 @@ const NodeCreatorModalStyles = makeStyles({
     width: '60px',
     height: '30px',
     border: props => `1.5px solid ${props.theme && props.theme.text}`,
-    color: props => props.theme && props.theme.text,
     fontFamily: 'inconsolata',
     outline: 'none',
     '&:hover': {
@@ -58,7 +57,8 @@ const NodeCreatorModalStyles = makeStyles({
   confirmButton: {
     marginLeft: '20px',
     fontWeight: '700',
-    backgroundColor: props => props.theme && props.theme.background
+    backgroundColor: props => props.theme && props.theme.background,
+    color: props => props.theme && props.theme.text
   },
   cancelButton: {
     fontWeight: '400',

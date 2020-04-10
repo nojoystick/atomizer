@@ -21,7 +21,7 @@ const octaves = [
 
 const NodeDetailPanel = ({ element }) => {
   const selectedNodes = useSelector(state => state.network.selectedNodes);
-  const [nodeData, setNodeData] = useState(null);
+  const [nodeData] = useState(null);
   const [index, setIndex] = useState(0);
   const dispatch = useDispatch();
 
