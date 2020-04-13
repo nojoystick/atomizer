@@ -3,12 +3,12 @@ import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import { keysToNotesMap, modeToOffsetMap } from '../../constants/frequencies';
 
-const Grid = ({ width, mode, pianoRoll, setPianoRoll, height }) => {
+const Grid = ({ width, mode, pianoRoll, setPianoRoll, height, color }) => {
   const theme = useSelector(state => state.network.theme);
   const key = useSelector(state => state.network.audio.key);
   const disposition = useSelector(state => state.network.audio.disposition);
   const [table, setTable] = useState(null);
-  const classes = useStyles({ theme: theme, height: height, width: width });
+  const classes = useStyles({ theme: theme, height: height, width: width, color: color });
 
   useEffect(() => {
     const setNote = (i, j, e) => {
@@ -82,8 +82,7 @@ const Grid = ({ width, mode, pianoRoll, setPianoRoll, height }) => {
 
 const useStyles = makeStyles({
   table: {
-    margin: 'auto',
-    marginTop: '20px'
+    margin: 'auto'
   },
   tableCell: {
     width: props => `${350 / props.width}px`,
@@ -108,7 +107,7 @@ const useStyles = makeStyles({
     }
   },
   selected: {
-    backgroundColor: props => props.theme && props.theme.nonMetal
+    backgroundColor: props => props.color
   }
 });
 

@@ -108,9 +108,9 @@ function useElementIndexHotkeys() {
   useEffect(() => {
     const _onKeyDown = e => {
       if (e.key === 'ArrowDown') {
-        dispatch(networkActions.setElementIndex(elementIndex + 1));
+        dispatch(networkActions.setElementIndex(parseInt(elementIndex) + 1, true));
       } else if (e.key === 'ArrowUp') {
-        dispatch(networkActions.setElementIndex(elementIndex - 1));
+        dispatch(networkActions.setElementIndex(parseInt(elementIndex) - 1, true));
       }
     };
 
@@ -121,7 +121,7 @@ function useElementIndexHotkeys() {
   }, [dispatch, elementIndex]);
 }
 
-function useHotkeys() {
+function useHotkeys(enabled) {
   const hotkeys = useSelector(state => state.config.hotkeys);
   const dispatch = useDispatch();
   const sideMenuData = useSideMenuData();
@@ -157,7 +157,7 @@ function useHotkeys() {
   const handler = throttled(100, _onKeyDown);
 
   useEffect(() => {
-    if (hotkeys) {
+    if (hotkeys && enabled !== false) {
       window.addEventListener('keydown', handler);
     } else {
       window.removeEventListener('keydown', handler);

@@ -111,6 +111,18 @@ const networkReducer = (state = defaultState, action) => {
     case 'DELETE':
       return doDeletion(state);
 
+    case 'DELETE_PIANO_ROLL_FOR_ELEMENT':
+      if (state.audio.pianoRollData[action.index]) {
+        let pianoRollCopy = {};
+        Object.keys(state.audio.pianoRollData).forEach(key => {
+          // eslint-disable-next-line eqeqeq
+          if (key != action.index) {
+            pianoRollCopy = { ...pianoRollCopy, [key]: state.audio.pianoRollData[key] };
+          }
+        });
+        return { ...state, audio: { ...state.audio, pianoRollData: pianoRollCopy } };
+      } else return state;
+
     case 'EDIT_EDGE':
       state.network.editEdgeMode();
       return state;
@@ -186,9 +198,27 @@ const networkReducer = (state = defaultState, action) => {
       return (state = { ...state, graphInfo: action.payload });
 
     case 'SET_ELEMENT_INDEX':
-      if (action.payload > 0 && action.payload <= elements(state.theme).length && PianoRollData[action.payload]) {
-        return (state = { ...state, elementIndex: action.payload });
-      } else return state;
+      if (action.constraint) {
+        if (state.audio.pianoRollData[action.payload]) {
+          return { ...state, elementIndex: action.payload };
+        } else if (state.elementIndex < action.payload) {
+          // find the next highest existing element and set it
+          // eslint-disable-next-line eqeqeq
+          const currIndex = Object.keys(state.audio.pianoRollData).findIndex(el => el == state.elementIndex);
+          const val = Object.keys(state.audio.pianoRollData)[currIndex + 1];
+          return val && val !== 'id' ? { ...state, elementIndex: val } : state;
+        } else {
+          // find the next lowest existing element and set it
+          // eslint-disable-next-line eqeqeq
+          const currIndex = Object.keys(state.audio.pianoRollData).findIndex(el => el == state.elementIndex);
+          const val = Object.keys(state.audio.pianoRollData)[currIndex - 1];
+          return val && val > 0 ? { ...state, elementIndex: val } : state;
+        }
+      } else {
+        if (action.payload > 0 && action.payload <= elements(state.theme).length) {
+          return { ...state, elementIndex: action.payload };
+        } else return state;
+      }
 
     case 'SET_BEAT_INDEX':
       return { ...state, audio: { ...state.audio, beatIndex: action.payload } };
@@ -230,7 +260,10 @@ const networkReducer = (state = defaultState, action) => {
       return { ...state, audio: { ...state.audio, pianoRollData: action.payload } };
 
     case 'SET_PIANO_ROLL_FOR_ELEMENT':
-      return { ...state, audio: { ...state.audio, pianoRollData: { ...state.pianoRollData, [action.index]: action.payload } } };
+      return {
+        ...state,
+        audio: { ...state.audio, pianoRollData: { ...state.audio.pianoRollData, [action.index]: action.payload } }
+      };
 
     case 'SET_THEME':
       // todo redraw the existing nodes when the theme changes

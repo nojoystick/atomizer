@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-dropdown-select';
 import { sizeConstants } from '../../../config';
 import useSideMenuData, { nodeEditorData } from './side-menu-data';
@@ -15,7 +15,6 @@ import 'tippy.js/themes/light.css';
 import SideMenuStyles from './SideMenuStyles';
 import { DeleteModal } from '../../modals';
 import * as Routes from '../../../constants/routes';
-import PianoRollData from '../../../audio/PianoRollData';
 
 const SideMenuPanel = () => {
   const { menuVisible, sideMenuVisible, screenInfo } = useSelector(state => state.view);
@@ -33,8 +32,13 @@ const SideMenuPanel = () => {
   const sideMenuData = useSideMenuData();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(networkActions.setElementIndex(Object.keys(pianoRollData)[0], true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const onDropdownChange = item => {
-    dispatch(networkActions.setElementIndex(item[0].atomicNumber));
+    dispatch(networkActions.setElementIndex(item[0].atomicNumber, true));
   };
 
   const onClick = action => {
@@ -47,7 +51,12 @@ const SideMenuPanel = () => {
     }
   };
 
-  const el = elements(theme).filter(el => (pianoRollData ? pianoRollData[el.atomicNumber] : PianoRollData[el.atomicNumber]));
+  let el = {};
+  elements(theme).forEach(element => {
+    if (pianoRollData[element.atomicNumber]) {
+      el = { ...el, [element.atomicNumber]: element };
+    }
+  });
 
   const Tooltip = ({ action, child, delay }) => (
     <Tippy
@@ -81,27 +90,31 @@ const SideMenuPanel = () => {
 
   return (
     <div id='sideMenuPanel' className={classes.sideMenuPanel}>
-      <ElementTile
-        nodeData={el[elementIndex - 1]}
-        style={{
-          fontSize: '14px',
-          width: sizeConstants.SIDE_MENU_SIZE - 17,
-          height: sizeConstants.SIDE_MENU_SIZE - 17,
-          margin: '5px'
-        }}
-      />
-      <Tooltip action={nodeEditorData} child={NodeEditorButton} delay={1000} />
-      <Select
-        options={el}
-        onChange={onDropdownChange}
-        className={classes.dropdown}
-        values={[el[elementIndex - 1]]}
-        dropdownGap={0}
-        dropdownHandle={false}
-        labelField='dropdownLabel'
-        onDropdownOpen={() => dispatch(configActions.setHotkeys(false))}
-        onDropdownClose={() => dispatch(configActions.setHotkeys(true))}
-      />
+      {el && el[elementIndex] && (
+        <>
+          <ElementTile
+            nodeData={el[elementIndex]}
+            style={{
+              fontSize: '14px',
+              width: sizeConstants.SIDE_MENU_SIZE - 17,
+              height: sizeConstants.SIDE_MENU_SIZE - 17,
+              margin: '5px'
+            }}
+          />
+          <Tooltip action={nodeEditorData} child={NodeEditorButton} delay={1000} />
+          <Select
+            options={Object.values(el)}
+            onChange={onDropdownChange}
+            className={classes.dropdown}
+            values={[el[elementIndex]]}
+            dropdownGap={0}
+            dropdownHandle={false}
+            labelField='dropdownLabel'
+            onDropdownOpen={() => dispatch(configActions.setHotkeys(false))}
+            onDropdownClose={() => dispatch(configActions.setHotkeys(true))}
+          />
+        </>
+      )}
       {Object.values(sideMenuData).map((actions, i) => {
         return (
           <div key={i + 200}>

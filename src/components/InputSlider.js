@@ -13,7 +13,8 @@ const InputSlider = ({
   defaultValueConversion,
   onChange,
   setDraggable,
-  globalValue
+  globalValue,
+  vertical
 }) => {
   const audio = useSelector(state => state.network.audio);
   const theme = useSelector(state => state.network.theme);
@@ -54,20 +55,22 @@ const InputSlider = ({
   };
 
   return (
-    <div className={classes.sliderGroup}>
-      <label className={classes.sliderLabel}>{label}</label>
+    <div className={`${classes.sliderContainer} sliderContainer`}>
+      <label className={`${classes.sliderLabel} ${classes.vertical}`}>{label}</label>
+      {!vertical && (
+        <input
+          className={classes.input}
+          type='number'
+          id={label}
+          key={localAudio}
+          min={min}
+          max={max}
+          defaultValue={localAudio.toFixed ? localAudio.toFixed(decimals) : localAudio}
+          onKeyDown={e => verify(onChange, min, max / defaultValueConversion, e)}
+        />
+      )}
       <input
-        className={classes.input}
-        type='number'
-        id={label}
-        key={localAudio}
-        min={min}
-        max={max}
-        defaultValue={localAudio.toFixed ? localAudio.toFixed(decimals) : localAudio}
-        onKeyDown={e => verify(onChange, min, max / defaultValueConversion, e)}
-      />
-      <input
-        className={`slider ${classes.slider}`}
+        className={`slider ${classes.slider} ${vertical && 'vertical'}`}
         type='range'
         id={label}
         key={renderSlider}
@@ -80,6 +83,18 @@ const InputSlider = ({
         onMouseUp={globalValue ? e => sliderUp(onChange, e) : null}
         onKeyUp={globalValue ? e => sliderUp(onChange, e) : null}
       />
+      {vertical && (
+        <input
+          className={classes.input}
+          type='number'
+          id={label}
+          key={localAudio}
+          min={min}
+          max={max}
+          defaultValue={localAudio.toFixed ? localAudio.toFixed(decimals) : localAudio}
+          onKeyDown={e => verify(onChange, min, max / defaultValueConversion, e)}
+        />
+      )}
     </div>
   );
 };

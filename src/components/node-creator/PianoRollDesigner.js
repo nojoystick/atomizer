@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import Grid from './Grid';
 import RhythmSelector from './RhythmSelector';
@@ -18,12 +17,6 @@ const noteToMod = {
   sixteenth: 1
 };
 
-/********* todo
- *
- * store cached notes and reload them when the note type changes
- *
- */
-
 const initializePianoRoll = (note, height, pianoRoll) => {
   const mod = noteToMod[note];
   const arr = [];
@@ -41,7 +34,7 @@ const initializePianoRoll = (note, height, pianoRoll) => {
   return arr;
 };
 
-const PianoRollDesigner = ({ element }) => {
+const PianoRollDesigner = ({ element, pianoRoll, setPianoRoll }) => {
   const theme = useSelector(state => state.network.theme);
   const screenInfo = useSelector(state => state.view.screenInfo);
   const key = useSelector(state => state.network.audio.key);
@@ -55,7 +48,6 @@ const PianoRollDesigner = ({ element }) => {
   const [note, setNote] = useState('eighth');
   const [mode] = useState('I');
   const [height, setHeight] = useState(key.label === '*' ? 13 : 8);
-  const [pianoRoll, setPianoRoll] = useState(initializePianoRoll(note, height));
 
   const classes = NodeCreatorModalStyles({ screenInfo: screenInfo, theme: theme });
   const dispatch = useDispatch();
@@ -64,18 +56,23 @@ const PianoRollDesigner = ({ element }) => {
     const h = key.label === '*' ? 13 : 8;
     setHeight(h);
     setPianoRoll(initializePianoRoll(note, h, pianoRoll));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, note]);
 
   useEffect(() => {
     const loadPianoRoll = roll => {
+      if (!roll || Object.keys(roll).length === 0) {
+        setPianoRoll(initializePianoRoll(note, height));
+        return null;
+      }
       setNote(setGridForRoll(roll));
-      const gridCopy = pianoRoll.slice();
+      const grid = initializePianoRoll(note, height);
       Object.keys(roll).forEach(beat => {
         roll[beat].forEach(note => {
-          gridCopy[height - 1 - note.pitch][parseInt(beat)] = 1;
+          grid[height - 1 - note.pitch][parseInt(beat)] = 1;
         });
       });
-      setPianoRoll(gridCopy);
+      setPianoRoll(grid);
     };
 
     /**
@@ -101,9 +98,10 @@ const PianoRollDesigner = ({ element }) => {
       });
       return notes[smallestNote];
     };
-    if (element && pianoRollData && (pianoRollData[element.atomicNumber] || PianoRollData[element.atomicNumber])) {
+    if (element && pianoRollData) {
       loadPianoRoll(pianoRollData ? pianoRollData[element.atomicNumber] : PianoRollData[element.atomicNumber]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [element]);
 
   const save = () => {
@@ -118,27 +116,39 @@ const PianoRollDesigner = ({ element }) => {
         }
       });
     });
-    dispatch(networkActions.setPianoRollForElement(element.atomicNumber, parsedRoll));
-    !profile.isEmpty &&
+    if (Object.keys(parsedRoll).length === 0) {
+      dispatch(networkActions.deletePianoRollForElement(element.atomicNumber));
       firestore
         .collection('pianoRollData')
         .doc(id)
-        .update({ [element.atomicNumber]: transformElementToPureObject(parsedRoll) });
+        .delete();
+    } else {
+      dispatch(networkActions.setPianoRollForElement(element.atomicNumber, parsedRoll));
+      !profile.isEmpty &&
+        firestore
+          .collection('pianoRollData')
+          .doc(id)
+          .update({ [element.atomicNumber]: transformElementToPureObject(parsedRoll) });
+    }
   };
 
   const clear = () => {
     setPianoRoll(initializePianoRoll(note, height));
   };
 
-  useEffect(() => {
-    setPianoRoll(initializePianoRoll(note, height, pianoRoll));
-  }, [note]);
-
   return (
     <div className={classes.content}>
-      <h3 className={classes.title}>piano roll</h3>
       <RhythmSelector note={note} setNote={setNote} />
-      <Grid width={noteToWidth[note]} mode={mode} pianoRoll={pianoRoll} setPianoRoll={setPianoRoll} height={height} />
+      {pianoRoll && (
+        <Grid
+          width={noteToWidth[note]}
+          mode={mode}
+          pianoRoll={pianoRoll}
+          setPianoRoll={setPianoRoll}
+          height={height}
+          color={element.color}
+        />
+      )}
       <div className={classes.buttonContainer}>
         <button className={`${classes.cancelButton} ${classes.button}`} onClick={clear}>
           clear

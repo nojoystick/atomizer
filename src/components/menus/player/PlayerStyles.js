@@ -14,6 +14,7 @@ const PlayerStyles = makeStyles({
     alignItems: 'center'
   },
   button: {
+    margin: '0px 10px 0px 10px',
     width: '50px',
     height: '48px',
     backgroundColor: props => props.theme && props.theme.background,
@@ -91,6 +92,49 @@ const PlayerStyles = makeStyles({
         color: props => props.theme && props.theme.text
       }
     }
+  },
+  parent: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  row: {
+    marginTop: '10px',
+    borderStyle: 'solid',
+    border: props => `3px solid ${props.theme && props.theme.text}`,
+    width: '350px',
+    height: '75px',
+    margin: '0px',
+    transition: '0.5s',
+    backgroundColor: props => props.theme && props.theme.background,
+    zIndex: '2'
+  },
+  short: {
+    width: '120px',
+    height: '75px',
+    marginRight: '10px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  med: {
+    width: '220px',
+    height: '75px',
+    marginRight: '10px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  last: {
+    marginRight: '0px',
+    marginLeft: 'auto'
+  },
+  centeredContent: {
+    marginTop: '30px'
+  },
+  sliderRow: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 

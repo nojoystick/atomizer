@@ -1,16 +1,26 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import NodeCreatorModalStyles from './NodeCreatorModalStyles';
+import OscillatorSettingsStyles from './OscillatorSettingsStyles';
+import { VolumeData } from './panel-data';
+import InputSlider from '../InputSlider';
 
-const OscillatorSettings = () => {
+const OscillatorSettings = ({ node }) => {
   const theme = useSelector(state => state.network.theme);
-  const screenInfo = useSelector(state => state.view.screenInfo);
-
-  const classes = NodeCreatorModalStyles({ screenInfo: screenInfo, theme: theme });
+  const useStylesProps = { theme: theme };
+  const classes = OscillatorSettingsStyles(useStylesProps);
 
   return (
     <div className={classes.content}>
-      <h3 className={classes.title}>oscillator settings</h3>
+      {Object.values(VolumeData(node)).map(inputSlider => {
+        return (
+          <InputSlider
+            key={inputSlider.key}
+            useStyles={OscillatorSettingsStyles}
+            useStylesProps={useStylesProps}
+            {...inputSlider}
+          />
+        );
+      })}
     </div>
   );
 };

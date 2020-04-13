@@ -100,11 +100,21 @@ body,
   overflow-y: scroll;
 }
 .react-dropdown-select-dropdown {
+  z-index: 10000;
   margin-top: -4px !important;
   max-height: 150px !important;
   border: 2px solid black !important;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  .css-148o527-ItemComponent {
+    padding: 5px !important;
+  }
 }
 .react-dropdown-select-item {
+  font-family: 'Inconsolata';
+  font-weight: 600;
   background: white !important;
   color: black !important;
 }

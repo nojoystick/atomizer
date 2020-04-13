@@ -1,27 +1,49 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
 
 const ModeSelector = ({ mode, audioNode, setMode }) => {
   const theme = useSelector(state => state.network.theme);
   const classes = useStyles({ theme: theme });
-  const labels = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii'];
+  const disposition = useSelector(state => state.network.audio.disposition);
+  const labels = {
+    M: [
+      { label: 'I', value: 'I' },
+      { label: 'ii', value: 'ii' },
+      { label: 'iii', value: 'iii' },
+      { label: 'IV', value: 'IV' },
+      { label: 'V', value: 'V' },
+      { label: 'vi', value: 'vi' },
+      { label: 'vii', value: 'vii' }
+    ],
+    m: [
+      { label: 'i', value: 'vi' },
+      { label: 'ii', value: 'vii' },
+      { label: 'III', value: 'I' },
+      { label: 'iv', value: 'ii' },
+      { label: 'v', value: 'iii' },
+      { label: 'VI', value: 'IV' },
+      { label: 'VII', value: 'V' }
+    ]
+  };
 
   const onClick = e => {
     audioNode ? audioNode.setMode(e.target.value) : setMode(e.target.value);
   };
 
+  useEffect(() => {}, [disposition]);
+
   return (
     <div className={classes.parent}>
-      {labels.map(label => {
+      {labels[disposition].map(label => {
         return (
           <button
-            key={label}
-            className={`${classes.button} ${label === mode && classes.selected}`}
+            key={label.label}
+            className={`${classes.button} ${(label.value === mode || label.value === audioNode.mode) && classes.selected}`}
             onClick={onClick}
-            value={label}
+            value={label.value}
           >
-            {label}
+            {label.label}
           </button>
         );
       })}

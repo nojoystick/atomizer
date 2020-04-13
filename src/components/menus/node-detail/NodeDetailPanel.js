@@ -67,6 +67,7 @@ const NodeDetailPanel = () => {
     }
   };
 
+  console.log(nodeData && nodeData.options.audioNode);
   useNodeDetailHotkeys(index, updateIndex);
 
   const menuStyle = () => {

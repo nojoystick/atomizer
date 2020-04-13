@@ -1,10 +1,10 @@
 import { makeStyles } from '@material-ui/styles';
 
-const NodeDetailStyles = makeStyles({
+const NodeSettingsStyles = makeStyles({
   nodeDetailPanel: {
     borderStyle: 'solid',
     border: props => `3px solid ${props.theme && props.theme.text}`,
-    height: '400px',
+    height: '180px',
     width: '350px',
     margin: '0px',
     transition: '0.5s',
@@ -117,4 +117,4 @@ const NodeDetailStyles = makeStyles({
   }
 });
 
-export default NodeDetailStyles;
+export default NodeSettingsStyles;

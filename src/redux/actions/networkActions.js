@@ -17,9 +17,10 @@ export const networkActions = {
       payload: param
     };
   },
-  setElementIndex: param => {
+  setElementIndex: (param, constraint) => {
     return {
       type: 'SET_ELEMENT_INDEX',
+      constraint: constraint,
       payload: param
     };
   },
@@ -201,6 +202,12 @@ export const networkActions = {
       type: 'SET_PIANO_ROLL_FOR_ELEMENT',
       index: index,
       payload: payload
+    };
+  },
+  deletePianoRollForElement: index => {
+    return {
+      type: 'DELETE_PIANO_ROLL_FOR_ELEMENT',
+      index: index
     };
   }
 };

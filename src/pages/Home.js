@@ -29,7 +29,7 @@ const Home = () => {
     setShow(true);
   }, []);
 
-  useHotkeys();
+  useHotkeys(Object.keys(audio.pianoRollData).length > 0);
   useResizer();
   useElementIndexHotkeys();
   usePreciseTimer(setPlayer, bpmToMs(audio.masterTempo), audio.playing);

@@ -15,7 +15,7 @@ import KeyDropdowns from '../../KeyDropdowns';
 import PlayerData from './player-data';
 
 const Player = ({ id, left, top, hideSourceOnDrag, setInteractible }) => {
-  const { playing } = useSelector(state => state.network.audio);
+  const playing = useSelector(state => state.network.audio.playing);
   const theme = useSelector(state => state.network.theme);
 
   const [isDraggable, setIsDraggable] = useState(true);

@@ -5,7 +5,7 @@ import Select from 'react-dropdown-select';
 import { keyArrs, keyMap, majorMinor } from '../constants/frequencies';
 import { makeStyles } from '@material-ui/styles';
 
-const KeyDropdowns = () => {
+const KeyDropdowns = ({ style, renderInBody }) => {
   const { key, disposition } = useSelector(state => state.network.audio);
   const theme = useSelector(state => state.network.theme);
 
@@ -38,8 +38,9 @@ const KeyDropdowns = () => {
   };
 
   return (
-    <div className={classes.parent}>
+    <div className={classes.parent} style={style}>
       <Select
+        portal={renderInBody && document.querySelector('body')}
         options={keyArrs[disposition]}
         onChange={onKeyChange}
         className={`small-dropdown-no-search ${classes.dropdown}`}
@@ -52,6 +53,7 @@ const KeyDropdowns = () => {
         onDropdownClose={() => dispatch(configActions.setHotkeys(true))}
       />
       <Select
+        portal={renderInBody && document.querySelector('body')}
         options={majorMinor}
         onChange={onDispositionChange}
         className={`${classes.dropdown} wide-dropdown-no-search`}
