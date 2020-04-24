@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 
 const PlayerContainer = ({ hideSourceOnDrag }) => {
   const { screenInfo } = useSelector(state => state.view);
-  const [player, setPlayer] = useState({ id: uuidv4(), top: screenInfo.height - 150, left: screenInfo.width / 2 - 200 });
+  const [player, setPlayer] = useState({ id: uuidv4(), top: screenInfo.height - 200, left: screenInfo.width / 2 - 300 });
   const [interactible, setInteractible] = useState(false);
   const [, drop] = useDrop({
     accept: ItemTypes.PLAYER,

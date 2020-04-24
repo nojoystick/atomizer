@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Grid from './Grid';
 import RhythmSelector from './RhythmSelector';
-import { noteToWidth } from '../../constants/frequencies';
+import { noteToWidth, dispositionToSemitones, semitonesToDisposition } from '../../constants/frequencies';
 import { useSelector, useDispatch } from 'react-redux';
 import NodeCreatorModalStyles from './NodeCreatorModalStyles';
 import Note from '../../audio/Note';
 import { networkActions } from '../../redux/actions';
-import PianoRollData, { transformElementToPureObject } from '../../audio/PianoRollData';
+import { transformElementToPureObject } from '../../audio/PianoRollData';
 import { useFirestore, useFirestoreConnect } from 'react-redux-firebase';
 
 const noteToMod = {
@@ -34,10 +34,10 @@ const initializePianoRoll = (note, height, pianoRoll) => {
   return arr;
 };
 
-const PianoRollDesigner = ({ element, pianoRoll, setPianoRoll }) => {
+const PianoRollDesigner = ({ element, pianoRoll, setPianoRoll, node, setNode, mode, setMode }) => {
   const theme = useSelector(state => state.network.theme);
   const screenInfo = useSelector(state => state.view.screenInfo);
-  const key = useSelector(state => state.network.audio.key);
+  const disposition = useSelector(state => state.network.audio.disposition);
   const pianoRollData = useSelector(state => state.network.audio.pianoRollData);
   const profile = useSelector(state => state.firebase.profile);
   const id = !profile.isEmpty ? profile.email : 'default';
@@ -45,31 +45,37 @@ const PianoRollDesigner = ({ element, pianoRoll, setPianoRoll }) => {
   useFirestoreConnect(() => [{ collection: 'pianoRollData', doc: id }]);
   const firestore = useFirestore();
 
+  const getHeightForDisposition = () => {
+    return disposition === 'c' ? 13 : 8;
+  };
+
   const [note, setNote] = useState('eighth');
-  const [mode] = useState('I');
-  const [height, setHeight] = useState(key.label === '*' ? 13 : 8);
+  const [height, setHeight] = useState();
 
   const classes = NodeCreatorModalStyles({ screenInfo: screenInfo, theme: theme });
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const h = key.label === '*' ? 13 : 8;
+    const h = getHeightForDisposition(disposition);
     setHeight(h);
     setPianoRoll(initializePianoRoll(note, h, pianoRoll));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key, note]);
+  }, [disposition, note]);
 
   useEffect(() => {
     const loadPianoRoll = roll => {
+      const h = getHeightForDisposition(disposition);
       if (!roll || Object.keys(roll).length === 0) {
-        setPianoRoll(initializePianoRoll(note, height));
+        setPianoRoll(initializePianoRoll(note, h));
         return null;
       }
       setNote(setGridForRoll(roll));
-      const grid = initializePianoRoll(note, height);
+      const grid = initializePianoRoll(note, h);
       Object.keys(roll).forEach(beat => {
         roll[beat].forEach(note => {
-          grid[height - 1 - note.pitch][parseInt(beat)] = 1;
+          if (grid[h - 1 - semitonesToDisposition[disposition][note.pitch]]) {
+            grid[h - 1 - semitonesToDisposition[disposition][note.pitch]][parseInt(beat)] = 1;
+          }
         });
       });
       setPianoRoll(grid);
@@ -99,10 +105,11 @@ const PianoRollDesigner = ({ element, pianoRoll, setPianoRoll }) => {
       return notes[smallestNote];
     };
     if (element && pianoRollData) {
-      loadPianoRoll(pianoRollData ? pianoRollData[element.atomicNumber] : PianoRollData[element.atomicNumber]);
+      updateNode(pianoRollData[element.atomicNumber]);
+      loadPianoRoll(pianoRollData[element.atomicNumber]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [element]);
+  }, [element, disposition]);
 
   const save = () => {
     let parsedRoll = {};
@@ -112,17 +119,19 @@ const PianoRollDesigner = ({ element, pianoRoll, setPianoRoll }) => {
           if (!parsedRoll[j]) {
             parsedRoll[j] = [];
           }
-          parsedRoll[j].push(new Note(height - i - 1, 120, note, false));
+          parsedRoll[j].push(new Note(dispositionToSemitones[disposition][height - 1 - i], 120, note, false));
         }
       });
     });
     if (Object.keys(parsedRoll).length === 0) {
+      updateNode(null);
       dispatch(networkActions.deletePianoRollForElement(element.atomicNumber));
       firestore
         .collection('pianoRollData')
         .doc(id)
         .delete();
     } else {
+      updateNode(parsedRoll);
       dispatch(networkActions.setPianoRollForElement(element.atomicNumber, parsedRoll));
       !profile.isEmpty &&
         firestore
@@ -130,6 +139,10 @@ const PianoRollDesigner = ({ element, pianoRoll, setPianoRoll }) => {
           .doc(id)
           .update({ [element.atomicNumber]: transformElementToPureObject(parsedRoll) });
     }
+  };
+
+  const updateNode = newNotes => {
+    setNode(node.getCloneWithNewRoll(newNotes));
   };
 
   const clear = () => {
@@ -147,6 +160,7 @@ const PianoRollDesigner = ({ element, pianoRoll, setPianoRoll }) => {
           setPianoRoll={setPianoRoll}
           height={height}
           color={element.color}
+          save={save}
         />
       )}
       <div className={classes.buttonContainer}>

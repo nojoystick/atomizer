@@ -17,7 +17,8 @@ const Modal = () => {
   const dispatch = useDispatch();
 
   const confirm = () => {
-    dispatch(modal.func());
+    console.log(modal, modal.global);
+    modal.global ? dispatch(modal.func()) : modal.func();
     cancel();
   };
 

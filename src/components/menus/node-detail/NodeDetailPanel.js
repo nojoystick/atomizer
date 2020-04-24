@@ -8,8 +8,10 @@ import NodeDetailStyles from './NodeDetailStyles';
 import ModeSelector from '../../ModeSelector';
 import NodeDetailData from './node-detail-data';
 import InputSlider from '../../InputSlider';
+import MuteSoloButtons from '../../menus/player/MuteSoloButtons';
 import Select from 'react-dropdown-select';
 import { configActions } from '../../../redux/actions';
+import useForceUpdate from '../../../utils/useForceUpdate';
 
 const octaves = [
   { id: 0, dropdownLabel: '0', value: 0 },
@@ -28,6 +30,7 @@ const NodeDetailPanel = () => {
   const [nodeData, setNodeData] = useState(null);
   const [index, setIndex] = useState(0);
   const dispatch = useDispatch();
+  const forceUpdate = useForceUpdate();
 
   const theme = useSelector(state => state.network.theme);
   const useStylesProps = {
@@ -67,15 +70,10 @@ const NodeDetailPanel = () => {
     }
   };
 
-  console.log(nodeData && nodeData.options.audioNode);
   useNodeDetailHotkeys(index, updateIndex);
 
-  const menuStyle = () => {
-    return {};
-  };
-
   return (
-    <div id='nodeDetailPanel' className={classes.nodeDetailPanel} style={menuStyle()}>
+    <div id='nodeDetailPanel' className={classes.nodeDetailPanel}>
       <h2 className={classes.nodeHeader}>node editor</h2>
       <div className={`${classes.nodeToolbar} ${nodeData ? classes.show : null}`}>
         <button className={classes.scrollButton} onClick={() => updateIndex(-1, index)}>
@@ -101,17 +99,21 @@ const NodeDetailPanel = () => {
 
       {nodeData ? (
         <>
+          <div className={classes.msButtonBar}>
+            <MuteSoloButtons
+              mute={nodeData.options.audioNode.mute}
+              onMute={nodeData.options.audioNode.toggleMute.bind(nodeData.options.audioNode)}
+              solo={nodeData.options.audioNode.solo}
+              onSolo={nodeData.options.audioNode.toggleSolo.bind(nodeData.options.audioNode)}
+              updateParent={forceUpdate}
+            />
+          </div>
           {NodeDetailData(nodeData.options.audioNode).map(inputSlider => {
             return (
               <InputSlider key={inputSlider.key} useStyles={NodeDetailStyles} useStylesProps={useStylesProps} {...inputSlider} />
             );
           })}
           <div className={classes.row}>
-            <ModeSelector
-              key={nodeData.options.audioNode.mode}
-              mode={nodeData.options.audioNode.mode}
-              audioNode={nodeData.options.audioNode}
-            />
             <Select
               options={octaves}
               onChange={e => nodeData.options.audioNode.setOctave(e[0].value)}
@@ -122,6 +124,12 @@ const NodeDetailPanel = () => {
               labelField='dropdownLabel'
               onDropdownOpen={() => dispatch(configActions.setHotkeys(false))}
               onDropdownClose={() => dispatch(configActions.setHotkeys(true))}
+            />
+            <ModeSelector
+              key={nodeData.options.audioNode.mode}
+              mode={nodeData.options.audioNode.mode}
+              audioNode={nodeData.options.audioNode}
+              updateParent={forceUpdate}
             />
           </div>
         </>

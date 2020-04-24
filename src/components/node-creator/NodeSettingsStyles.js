@@ -49,7 +49,6 @@ const NodeSettingsStyles = makeStyles({
     height: '100px',
     border: 'none',
     backgroundColor: props => props.theme && props.theme.background,
-    outline: 'none',
     '&:hover': {
       opacity: '0.4'
     }
@@ -75,7 +74,6 @@ const NodeSettingsStyles = makeStyles({
     width: '45px',
     fontFamily: 'Inconsolata',
     fontSize: '14px',
-    outline: 'none',
     border: 'none',
     display: 'inline-block',
     backgroundColor: props => props.theme && props.theme.background,
@@ -99,15 +97,13 @@ const NodeSettingsStyles = makeStyles({
     borderWidth: '0px 0px 2px 0px !important',
     borderColor: `${props => props.theme && props.theme.text} $important`,
     color: props => props.theme && props.theme.text,
-    outline: 'none !important',
     boxShadow: 'none !important',
     padding: '0px !important',
     margin: 'auto',
     marginTop: '10px',
     marginBottom: '10px',
     '&:hover': {
-      borderColor: `${props => props.theme && props.theme.text} !important`,
-      outline: 'none'
+      borderColor: `${props => props.theme && props.theme.text} !important`
     },
     '& div': {
       '& input': {

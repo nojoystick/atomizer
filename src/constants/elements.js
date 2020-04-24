@@ -11,7 +11,9 @@ const elements = theme => {
       label: `<b>H</b>`,
       dropdownLabel: 'H',
       title: 'Hydrogen',
+      opacity: 0.5,
       color: theme.nonMetal,
+      category: 'nonMetal',
       weight: 1.008
     },
     {
@@ -21,6 +23,7 @@ const elements = theme => {
       dropdownLabel: 'He',
       title: 'Helium',
       color: theme.nobleGas,
+      category: 'nobleGas',
       weight: 4.0026
     },
     {
@@ -30,6 +33,7 @@ const elements = theme => {
       dropdownLabel: 'Li',
       title: 'Lithium',
       color: theme.alkaliMetal,
+      category: 'alkaliMetal',
       weight: 6.94
     },
     {
@@ -39,6 +43,7 @@ const elements = theme => {
       dropdownLabel: 'Be',
       title: 'Beryllium',
       color: theme.alkaliMetal,
+      category: 'alkaliMetal',
       weight: 9.0122
     },
     {
@@ -48,6 +53,7 @@ const elements = theme => {
       dropdownLabel: 'B',
       title: 'Boron',
       color: theme.metalloid,
+      category: 'metalloid',
       weight: 10.81
     },
     {
@@ -57,6 +63,7 @@ const elements = theme => {
       dropdownLabel: 'C',
       title: 'Carbon',
       color: theme.nonMetal,
+      category: 'nonMetal',
       weight: 12.011
     },
     {
@@ -66,6 +73,7 @@ const elements = theme => {
       dropdownLabel: 'N',
       title: 'Nitrogen',
       color: theme.nonMetal,
+      category: 'nonMetal',
       weight: 14.007
     },
     {
@@ -75,6 +83,7 @@ const elements = theme => {
       dropdownLabel: 'O',
       title: 'Oxygen',
       color: theme.nonMetal,
+      category: 'nonMetal',
       weight: 15.999
     },
     {
@@ -84,6 +93,7 @@ const elements = theme => {
       dropdownLabel: 'F',
       title: 'Fluorine',
       color: theme.nonMetal,
+      category: 'nonMetal',
       weight: 18.998
     },
     {
@@ -93,6 +103,7 @@ const elements = theme => {
       dropdownLabel: 'Ne',
       title: 'Neon',
       color: theme.nobleGas,
+      category: 'nobleGas',
       weight: 20.18
     },
     {
@@ -102,6 +113,7 @@ const elements = theme => {
       dropdownLabel: 'Na',
       title: 'Sodium',
       color: theme.alkaliMetal,
+      category: 'alkaliMetal',
       weight: 22.99
     },
     {
@@ -111,6 +123,7 @@ const elements = theme => {
       dropdownLabel: 'Mg',
       title: 'Magnesium',
       color: theme.alkaliMetal,
+      category: 'alkaliMetal',
       weight: 24.305
     },
     {
@@ -120,6 +133,7 @@ const elements = theme => {
       dropdownLabel: 'Al',
       title: 'Aluminum',
       color: theme.postTransitionMetal,
+      category: 'postTransitionMetal',
       weight: 26.982
     },
     {
@@ -129,6 +143,7 @@ const elements = theme => {
       dropdownLabel: 'Si',
       title: 'Silicon',
       color: theme.metalloid,
+      category: 'metalloid',
       weight: 28.085
     },
     {
@@ -138,6 +153,7 @@ const elements = theme => {
       dropdownLabel: 'P',
       title: 'Phosphorus',
       color: theme.nonMetal,
+      category: 'nonMetal',
       weight: 30.974
     },
     {
@@ -147,6 +163,7 @@ const elements = theme => {
       dropdownLabel: 'S',
       title: 'Sulfur',
       color: theme.nonMetal,
+      category: 'nonMetal',
       weight: 32.06
     },
     {
@@ -156,6 +173,7 @@ const elements = theme => {
       dropdownLabel: 'Cl',
       title: 'Chlorine',
       color: theme.nonMetal,
+      category: 'nonMetal',
       weight: 35.45
     },
     {
@@ -165,6 +183,7 @@ const elements = theme => {
       dropdownLabel: 'Ar',
       title: 'Argon',
       color: theme.nobleGas,
+      category: 'nobleGas',
       weight: 39.948
     },
     {
@@ -174,6 +193,7 @@ const elements = theme => {
       dropdownLabel: 'K',
       title: 'Potassium',
       color: theme.alkaliMetal,
+      category: 'alkaliMetal',
       weight: 39.098
     },
     {
@@ -183,6 +203,7 @@ const elements = theme => {
       dropdownLabel: 'Ca',
       title: 'Calcium',
       color: theme.alkaliMetal,
+      category: 'alkaliMetal',
       weight: 40.078
     },
     {
@@ -192,6 +213,7 @@ const elements = theme => {
       dropdownLabel: 'Sc',
       title: 'Scandium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 44.956
     },
     {
@@ -201,6 +223,7 @@ const elements = theme => {
       dropdownLabel: 'Ti',
       title: 'Titanium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 47.867
     },
     {
@@ -210,6 +233,7 @@ const elements = theme => {
       dropdownLabel: 'V',
       title: 'Vanadium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 50.942
     },
     {
@@ -219,6 +243,7 @@ const elements = theme => {
       dropdownLabel: 'Cr',
       title: 'Chromium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 51.996
     },
     {
@@ -228,6 +253,7 @@ const elements = theme => {
       dropdownLabel: 'Mn',
       title: 'Manganese',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 54.938
     },
     {
@@ -237,6 +263,7 @@ const elements = theme => {
       dropdownLabel: 'Fe',
       title: 'Iron',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 55.845
     },
     {
@@ -246,6 +273,7 @@ const elements = theme => {
       dropdownLabel: 'Co',
       title: 'Cobalt',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 58.933
     },
     {
@@ -255,6 +283,7 @@ const elements = theme => {
       dropdownLabel: 'Ni',
       title: 'Nickel',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 58.693
     },
     {
@@ -264,6 +293,7 @@ const elements = theme => {
       dropdownLabel: 'Cu',
       title: 'Copper',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 63.546
     },
     {
@@ -273,6 +303,7 @@ const elements = theme => {
       dropdownLabel: 'Zn',
       title: 'Zinc',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 65.38
     },
     {
@@ -282,6 +313,7 @@ const elements = theme => {
       dropdownLabel: 'Ga',
       title: 'Gallium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 69.723
     },
     {
@@ -291,6 +323,7 @@ const elements = theme => {
       dropdownLabel: 'Ge',
       title: 'Germanium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 72.63
     },
     {
@@ -300,6 +333,7 @@ const elements = theme => {
       dropdownLabel: 'As',
       title: 'Arsenic',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 74.922
     },
     {
@@ -309,6 +343,7 @@ const elements = theme => {
       dropdownLabel: 'Se',
       title: 'Selenium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 78.971
     },
     {
@@ -318,6 +353,7 @@ const elements = theme => {
       dropdownLabel: 'Br',
       title: 'Bromine',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 79.904
     },
     {
@@ -327,6 +363,7 @@ const elements = theme => {
       dropdownLabel: 'Kr',
       title: 'Krypton',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 83.798
     },
     {
@@ -336,6 +373,7 @@ const elements = theme => {
       dropdownLabel: 'Rb',
       title: 'Rubidium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 85.468
     },
     {
@@ -345,6 +383,7 @@ const elements = theme => {
       dropdownLabel: 'Sr',
       title: 'Strontium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 87.62
     },
     {
@@ -354,6 +393,7 @@ const elements = theme => {
       dropdownLabel: 'Y',
       title: 'Yttrium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 88.9
     },
     {
@@ -363,6 +403,7 @@ const elements = theme => {
       dropdownLabel: 'Zr',
       title: 'Zirconium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 91.224
     },
     {
@@ -372,6 +413,7 @@ const elements = theme => {
       dropdownLabel: 'Nb',
       title: 'Niobium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 92.906
     },
     {
@@ -381,6 +423,7 @@ const elements = theme => {
       dropdownLabel: 'Mo',
       title: 'Molybdeum',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 95.95
     },
     {
@@ -390,6 +433,7 @@ const elements = theme => {
       dropdownLabel: 'Tc',
       title: 'Technetium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 98
     },
     {
@@ -399,6 +443,7 @@ const elements = theme => {
       dropdownLabel: 'Ru',
       title: 'Ruthenium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 101.07
     },
     {
@@ -408,6 +453,7 @@ const elements = theme => {
       dropdownLabel: 'Rh',
       title: 'Rhodium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 102.91
     },
     {
@@ -417,6 +463,7 @@ const elements = theme => {
       dropdownLabel: 'Pd',
       title: 'Palladium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 106.42
     },
     {
@@ -426,6 +473,7 @@ const elements = theme => {
       dropdownLabel: 'Ag',
       title: 'Silver',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 107.87
     },
     {
@@ -435,6 +483,7 @@ const elements = theme => {
       dropdownLabel: 'Cd',
       title: 'Cadmium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 112.41
     },
     {
@@ -444,6 +493,7 @@ const elements = theme => {
       dropdownLabel: 'In',
       title: 'Indium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 114.82
     },
     {
@@ -453,6 +503,7 @@ const elements = theme => {
       dropdownLabel: 'Sn',
       title: 'Tin',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 118.71
     },
     {
@@ -462,6 +513,7 @@ const elements = theme => {
       dropdownLabel: 'Sb',
       title: 'Antimony',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 121.76
     },
     {
@@ -471,6 +523,7 @@ const elements = theme => {
       dropdownLabel: 'Te',
       title: 'Tellurium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 127.6
     },
     {
@@ -480,6 +533,7 @@ const elements = theme => {
       dropdownLabel: 'I',
       title: 'Iodine',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 126.9
     },
     {
@@ -489,6 +543,7 @@ const elements = theme => {
       dropdownLabel: 'Xe',
       title: 'Xenon',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 131.29
     },
     {
@@ -498,6 +553,7 @@ const elements = theme => {
       dropdownLabel: 'Cs',
       title: 'Caesium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 132.91
     },
     {
@@ -507,6 +563,7 @@ const elements = theme => {
       dropdownLabel: 'Ba',
       title: 'Barium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 137.33
     },
     {
@@ -516,6 +573,7 @@ const elements = theme => {
       dropdownLabel: 'La',
       title: 'Lanthanium',
       color: theme.lanthanide,
+      category: 'lanthanide',
       weight: 138.91
     },
     {
@@ -525,6 +583,7 @@ const elements = theme => {
       dropdownLabel: 'Ce',
       title: 'Cerium',
       color: theme.lanthanide,
+      category: 'lanthanide',
       weight: 140.12
     },
     {
@@ -534,6 +593,7 @@ const elements = theme => {
       dropdownLabel: 'Pr',
       title: 'Praseodymium',
       color: theme.lanthanide,
+      category: 'lanthanide',
       weight: 140.91
     },
     {
@@ -543,6 +603,7 @@ const elements = theme => {
       dropdownLabel: 'Nd',
       title: 'Neodymium',
       color: theme.lanthanide,
+      category: 'lanthanide',
       weight: 144.24
     },
     {
@@ -552,6 +613,7 @@ const elements = theme => {
       dropdownLabel: 'Pm',
       title: 'Prometheum',
       color: theme.lanthanide,
+      category: 'lanthanide',
       weight: 145
     },
     {
@@ -561,6 +623,7 @@ const elements = theme => {
       dropdownLabel: 'Sm',
       title: 'Samarium',
       color: theme.lanthanide,
+      category: 'lanthanide',
       weight: 150.36
     },
     {
@@ -570,6 +633,7 @@ const elements = theme => {
       dropdownLabel: 'Eu',
       title: 'Europium',
       color: theme.lanthanide,
+      category: 'lanthanide',
       weight: 151.96
     },
     {
@@ -579,6 +643,7 @@ const elements = theme => {
       dropdownLabel: 'Gd',
       title: 'Gadolinium',
       color: theme.lanthanide,
+      category: 'lanthanide',
       weight: 157.25
     },
     {
@@ -588,6 +653,7 @@ const elements = theme => {
       dropdownLabel: 'Tb',
       title: 'Terbium',
       color: theme.lanthanide,
+      category: 'lanthanide',
       weight: 158.93
     },
     {
@@ -597,6 +663,7 @@ const elements = theme => {
       dropdownLabel: 'Dy',
       title: 'Dysprosium',
       color: theme.lanthanide,
+      category: 'lanthanide',
       weight: 162.5
     },
     {
@@ -606,6 +673,7 @@ const elements = theme => {
       dropdownLabel: 'Ho',
       title: 'Holmium',
       color: theme.lanthanide,
+      category: 'lanthanide',
       weight: 164.93
     },
     {
@@ -615,6 +683,7 @@ const elements = theme => {
       dropdownLabel: 'Er',
       title: 'Erbium',
       color: theme.lanthanide,
+      category: 'lanthanide',
       weight: 167.26
     },
     {
@@ -624,6 +693,7 @@ const elements = theme => {
       dropdownLabel: 'Tm',
       title: 'Thulium',
       color: theme.lanthanide,
+      category: 'lanthanide',
       weight: 168.93
     },
     {
@@ -633,6 +703,7 @@ const elements = theme => {
       dropdownLabel: 'Yb',
       title: 'Ytterbium',
       color: theme.lanthanide,
+      category: 'lanthanide',
       weight: 173.05
     },
     {
@@ -642,6 +713,7 @@ const elements = theme => {
       dropdownLabel: 'Lu',
       title: 'Lutetium',
       color: theme.lanthanide,
+      category: 'lanthanide',
       weight: 174.97
     },
     {
@@ -651,6 +723,7 @@ const elements = theme => {
       dropdownLabel: 'Hf',
       title: 'Hafnium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 178.49
     },
     {
@@ -660,6 +733,7 @@ const elements = theme => {
       dropdownLabel: 'Ta',
       title: 'Tantalum',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 180.95
     },
     {
@@ -669,6 +743,7 @@ const elements = theme => {
       dropdownLabel: 'W',
       title: 'Tungsten',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 183.84
     },
     {
@@ -678,6 +753,7 @@ const elements = theme => {
       dropdownLabel: 'Re',
       title: 'Rhenium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 186.21
     },
     {
@@ -687,6 +763,7 @@ const elements = theme => {
       dropdownLabel: 'Os',
       title: 'Osmium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 190.23
     },
     {
@@ -696,6 +773,7 @@ const elements = theme => {
       dropdownLabel: 'Ir',
       title: 'Iridium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 192.22
     },
     {
@@ -705,6 +783,7 @@ const elements = theme => {
       dropdownLabel: 'Pt',
       title: 'Platinum',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 195.08
     },
     {
@@ -714,6 +793,7 @@ const elements = theme => {
       dropdownLabel: 'Au',
       title: 'Gold',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 196.97
     },
     {
@@ -723,6 +803,7 @@ const elements = theme => {
       dropdownLabel: 'Hg',
       title: 'Mercury',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 200.59
     },
     {
@@ -732,6 +813,7 @@ const elements = theme => {
       dropdownLabel: 'Tl',
       title: 'Thallium',
       color: theme.postTransitionMetal,
+      category: 'postTransitionMetal',
       weight: 204.38
     },
     {
@@ -741,6 +823,7 @@ const elements = theme => {
       dropdownLabel: 'Pb',
       title: 'Lead',
       color: theme.postTransitionMetal,
+      category: 'postTransitionMetal',
       weight: 174.97
     },
     {
@@ -750,6 +833,7 @@ const elements = theme => {
       dropdownLabel: 'Bi',
       title: 'Bismuth',
       color: theme.postTransitionMetal,
+      category: 'postTransitionMetal',
       weight: 174.97
     },
     {
@@ -759,6 +843,7 @@ const elements = theme => {
       dropdownLabel: 'Po',
       title: 'Polonium',
       color: theme.postTransitionMetal,
+      category: 'postTransitionMetal',
       weight: 174.97
     },
     {
@@ -768,6 +853,7 @@ const elements = theme => {
       dropdownLabel: 'At',
       title: 'Astatine',
       color: theme.metalloid,
+      category: 'metalloid',
       weight: 174.97
     },
     {
@@ -777,6 +863,7 @@ const elements = theme => {
       dropdownLabel: 'Rn',
       title: 'Radon',
       color: theme.nobleGas,
+      category: 'nobleGas',
       weight: 222
     },
     {
@@ -786,6 +873,7 @@ const elements = theme => {
       dropdownLabel: 'Fr',
       title: 'Francium',
       color: theme.alkaliMetal,
+      category: 'alkaliMetal',
       weight: 223
     },
     {
@@ -795,6 +883,7 @@ const elements = theme => {
       dropdownLabel: 'Ra',
       title: 'Radium',
       color: theme.alkaliMetal,
+      category: 'alkaliMetal',
       weight: 226
     },
     {
@@ -804,6 +893,7 @@ const elements = theme => {
       dropdownLabel: 'Ac',
       title: 'Actinium',
       color: theme.actinide,
+      category: 'actinide',
       weight: 227
     },
     {
@@ -813,6 +903,7 @@ const elements = theme => {
       dropdownLabel: 'Th',
       title: 'Thorium',
       color: theme.actinide,
+      category: 'actinide',
       weight: 232.04
     },
     {
@@ -822,6 +913,7 @@ const elements = theme => {
       dropdownLabel: 'Pa',
       title: 'Protactinium',
       color: theme.actinide,
+      category: 'actinide',
       weight: 231.04
     },
     {
@@ -831,6 +923,7 @@ const elements = theme => {
       dropdownLabel: 'U',
       title: 'Uranium',
       color: theme.actinide,
+      category: 'actinide',
       weight: 238.03
     },
     {
@@ -840,6 +933,7 @@ const elements = theme => {
       dropdownLabel: 'Np',
       title: 'Neptunium',
       color: theme.actinide,
+      category: 'actinide',
       weight: 237
     },
     {
@@ -849,6 +943,7 @@ const elements = theme => {
       dropdownLabel: 'Pu',
       title: 'Plutonium',
       color: theme.actinide,
+      category: 'actinide',
       weight: 244
     },
     {
@@ -858,6 +953,7 @@ const elements = theme => {
       dropdownLabel: 'Am',
       title: 'Americium',
       color: theme.actinide,
+      category: 'actinide',
       weight: 243
     },
     {
@@ -867,6 +963,7 @@ const elements = theme => {
       dropdownLabel: 'Cm',
       title: 'Curium',
       color: theme.actinide,
+      category: 'actinide',
       weight: 247
     },
     {
@@ -876,6 +973,7 @@ const elements = theme => {
       dropdownLabel: 'Bk',
       title: 'Berkelium',
       color: theme.actinide,
+      category: 'actinide',
       weight: 247
     },
     {
@@ -885,6 +983,7 @@ const elements = theme => {
       dropdownLabel: 'Cf',
       title: 'Californium',
       color: theme.actinide,
+      category: 'actinide',
       weight: 251
     },
     {
@@ -894,6 +993,7 @@ const elements = theme => {
       dropdownLabel: 'Es',
       title: 'Einsteinium',
       color: theme.actinide,
+      category: 'actinide',
       weight: 252
     },
     {
@@ -903,6 +1003,7 @@ const elements = theme => {
       dropdownLabel: 'Fm',
       title: 'Fermium',
       color: theme.actinide,
+      category: 'actinide',
       weight: 257
     },
     {
@@ -912,6 +1013,7 @@ const elements = theme => {
       dropdownLabel: 'Md',
       title: 'Mendelevium',
       color: theme.actinide,
+      category: 'actinide',
       weight: 258
     },
     {
@@ -921,6 +1023,7 @@ const elements = theme => {
       dropdownLabel: 'No',
       title: 'Nobelium',
       color: theme.actinide,
+      category: 'actinide',
       weight: 259
     },
     {
@@ -930,6 +1033,7 @@ const elements = theme => {
       dropdownLabel: 'Rf',
       title: 'Lawrencium',
       color: theme.actinide,
+      category: 'actinide',
       weight: 266
     },
     {
@@ -939,6 +1043,7 @@ const elements = theme => {
       dropdownLabel: 'Rf',
       title: 'Rutherfordium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 267
     },
     {
@@ -948,6 +1053,7 @@ const elements = theme => {
       dropdownLabel: 'Db',
       title: 'Dubnium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 268
     },
     {
@@ -957,6 +1063,7 @@ const elements = theme => {
       dropdownLabel: 'Sg',
       title: 'Seaborgium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 269
     },
     {
@@ -966,6 +1073,7 @@ const elements = theme => {
       dropdownLabel: 'Bh',
       title: 'Bohrium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 270
     },
     {
@@ -975,6 +1083,7 @@ const elements = theme => {
       dropdownLabel: 'Hs',
       title: 'Hassium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 270
     },
     {
@@ -984,6 +1093,7 @@ const elements = theme => {
       dropdownLabel: 'Mt',
       title: 'Meitnerium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 278
     },
     {
@@ -993,6 +1103,7 @@ const elements = theme => {
       dropdownLabel: 'Ds',
       title: 'Darmstadtium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 281
     },
     {
@@ -1002,6 +1113,7 @@ const elements = theme => {
       dropdownLabel: 'Rg',
       title: 'Roentgenium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 282
     },
     {
@@ -1011,6 +1123,7 @@ const elements = theme => {
       dropdownLabel: 'Cn',
       title: 'Copernicium',
       color: theme.transitionMetal,
+      category: 'transitionMetal',
       weight: 285
     },
     {
@@ -1020,6 +1133,7 @@ const elements = theme => {
       dropdownLabel: 'Nh',
       title: 'Nihonium',
       color: theme.postTransitionMetal,
+      category: 'postTransitionMetal',
       weight: 286
     },
     {
@@ -1029,6 +1143,7 @@ const elements = theme => {
       dropdownLabel: 'Fl',
       title: 'Flerovium',
       color: theme.postTransitionMetal,
+      category: 'postTransitionMetal',
       weight: 289
     },
     {
@@ -1038,6 +1153,7 @@ const elements = theme => {
       dropdownLabel: 'Mc',
       title: 'Moscovium',
       color: theme.postTransitionMetal,
+      category: 'postTransitionMetal',
       weight: 290
     },
     {
@@ -1047,6 +1163,7 @@ const elements = theme => {
       dropdownLabel: 'Lv',
       title: 'Livermorium',
       color: theme.postTransitionMetal,
+      category: 'postTransitionMetal',
       weight: 293
     },
     {
@@ -1056,6 +1173,7 @@ const elements = theme => {
       dropdownLabel: 'Ts',
       title: 'Tennessine',
       color: theme.postTransitionMetal,
+      category: 'postTransitionMetal',
       weight: 294
     },
     {
@@ -1065,6 +1183,7 @@ const elements = theme => {
       dropdownLabel: 'Og',
       title: 'Oganesson',
       color: theme.nobleGas,
+      category: 'nobleGas',
       weight: 294
     }
   ];

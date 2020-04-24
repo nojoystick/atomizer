@@ -11,6 +11,7 @@ const networkData = {
         color: 'darkGray',
         hover: 'gray'
       },
+      arrowStrikethrough: false,
       width: 1.5,
       selectionWidth: 1,
       hoverWidth: 0.5,

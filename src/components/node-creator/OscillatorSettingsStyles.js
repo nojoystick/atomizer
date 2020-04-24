@@ -30,7 +30,7 @@ const OscillatorSettingsStyles = makeStyles({
     marginLeft: '-100px !important',
     marginTop: '140px !important'
   },
-  sliderContainer: {
+  sliderGroup: {
     width: '50px'
   },
   input: {
@@ -39,7 +39,6 @@ const OscillatorSettingsStyles = makeStyles({
     width: '45px',
     fontFamily: 'Inconsolata',
     fontSize: '14px',
-    outline: 'none',
     border: 'none',
     backgroundColor: props => props.theme && props.theme.background,
     color: props => props.theme && props.theme.text

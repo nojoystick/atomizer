@@ -1,8 +1,8 @@
 export const configActions = {
-  setModal: (component, func) => {
+  setModal: (component, func, glob) => {
     return {
       type: 'SET_MODAL',
-      payload: { component: component, func: func }
+      payload: { component: component, func: func, global: glob }
     };
   },
   setHotkeys: param => {

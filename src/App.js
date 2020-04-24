@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { disableBodyScroll } from 'body-scroll-lock';
 import { HashRouter, Route, NavLink, useLocation } from 'react-router-dom';
 import * as Components from './pages';
 import LoadingScreen from './components/LoadingScreen';
 import Theme from './stylesheets/Theme';
 import Audio from './audio/Audio';
+import { Modal, MobileWarningModal } from './components/modals';
 import * as Routes from './constants/routes';
 import { defaultConfig } from './config';
 import PianoRollData, { transformToPureObject } from './audio/PianoRollData';
 import { useFirestore, useFirestoreConnect, isEmpty } from 'react-redux-firebase';
 import useLoadFirestoreValues from './utils/useLoadFirestoreValues';
 import useStyles from './AppStyles.js';
+import { networkActions, configActions } from './redux/actions';
 import './stylesheets/App.scss';
 
 const Header = () => {
@@ -60,6 +62,7 @@ const Header = () => {
         </h1>
       </header>
       <div id='body' className={classes.body}>
+        <Modal />
         <Route path={Routes.HOME} exact component={Components.Home} />
         <Route path={Routes.LAB} component={Components.Lab} />
         <Route path={Routes.ABOUT} component={Components.About} />
@@ -91,8 +94,10 @@ const App = () => {
   const pianoRollData = useSelector(state => state.firestore.ordered.pianoRollData);
   useLoadFirestoreValues(_theme, _hotkeys, auth, pianoRollData);
   const firestore = useFirestore();
+  const dispatch = useDispatch();
 
   const theme = useSelector(state => state.network.theme);
+  const screenInfo = useSelector(state => state.view.screenInfo);
   const targetElement = document.querySelector('#root');
   targetElement.style.backgroundColor = theme && theme.background;
   disableBodyScroll(targetElement);
@@ -163,6 +168,16 @@ const App = () => {
     };
     initializeMasterGain();
   }, []);
+
+  useEffect(() => {
+    const showAccountModal = () => {
+      dispatch(configActions.setModal(MobileWarningModal, null, false));
+      dispatch(networkActions.setModalVisible(true));
+    };
+    if (screenInfo.width < 500) {
+      showAccountModal();
+    }
+  }, [dispatch, screenInfo]);
 
   return (
     <HashRouter>

@@ -81,7 +81,6 @@ const NodeDetailStyles = makeStyles({
     height: '100px',
     border: 'none',
     backgroundColor: props => props.theme && props.theme.background,
-    outline: 'none',
     '&:hover': {
       opacity: '0.4'
     }
@@ -91,10 +90,11 @@ const NodeDetailStyles = makeStyles({
     height: '10px'
   },
   sliderGroup: {
-    position: 'relative'
+    position: 'relative',
+    padding: '0px 0px 10px 0px'
   },
   sliderLabel: {
-    margin: '20px 0px 0px 20px',
+    margin: '15px 0px 0px 20px',
     display: 'inline-block',
     fontFamily: 'Inconsolata',
     fontWeight: '800',
@@ -102,12 +102,11 @@ const NodeDetailStyles = makeStyles({
   },
   input: {
     position: 'absolute',
-    top: '20px',
+    top: '15px',
     right: '40px',
-    width: '45px',
+    width: '50px',
     fontFamily: 'Inconsolata',
     fontSize: '14px',
-    outline: 'none',
     border: 'none',
     display: 'inline-block',
     backgroundColor: props => props.theme && props.theme.background,
@@ -116,9 +115,7 @@ const NodeDetailStyles = makeStyles({
   row: {
     display: 'flex',
     alignItems: 'center',
-    '& > div': {
-      display: 'inline-block'
-    }
+    justifyContent: 'center'
   },
   dropdown: {
     width: '50px !important',
@@ -131,20 +128,28 @@ const NodeDetailStyles = makeStyles({
     borderWidth: '0px 0px 2px 0px !important',
     borderColor: `${props => props.theme && props.theme.text} $important`,
     color: props => props.theme && props.theme.text,
-    outline: 'none !important',
     boxShadow: 'none !important',
     padding: '0px !important',
     margin: 'auto',
     marginTop: '10px',
     marginBottom: '10px',
     '&:hover': {
-      borderColor: `${props => props.theme && props.theme.text} !important`,
-      outline: 'none'
+      borderColor: `${props => props.theme && props.theme.text} !important`
     },
     '& div': {
       '& input': {
         color: props => props.theme && props.theme.text
       }
+    }
+  },
+  msButtonBar: {
+    width: '100%',
+    margin: '10px 0px 0px 0px',
+    height: '30px',
+    display: 'flex',
+    justifyContent: 'center',
+    '& button': {
+      margin: '0px 20px'
     }
   }
 });

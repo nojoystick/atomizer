@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-dropdown-select';
-import { sizeConstants } from '../../../config';
 import useSideMenuData, { nodeEditorData } from './side-menu-data';
 import { Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -44,7 +43,7 @@ const SideMenuPanel = () => {
   const onClick = action => {
     dispatch(action.action());
     if (action.label === 'delete selected') {
-      dispatch(configActions.setModal(DeleteModal, networkActions.delete));
+      dispatch(configActions.setModal(DeleteModal, networkActions.delete, true));
     }
     if (action.label === 'send to node editor') {
       setRedirectToLab(true);
@@ -92,16 +91,17 @@ const SideMenuPanel = () => {
     <div id='sideMenuPanel' className={classes.sideMenuPanel}>
       {el && el[elementIndex] && (
         <>
-          <ElementTile
-            nodeData={el[elementIndex]}
-            style={{
-              fontSize: '14px',
-              width: sizeConstants.SIDE_MENU_SIZE - 17,
-              height: sizeConstants.SIDE_MENU_SIZE - 17,
-              margin: '5px'
-            }}
-          />
-          <Tooltip action={nodeEditorData} child={NodeEditorButton} delay={1000} />
+          <div className={classes.elementTileParent}>
+            <ElementTile
+              nodeData={el[elementIndex]}
+              style={{
+                fontSize: '14px',
+                width: '100%',
+                height: '100%'
+              }}
+            />
+            <Tooltip action={nodeEditorData} child={NodeEditorButton} delay={1000} />
+          </div>
           <Select
             options={Object.values(el)}
             onChange={onDropdownChange}
@@ -115,6 +115,7 @@ const SideMenuPanel = () => {
           />
         </>
       )}
+
       {Object.values(sideMenuData).map((actions, i) => {
         return (
           <div key={i + 200}>

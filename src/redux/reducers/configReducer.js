@@ -1,7 +1,7 @@
 const defaultState = {
   modal: {
     header: null,
-    message: null,
+    global: null,
     func: null
   },
   login: {
@@ -18,7 +18,10 @@ const defaultState = {
 const configReducer = (state = defaultState, action) => {
   switch (action.type) {
     case 'SET_MODAL':
-      state = { ...state, modal: { component: action.payload.component, func: action.payload.func } };
+      state = {
+        ...state,
+        modal: { component: action.payload.component, func: action.payload.func, global: action.payload.global }
+      };
       return state;
     case 'SET_HOTKEYS':
       return { ...state, hotkeys: action.payload };

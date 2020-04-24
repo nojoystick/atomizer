@@ -13,15 +13,20 @@ import PlayerStyles from './PlayerStyles';
 import InputSlider from '../../InputSlider';
 import KeyDropdowns from '../../KeyDropdowns';
 import PlayerData from './player-data';
+import MuteSoloButtons from './MuteSoloButtons';
+import { usePlayerHotkeys } from '../../../utils/hotkeys';
 
 const Player = ({ id, left, top, hideSourceOnDrag, setInteractible }) => {
+  const somethingIsMuted = useSelector(state => state.network.audio.somethingIsMuted);
+  const somethingIsSoloed = useSelector(state => state.network.audio.somethingIsSoloed);
   const playing = useSelector(state => state.network.audio.playing);
   const theme = useSelector(state => state.network.theme);
 
   const [isDraggable, setIsDraggable] = useState(true);
 
-  const classes = PlayerStyles({ theme: theme });
+  const classes = PlayerStyles({ theme: theme, solo: somethingIsSoloed, mute: somethingIsMuted });
   const dispatch = useDispatch();
+  usePlayerHotkeys();
 
   const [{ isDragging }, drag] = useDrag({
     item: { id, left, top, type: ItemTypes.PLAYER },
@@ -56,6 +61,16 @@ const Player = ({ id, left, top, hideSourceOnDrag, setInteractible }) => {
       {PlayerData.map(inputSlider => {
         return <InputSlider key={inputSlider.max} useStyles={PlayerStyles} {...inputSlider} setDraggable={setIsDraggable} />;
       })}
+      <div className={classes.msContainer}>
+        <MuteSoloButtons
+          mute={somethingIsMuted}
+          solo={somethingIsSoloed}
+          onMute={networkActions.setMuted}
+          onSolo={networkActions.setSoloed}
+          helpTextEnabled
+          redux
+        />
+      </div>
     </div>
   );
 };

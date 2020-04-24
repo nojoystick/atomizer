@@ -56,7 +56,6 @@ const useStyles = makeStyles({
     backgroundColor: props => props.theme && props.theme.background,
     color: props => props.theme && props.theme.text,
     border: 'none',
-    outline: 'none',
     opacity: '0.6',
     margin: '0px',
     padding: '0px',

@@ -9,7 +9,7 @@ import { networkActions } from '../../redux/actions';
 import Icon from '../Icon';
 import IconSet from '../../constants/icon-set';
 
-const PlayerEditor = ({ node }) => {
+const PlayerEditor = ({ node, mode, setMode }) => {
   const playing = useSelector(state => state.network.audio.playing);
   const theme = useSelector(state => state.network.theme);
 
@@ -50,7 +50,7 @@ const PlayerEditor = ({ node }) => {
 
       <div className={classes.row}>
         <div className={classes.parent} style={{ paddingTop: '5px' }}>
-          <ModeSelector mode={node.mode} audioNode={node} />
+          <ModeSelector mode={mode} audioNode={node} setMode={setMode} />
           <KeyDropdowns renderInBody={true} style={{ marginTop: '13px', marginLeft: '-10px' }} />
         </div>
       </div>

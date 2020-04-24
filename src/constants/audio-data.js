@@ -19,5 +19,10 @@ const midiBounds = {
   max: 127
 };
 
+const panBounds = {
+  min: -127,
+  max: 127
+};
+
 export default defaultAudioData;
-export { tempoBounds, volumeBounds, midiBounds };
+export { tempoBounds, volumeBounds, midiBounds, panBounds };

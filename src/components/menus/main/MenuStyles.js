@@ -32,7 +32,6 @@ const MenuStyles = makeStyles({
     border: 'none',
     borderBottom: props => `1px solid ${props.theme && props.theme.text}`,
     cursor: 'pointer',
-    outline: 'none',
     '& :hover': {
       opacity: '0.6'
     }

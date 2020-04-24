@@ -6,15 +6,14 @@ import MenuPanel from '../components/menus/main/MenuPanel';
 import SideMenuPanel from '../components/menus/network-editor/SideMenuPanel';
 import NodeDetailPanel from '../components/menus/node-detail/NodeDetailPanel';
 import PlayerContainer from '../components/menus/player/PlayerContainer';
-import Modal from '../components/modals/Modal';
 import Icon from '../components/Icon';
 import IconSet from '../constants/icon-set';
 import { sizeConstants } from '../config';
 import { useResizer, useHotkeys, useElementIndexHotkeys } from '../utils/hotkeys';
 import { useSelector, useDispatch } from 'react-redux';
 import { viewActions } from '../redux/actions';
+import usePlayer from '../audio/usePlayer';
 import HomeStyles from './HomeStyles';
-import { setPlayer, usePreciseTimer } from '../audio/startPlayer';
 
 const Home = () => {
   const [show, setShow] = useState(false);
@@ -31,8 +30,8 @@ const Home = () => {
 
   useHotkeys(Object.keys(audio.pianoRollData).length > 0);
   useResizer();
-  useElementIndexHotkeys();
-  usePreciseTimer(setPlayer, bpmToMs(audio.masterTempo), audio.playing);
+  useElementIndexHotkeys('Home');
+  usePlayer();
 
   const getExpandIcon = (className, rotation, visible) => {
     return (
@@ -49,7 +48,6 @@ const Home = () => {
   return (
     <div className={show ? 'page show' : 'page hide'}>
       <PlayerContainer hideSourceOnDrag={true} />
-      <Modal />
       <Network />
       <SideMenuPanel />
       <MenuPanel />
@@ -83,11 +81,6 @@ const getDetailStyle = sideMenuVisible => {
     left: 'unset',
     right: `${sideMenuVisible ? sizeConstants.SIDE_MENU_SIZE - 5 + 'px' : '40px'}`
   };
-};
-
-/* determine how many ms in a 32nd note for a given bpm*/
-const bpmToMs = bpm => {
-  return 60000 / bpm / 8;
 };
 
 export default Home;

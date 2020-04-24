@@ -1,4 +1,4 @@
-import { volumeBounds, midiBounds } from '../../../constants/audio-data';
+import { volumeBounds, midiBounds, panBounds } from '../../../constants/audio-data';
 
 const NodeDetailData = audioNode => {
   return [
@@ -22,7 +22,18 @@ const NodeDetailData = audioNode => {
       defaultValue: audioNode.intensity,
       defaultValueConversion: 1,
       globalValue: false,
-      key: audioNode.intensity
+      key: audioNode.intensity - 500
+    },
+    {
+      label: 'pan',
+      onChange: audioNode.setPan.bind(audioNode),
+      min: panBounds.min,
+      max: panBounds.max,
+      decimals: 2,
+      defaultValue: audioNode.pan,
+      defaultValueConversion: 127,
+      globalValue: false,
+      key: audioNode.pan + 500
     }
   ];
 };

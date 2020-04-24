@@ -7,6 +7,7 @@ import ElementSelector from '../components/node-creator/ElementSelector';
 import PlayerEditor from '../components/node-creator/PlayerEditor';
 import elements from '../constants/elements';
 import Node from '../audio/Node';
+import { useElementIndexHotkeys } from '../utils/hotkeys';
 
 const Lab = () => {
   const elementIndex = useSelector(state => state.network.elementIndex);
@@ -14,10 +15,12 @@ const Lab = () => {
   const screenInfo = useSelector(state => state.view.screenInfo);
   const [elToEdit, setElToEdit] = useState(elements(theme)[elementIndex - 1]);
   const [pianoRoll, setPianoRoll] = useState(null);
-  const [node] = useState(new Node());
+  const [node, setNode] = useState(new Node());
+  const [mode, setMode] = useState(node.mode);
   const [show, setShow] = useState(false);
 
   const classes = NodeCreatorModalStyles({ screenInfo: screenInfo, theme: theme });
+  useElementIndexHotkeys('Lab');
 
   useEffect(() => {
     setShow(true);
@@ -27,11 +30,6 @@ const Lab = () => {
   }, []);
 
   useEffect(() => {
-    node.setNotes(pianoRoll);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pianoRoll]);
-
-  useEffect(() => {
     setElToEdit(elements(theme)[elementIndex - 1]);
   }, [elementIndex, theme]);
 
@@ -39,9 +37,16 @@ const Lab = () => {
     <div className={`${classes.flexContainer} ${show ? 'page show' : 'page hide'}`}>
       <div className={classes.columnParent}>
         <ElementSelector element={elToEdit} node={node} />
-        <PlayerEditor node={node} />
+        <PlayerEditor node={node} mode={mode} setMode={setMode} />
       </div>
-      <PianoRollDesigner element={elToEdit} pianoRoll={pianoRoll} setPianoRoll={setPianoRoll} />
+      <PianoRollDesigner
+        element={elToEdit}
+        pianoRoll={pianoRoll}
+        setPianoRoll={setPianoRoll}
+        node={node}
+        setNode={setNode}
+        mode={mode}
+      />
       <OscillatorSettings node={node} />
     </div>
   );

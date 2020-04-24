@@ -8,6 +8,7 @@ const useLoadFirestoreValues = (theme, hotkeys, login, pianoRollData) => {
   const auth = useSelector(state => state.firebase.auth);
   const profile = useSelector(state => state.firebase.profile);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(networkActions.setTheme(theme));
   }, [dispatch, theme]);

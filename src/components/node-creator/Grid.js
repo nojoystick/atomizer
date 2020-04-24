@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
-import { keysToNotesMap, modeToOffsetMap } from '../../constants/frequencies';
+import { keysToNotesMap, modeToOffsetMap, modeToSemitoneOffsetMap } from '../../constants/frequencies';
 
 const Grid = ({ width, mode, pianoRoll, setPianoRoll, height, color }) => {
   const theme = useSelector(state => state.network.theme);
@@ -20,7 +20,7 @@ const Grid = ({ width, mode, pianoRoll, setPianoRoll, height, color }) => {
     };
 
     const getNoteName = i => {
-      let index = height - 1 - i + modeToOffsetMap[mode];
+      let index = height - 1 - i + (disposition === 'c' ? modeToSemitoneOffsetMap[mode] : modeToOffsetMap[mode]);
       if (index >= height) {
         index -= height - 1;
       }
@@ -63,20 +63,7 @@ const Grid = ({ width, mode, pianoRoll, setPianoRoll, height, color }) => {
       );
     };
     setTable(createTable());
-  }, [
-    pianoRoll,
-    setPianoRoll,
-    height,
-    mode,
-    disposition,
-    key.label,
-    classes.table,
-    classes.scaleLabel,
-    classes.tableCell,
-    classes.button,
-    classes.selected
-  ]);
-
+  }, [pianoRoll, setPianoRoll, height, mode, disposition, key.label, classes]);
   return <>{table}</>;
 };
 
@@ -101,7 +88,6 @@ const useStyles = makeStyles({
     height: props => (props.height === 8 ? '20px' : '15px !important'),
     backgroundColor: 'transparent',
     border: props => `2px solid ${props.theme && props.theme.text}`,
-    outline: 'none',
     '&:hover': {
       opacity: '0.5'
     }

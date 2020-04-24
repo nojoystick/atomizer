@@ -393,21 +393,22 @@ const volume = [
   1.0
 ];
 
-const modeMap = {
-  // Ionian
-  I: [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24],
-  // Dorian
-  ii: [2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24, 26],
-  //, Phrygian
-  iii: [4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24, 26, 28],
-  //, Lydian
-  IV: [5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24, 26, 28, 29],
-  //, Mixolydian
-  V: [7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24, 26, 28, 29, 31],
-  //, Aeolian
-  vi: [9, 11, 12, 14, 16, 17, 19, 21, 23, 24, 26, 28, 29, 31, 33],
-  //, Locrian
-  vii: [11, 12, 14, 16, 17, 19, 21, 23, 24, 26, 28, 29, 31, 33, 35]
+const dispositionToSemitones = {
+  M: [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24],
+  m: [0, 2, 3, 5, 7, 8, 10, 12, 14, 15, 17, 19, 20, 22, 24],
+  c: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+};
+
+const semitonesToDisposition = {
+  M: [0, 0, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 9, 9, 10, 11, 11, 12, 12, 13, 13, 14],
+  m: [0, 0, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 9, 9, 10, 11, 11, 12, 12, 13, 13, 14],
+  c: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+};
+
+const transformToDisposition = {
+  M: [0, 0, 2, 4, 4, 5, 7, 7, 9, 9, 11, 11, 12, 12, 14, 16, 16, 17, 19, 19, 21, 21, 23, 23, 24],
+  m: [0, 0, 2, 3, 3, 5, 7, 7, 8, 8, 10, 10, 12, 12, 14, 15, 15, 17, 19, 19, 20, 20, 22, 22, 24],
+  c: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
 };
 
 const keyMap = {
@@ -423,8 +424,7 @@ const keyMap = {
     F: { label: 'F', value: 29 },
     Gb: { label: 'Gb', value: 30 },
     G: { label: 'G', value: 31 },
-    Ab: { label: 'Ab', value: 32 },
-    '*': { label: '&#', value: 21 }
+    Ab: { label: 'Ab', value: 32 }
   },
   m: {
     A: { label: 'A', value: 21 },
@@ -438,8 +438,7 @@ const keyMap = {
     F: { label: 'F', value: 29 },
     'F#': { label: 'F#', value: 30 },
     G: { label: 'G', value: 31 },
-    'G#': { label: 'G#', value: 32 },
-    '*': { label: '&#', value: 21 }
+    'G#': { label: 'G#', value: 32 }
   }
 };
 
@@ -456,8 +455,7 @@ const keyArrs = {
     { label: 'F', value: 29 },
     { label: 'Gb', value: 30 },
     { label: 'G', value: 31 },
-    { label: 'Ab', value: 32 },
-    { label: '*', value: 0 }
+    { label: 'Ab', value: 32 }
   ],
   m: [
     { label: 'A', value: 21 },
@@ -471,14 +469,28 @@ const keyArrs = {
     { label: 'F', value: 29 },
     { label: 'F#', value: 30 },
     { label: 'G', value: 31 },
-    { label: 'G#', value: 32 },
-    { label: '*', value: 0 }
+    { label: 'G#', value: 32 }
+  ],
+  c: [
+    { label: 'A', value: 21 },
+    { label: 'Bb', value: 22 },
+    { label: 'B', value: 23 },
+    { label: 'C', value: 24 },
+    { label: 'Db', value: 25 },
+    { label: 'D', value: 26 },
+    { label: 'Eb', value: 27 },
+    { label: 'E', value: 28 },
+    { label: 'F', value: 29 },
+    { label: 'Gb', value: 30 },
+    { label: 'G', value: 31 },
+    { label: 'Ab', value: 32 }
   ]
 };
 
-const majorMinor = [
+const dispositionOptions = [
   { label: 'Major', value: 'M' },
-  { label: 'Minor', value: 'm' }
+  { label: 'Minor', value: 'm' },
+  { label: 'Chrom', value: 'c' }
 ];
 
 const keysToNotesMap = {
@@ -494,8 +506,7 @@ const keysToNotesMap = {
     F: ['F', 'G', 'A', 'Bb', 'C', 'D', 'E', 'F'],
     Gb: ['Gb', 'Ab', 'Bb', 'Cb', 'Db', 'Eb', 'F', 'Gb'],
     G: ['G', 'A', 'B', 'C', 'D', 'E', 'F#', 'G'],
-    Ab: ['Ab', 'Bb', 'C', 'Db', 'Eb', 'F', 'G', 'Ab'],
-    '*': ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A']
+    Ab: ['Ab', 'Bb', 'C', 'Db', 'Eb', 'F', 'G', 'Ab']
   },
   m: {
     A: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'A'],
@@ -509,8 +520,21 @@ const keysToNotesMap = {
     F: ['F', 'G', 'Ab', 'Bb', 'C', 'Db', 'Eb', 'F'],
     'F#': ['F#', 'G#', 'A', 'B', 'C#', 'D', 'E', 'F#'],
     G: ['G', 'A', 'Bb', 'C', 'D', 'Eb', 'F', 'G'],
-    'G#': ['G#', 'A#', 'B', 'C#', 'D#', 'E', 'F#', 'G#'],
-    '*': ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A']
+    'G#': ['G#', 'A#', 'B', 'C#', 'D#', 'E', 'F#', 'G#']
+  },
+  c: {
+    A: ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A'],
+    Bb: ['Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb'],
+    B: ['B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'],
+    C: ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C'],
+    Db: ['Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B', 'C', 'Db'],
+    D: ['D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D'],
+    Eb: ['Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb'],
+    E: ['E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E'],
+    F: ['F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F'],
+    Gb: ['Gb', 'G', 'Ab', 'A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb'],
+    G: ['G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G'],
+    Ab: ['Ab', 'A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab']
   }
 };
 
@@ -524,6 +548,22 @@ const modeToOffsetMap = {
   vii: 6
 };
 
+const modeToSemitoneOffsetMap = {
+  I: 0,
+  ii: 2,
+  iii: 4,
+  IV: 5,
+  V: 7,
+  vi: 9,
+  vii: 11,
+  i: 0,
+  III: 3,
+  iv: 5,
+  v: 7,
+  VI: 8,
+  VII: 10
+};
+
 const noteToWidth = {
   sixteenth: 16,
   eighth: 8,
@@ -532,4 +572,18 @@ const noteToWidth = {
   whole: 1
 };
 
-export { frequency, toPenta, volume, modeMap, keyMap, keyArrs, majorMinor, keysToNotesMap, modeToOffsetMap, noteToWidth };
+export {
+  frequency,
+  toPenta,
+  volume,
+  dispositionToSemitones,
+  semitonesToDisposition,
+  transformToDisposition,
+  keyMap,
+  keyArrs,
+  dispositionOptions,
+  keysToNotesMap,
+  modeToOffsetMap,
+  modeToSemitoneOffsetMap,
+  noteToWidth
+};

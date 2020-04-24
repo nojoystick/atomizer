@@ -32,7 +32,6 @@ const SideMenuStyles = makeStyles({
     height: '58px',
     width: '65px',
     cursor: 'pointer',
-    outline: 'none',
     backgroundColor: 'transparent',
     color: props => props.theme && props.theme.text,
     margin: 'auto',
@@ -74,15 +73,13 @@ const SideMenuStyles = makeStyles({
     zIndex: '3',
     borderWidth: '0px 0px 2px 0px !important',
     borderColor: `${props => props.theme && props.theme.text} $important`,
-    outline: 'none !important',
     boxShadow: 'none !important',
     padding: '0px !important',
     margin: 'auto',
     marginTop: '10px',
     marginBottom: '10px',
     '&:hover': {
-      borderColor: `${props => props.theme && props.theme.text} !important`,
-      outline: 'none'
+      borderColor: `${props => props.theme && props.theme.text} !important`
     },
     '& div': {
       '& input': {
@@ -113,6 +110,11 @@ const SideMenuStyles = makeStyles({
     marginLeft: '0px',
     display: 'block',
     opacity: '0.6'
+  },
+  elementTileParent: {
+    width: '83px',
+    height: '83px',
+    margin: '5px'
   }
 });
 

@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
 
-const ModeSelector = ({ mode, audioNode, setMode }) => {
+const ModeSelector = ({ mode, audioNode, setMode, updateParent }) => {
   const theme = useSelector(state => state.network.theme);
   const classes = useStyles({ theme: theme });
   const disposition = useSelector(state => state.network.audio.disposition);
@@ -28,14 +28,16 @@ const ModeSelector = ({ mode, audioNode, setMode }) => {
   };
 
   const onClick = e => {
-    audioNode ? audioNode.setMode(e.target.value) : setMode(e.target.value);
+    audioNode && audioNode.setMode(e.target.value);
+    setMode && setMode(e.target.value);
+    updateParent && updateParent();
   };
 
-  useEffect(() => {}, [disposition]);
+  const labelsToMap = labels[disposition] ? labels[disposition] : labels['M'];
 
   return (
     <div className={classes.parent}>
-      {labels[disposition].map(label => {
+      {labelsToMap.map(label => {
         return (
           <button
             key={label.label}
@@ -66,7 +68,6 @@ const useStyles = makeStyles({
     backgroundColor: props => props.theme && props.theme.background,
     color: props => props.theme && props.theme.text,
     border: 'none',
-    outline: 'none',
     opacity: '0.6',
     marginTop: '10px',
     '&:hover': {

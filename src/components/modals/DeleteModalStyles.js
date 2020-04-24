@@ -24,7 +24,6 @@ const DeleteModalStyles = makeStyles({
     border: props => `1.5px solid ${props.theme && props.theme.text}`,
     color: props => props.theme && props.theme.text,
     fontFamily: 'inconsolata',
-    outline: 'none',
     '&:hover': {
       opacity: '0.4'
     }
@@ -37,6 +36,10 @@ const DeleteModalStyles = makeStyles({
   cancelButton: {
     fontWeight: '400',
     backgroundColor: props => props.theme && props.theme.secondary
+  },
+  wideButton: {
+    alignSelf: 'center',
+    width: '120px'
   }
 });
 

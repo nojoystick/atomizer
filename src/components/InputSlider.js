@@ -26,11 +26,14 @@ const InputSlider = ({
 
   /** only pass the value to redux on mouseUp/keyUp */
   function sliderUp(action, e) {
-    dispatch(action(e.target.value, e.target.id === 'volume' ? 'MIDI' : null));
+    dispatch(action(e.target.value, defaultValueConversion === 127 ? 'MIDI' : null));
   }
 
   function sliderChange(action, e) {
-    const val = defaultValueConversion === 1 ? e.target.value : volume[e.target.value];
+    let val = e.target.value / defaultValueConversion;
+    if (e.target.id === 'volume') {
+      val = volume[e.target.value];
+    }
     setLocalAudio(val);
     if (!globalValue) {
       action(val);
@@ -55,7 +58,7 @@ const InputSlider = ({
   };
 
   return (
-    <div className={`${classes.sliderContainer} sliderContainer`}>
+    <div className={`${classes.sliderGroup} sliderContainer`}>
       <label className={`${classes.sliderLabel} ${classes.vertical}`}>{label}</label>
       {!vertical && (
         <input
@@ -65,7 +68,7 @@ const InputSlider = ({
           key={localAudio}
           min={min}
           max={max}
-          defaultValue={localAudio.toFixed ? localAudio.toFixed(decimals) : localAudio}
+          defaultValue={localAudio && localAudio.toFixed ? localAudio.toFixed(decimals) : localAudio}
           onKeyDown={e => verify(onChange, min, max / defaultValueConversion, e)}
         />
       )}
@@ -91,7 +94,7 @@ const InputSlider = ({
           key={localAudio}
           min={min}
           max={max}
-          defaultValue={localAudio.toFixed ? localAudio.toFixed(decimals) : localAudio}
+          defaultValue={localAudio && localAudio.toFixed ? localAudio.toFixed(decimals) : localAudio}
           onKeyDown={e => verify(onChange, min, max / defaultValueConversion, e)}
         />
       )}

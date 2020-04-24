@@ -14,7 +14,7 @@ const ModalStyles = makeStyles({
     justifyContent: 'center',
     zIndex: '9998',
     visibility: props => (props.show ? 'visible' : 'hidden'),
-    opacity: props => (props.show ? '0.6' : '0')
+    opacity: props => (props.show ? '0.8' : '0')
   },
   flexContainer: {
     backgroundColor: 'transparent',

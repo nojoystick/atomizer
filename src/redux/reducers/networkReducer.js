@@ -23,14 +23,15 @@ const defaultState = {
     playing: false,
     key: { label: 'A', value: 21 },
     disposition: 'M',
-    beatIndex: 0,
     masterGain: 0.5,
     masterTempo: 120,
     lpFilterFrequency: 0.1,
     lpFilterQ: 0.1,
     hpFilterFrequency: 0.1,
     hpFilterQ: 0.1,
-    pianoRollData: PianoRollData
+    pianoRollData: PianoRollData,
+    somethingIsMuted: false,
+    somethingIsSoloed: false
   }
 };
 
@@ -41,7 +42,16 @@ const networkReducer = (state = defaultState, action) => {
       const nodesCopy = state.graphInfo.nodes.slice();
       const x = action.payload.pointer.canvas.x;
       const y = action.payload.pointer.canvas.y;
-      const audioNode = new Node(state.audio.pianoRollData[state.elementIndex]);
+      const audioNode = new Node(
+        state.audio.pianoRollData[state.elementIndex],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        state.audio.somethingIsSoloed
+      );
       nodesCopy.push({ ...elements(state.theme)[state.elementIndex - 1], id: id, x: x, y: y, audioNode: audioNode });
       const edgesCopy = state.graphInfo.edges.slice();
       if (action.payload.nodes.length) {
@@ -60,7 +70,16 @@ const networkReducer = (state = defaultState, action) => {
       const nodes = state.graphInfo.nodes.slice();
       const nodeX = state.elementIndex % 2 ? 30 : -30;
       const nodeY = state.elementIndex % 3 ? 30 : -30;
-      const _audioNode = new Node(state.audio.pianoRollData[state.elementIndex]);
+      const _audioNode = new Node(
+        state.audio.pianoRollData[state.elementIndex],
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        state.audio.somethingIsSoloed
+      );
       nodes.push({ ...elements(state.theme)[state.elementIndex - 1], id: _id, x: nodeX, y: nodeY, audioNode: _audioNode });
       return {
         ...state,
@@ -82,7 +101,11 @@ const networkReducer = (state = defaultState, action) => {
             manipulation: {
               ...state.options.manipulation,
               addEdge: function(nodeData, callback) {
-                if (nodeData.from !== nodeData.to) {
+                if (
+                  nodeData.from !== nodeData.to &&
+                  noLoop(nodeData.from, nodeData.to, state.network.body.nodes) &&
+                  noDupe(nodeData.from, nodeData.to, state.network.body.nodes)
+                ) {
                   callback(nodeData);
                   state.network.addEdgeMode();
                 }
@@ -164,7 +187,6 @@ const networkReducer = (state = defaultState, action) => {
       };
 
     case 'PLAY_OR_PAUSE':
-      playOrPause(state);
       return { ...state, audio: { ...state.audio, playing: !state.audio.playing } };
 
     case 'SELECT_ALL':
@@ -191,12 +213,6 @@ const networkReducer = (state = defaultState, action) => {
     case 'SET_NETWORK':
       return (state = { ...state, network: action.payload });
 
-    case 'SET_OPTIONS':
-      return (state = { ...state, options: action.payload });
-
-    case 'SET_GRAPH_INFO':
-      return (state = { ...state, graphInfo: action.payload });
-
     case 'SET_ELEMENT_INDEX':
       if (action.constraint) {
         if (state.audio.pianoRollData[action.payload]) {
@@ -219,9 +235,6 @@ const networkReducer = (state = defaultState, action) => {
           return { ...state, elementIndex: action.payload };
         } else return state;
       }
-
-    case 'SET_BEAT_INDEX':
-      return { ...state, audio: { ...state.audio, beatIndex: action.payload } };
 
     case 'SET_LP_FILTER_FREQUENCY':
       Audio.lpFilter.frequency.setValueAtTime(frequency[action.payload], Audio.context.currentTime);
@@ -266,18 +279,14 @@ const networkReducer = (state = defaultState, action) => {
       };
 
     case 'SET_THEME':
-      // todo redraw the existing nodes when the theme changes
-      // const el = elements(action.payload);
-      // const _nodes = state.network.body.nodes;
-      // Object.values(_nodes).forEach(node => {
-      //   node.options.color = el.find(item => item.atomicNumber === node.options.atomicNumber).color;
-      // })
-      // state.network.setData({nodes: _nodes});
-      return (state = { ...state, theme: action.payload });
+      if (action.payload === state.theme) {
+        return state;
+      }
+      updateColorsForTheme(state.network, action.payload);
+      return { ...state, theme: action.payload };
 
     case 'STOP':
-      stop();
-      return { ...state, audio: { ...state.audio, playing: false, beatIndex: 0 } };
+      return { ...state, audio: { ...state.audio, playing: false } };
 
     case 'TOGGLE_SELECT':
       const op = state.multiSelectState
@@ -315,6 +324,111 @@ const networkReducer = (state = defaultState, action) => {
     case 'SEND_TO_LAB':
       // right now this is a no-op
       return state;
+
+    case 'SET_MUTED':
+      let somethingIsMuted = false;
+      Object.keys(state.network.body.nodes).forEach(key => {
+        if (state.selectedNodes && state.selectedNodes.includes(key)) {
+          state.network.body.nodes[key].options.audioNode.toggleMute();
+          if (state.network.body.nodes[key].options.audioNode.mute === true) {
+            setColorForState('mute', key, state);
+          } else {
+            setColorForState('unmute', key, state);
+          }
+        }
+        if (!state.selectedNodes || state.selectedNodes.length === 0) {
+          if (state.audio.somethingIsMuted) {
+            setColorForState('unmute', key, state);
+            state.network.body.nodes[key].options.audioNode.setMute(false);
+          } else {
+            setColorForState('mute', key, state);
+            state.network.body.nodes[key].options.audioNode.setMute(true);
+          }
+        }
+        if (state.network.body.nodes[key].options.audioNode.mute === true) {
+          somethingIsMuted = true;
+        }
+      });
+      return { ...state, audio: { ...state.audio, somethingIsMuted: somethingIsMuted } };
+
+    case 'SET_SOLOED':
+      let somethingIsSoloed = false;
+      let _somethingIsMuted = false;
+      Object.keys(state.network.body.nodes).forEach(key => {
+        if (state.selectedNodes && state.selectedNodes.includes(key)) {
+          if (state.network.body.nodes[key].options.audioNode.solo !== 1) {
+            if (
+              state.network.body.nodes[key].options.audioNode.solo === -1 ||
+              state.network.body.nodes[key].options.audioNode.mute
+            ) {
+              setColorForState('unmute', key, state);
+              state.network.body.nodes[key].options.audioNode.setMute(false);
+            }
+            state.network.body.nodes[key].options.audioNode.setSolo(1);
+          } else {
+            state.network.body.nodes[key].options.audioNode.setSolo(-1);
+            setColorForState('mute', key, state);
+          }
+          if (state.network.body.nodes[key].options.audioNode.mute) {
+            state.network.body.nodes[key].options.audioNode.setMute(false);
+            setColorForState('unmute', key, state);
+          }
+          if (state.network.body.nodes[key].options.audioNode.solo !== 1 && state.audio.somethingIsSoloed) {
+            state.network.body.nodes[key].options.audioNode.setSolo(-1);
+            setColorForState('mute', key, state);
+          }
+        } else if (
+          state.selectedNodes &&
+          state.selectedNodes.length > 0 &&
+          state.network.body.nodes[key].options.audioNode.solo !== 1
+        ) {
+          state.network.body.nodes[key].options.audioNode.setSolo(-1);
+          setColorForState('mute', key, state);
+        }
+        if (!state.selectedNodes || state.selectedNodes.length === 0) {
+          state.network.body.nodes[key].options.audioNode.setSolo(0);
+        }
+        if (state.network.body.nodes[key].options.audioNode.solo === 1) {
+          somethingIsSoloed = true;
+        }
+        if (state.network.body.nodes[key].options.audioNode.mute === true) {
+          _somethingIsMuted = true;
+        }
+      });
+      if (somethingIsSoloed) {
+        Object.keys(state.network.body.nodes).forEach(key => {
+          if (state.network.body.nodes[key].options.audioNode.solo !== 1) {
+            state.network.body.nodes[key].options.audioNode.setSolo(-1);
+            setColorForState('mute', key, state);
+          }
+        });
+      } else {
+        Object.keys(state.network.body.nodes).forEach(key => {
+          state.network.body.nodes[key].options.audioNode.setSolo(0);
+          if (state.network.body.nodes[key].options.audioNode.mute === false) {
+            setColorForState('unmute', key, state);
+          }
+        });
+      }
+      return { ...state, audio: { ...state.audio, somethingIsSoloed: somethingIsSoloed, somethingIsMuted: _somethingIsMuted } };
+
+    case 'IS_SOMETHING_MUTED_OR_SOLOED':
+      let somethingMute = false;
+      let somethingSolo = false;
+      Object.keys(state.network.body.nodes).forEach(key => {
+        if (state.network.body.nodes[key].options.audioNode.solo === 1) {
+          somethingSolo = true;
+        }
+        if (state.network.body.nodes[key].options.audioNode.mute === true) {
+          somethingMute = true;
+          if (state.network.body.nodes[key].options.color.state !== 'mute') {
+            setColorForState('mute', key, state);
+          }
+        } else if (state.network.body.nodes[key].options.color.state === 'mute') {
+          setColorForState('unmute', key, state);
+        }
+      });
+      return { ...state, audio: { ...state.audio, somethingIsSoloed: somethingSolo, somethingIsMuted: somethingMute } };
 
     default:
       return state;
@@ -359,16 +473,115 @@ const setModalVisible = (state, payload) => {
   return (state = { ...state, modalVisible: payload });
 };
 
-const playOrPause = state => {
-  if (state.audio.playing) {
-    stop();
-  } else {
-    Audio.masterGainNode.gain.setTargetAtTime(state.audio.masterGain, Audio.context.currentTime, 0.001);
+/**
+ * make sure there are no loops in the network
+ * @param from, to, nodes
+ */
+const noLoop = (from, to, nodes) => {
+  let val = true;
+  let nextLayer = nodes[to];
+  val = searchGraphForLoop(from, nextLayer, nodes);
+  return val;
+};
+
+/**
+ * Recursively search for a loop back to the starting node
+ */
+const searchGraphForLoop = (from, node, nodes) => {
+  let val = true;
+  if (node.id === from) {
+    return false;
+  } else if (node.edges && node.edges.length > 0) {
+    for (let i = 0; i < node.edges.length; i++) {
+      if (node.edges[i].fromId === node.id) {
+        val = searchGraphForLoop(from, nodes[node.edges[i].toId], nodes);
+        if (val === false) {
+          return val;
+        }
+      }
+    }
+  }
+  return val;
+};
+
+/**
+ * Detect duplicate edges and don't bother adding them
+ */
+const noDupe = (from, to, nodes) => {
+  let val = true;
+  nodes[from].edges.forEach(edge => {
+    if (edge.toId === to) {
+      val = false;
+    }
+  });
+  return val;
+};
+
+const transformColor = (colorString, amount) => {
+  const rgb = colorString[0] === '#' ? hexToRgb(colorString) : rgbaToRgb(colorString);
+  const newColor = amount === 1.0 ? rgbToHex(rgb[0], rgb[1], rgb[2]) : rgbToRgba(rgb[0], rgb[1], rgb[2], amount);
+  return newColor;
+};
+
+function hexToRgb(hex) {
+  var bigint = parseInt(hex.substr(1), 16);
+  var r = (bigint >> 16) & 255;
+  var g = (bigint >> 8) & 255;
+  var b = bigint & 255;
+  return [r, g, b];
+}
+
+const rgbToHex = (r, g, b) =>
+  '#' +
+  [r, g, b]
+    .map(x => {
+      const hex = parseInt(x).toString(16);
+      return hex.length === 1 ? '0' + hex : hex;
+    })
+    .join('');
+
+function rgbaToRgb(rgba) {
+  return rgba.substr(5).split(', ');
+}
+
+function rgbToRgba(r, g, b, amount) {
+  return `rgba(${r}, ${g}, ${b}, ${amount})`;
+}
+
+const setColor = (id, status, transformAmount, network) => {
+  network.body.nodes[id].options.color.background = transformColor(
+    network.body.nodes[id].options.color.background,
+    transformAmount
+  );
+  network.body.nodes[id].options.color.border = transformColor(network.body.nodes[id].options.color.border, transformAmount);
+  const highlightColor = transformColor(network.body.nodes[id].options.color.highlight.background, transformAmount);
+  network.body.nodes[id].options.color.highlight.background = highlightColor;
+  network.body.nodes[id].options.color.hover.background = highlightColor;
+  network.body.nodes[id].options.color.state = status;
+};
+
+const setColorForState = (status, id, state) => {
+  switch (status) {
+    case 'mute':
+      setColor(id, status, 0.2, state.network);
+      break;
+    case 'unmute':
+      setColor(id, status, 1.0, state.network);
+      break;
+    default:
+      return;
   }
 };
 
-const stop = () => {
-  Audio.masterGainNode.gain.setTargetAtTime(0, Audio.context.currentTime, 0.001);
+const updateColorsForTheme = (network, theme) => {
+  network &&
+    Object.values(network.body.nodes).forEach(node => {
+      if (node.options.state === 'mute') {
+      } else {
+        node.options.color.background = theme[node.options.category];
+      }
+    });
+  return network;
 };
 
 export default networkReducer;

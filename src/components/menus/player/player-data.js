@@ -24,4 +24,10 @@ const PlayerData = [
   }
 ];
 
+const TooltipHelperText = {
+  mute: 'Mute selected nodes',
+  solo: 'Solo selected nodes'
+};
+
 export default PlayerData;
+export { TooltipHelperText };

@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { networkActions, configActions } from '../redux/actions';
 import Select from 'react-dropdown-select';
-import { keyArrs, keyMap, majorMinor } from '../constants/frequencies';
+import { keyArrs, keyMap, dispositionOptions } from '../constants/frequencies';
 import { makeStyles } from '@material-ui/styles';
 
 const KeyDropdowns = ({ style, renderInBody }) => {
@@ -16,7 +16,7 @@ const KeyDropdowns = ({ style, renderInBody }) => {
     dispatch(networkActions.setKey(e[0]));
   };
 
-  const majorMinorLabelChange = {
+  const dispositionLabelChange = {
     Db: 'C#',
     Gb: 'F#',
     Ab: 'G#',
@@ -30,9 +30,9 @@ const KeyDropdowns = ({ style, renderInBody }) => {
   const onDispositionChange = e => {
     const localDisposition = disposition;
     dispatch(networkActions.setDisposition(e[0].value));
-    if (Object.keys(majorMinorLabelChange).includes(key.label)) {
-      const label = majorMinorLabelChange[key.label];
-      const newDisposition = majorMinorLabelChange[localDisposition];
+    if (Object.keys(dispositionLabelChange).includes(key.label)) {
+      const label = dispositionLabelChange[key.label];
+      const newDisposition = dispositionLabelChange[localDisposition];
       dispatch(networkActions.setKey(keyMap[newDisposition][label]));
     }
   };
@@ -54,10 +54,10 @@ const KeyDropdowns = ({ style, renderInBody }) => {
       />
       <Select
         portal={renderInBody && document.querySelector('body')}
-        options={majorMinor}
+        options={dispositionOptions}
         onChange={onDispositionChange}
         className={`${classes.dropdown} wide-dropdown-no-search`}
-        values={[majorMinor.find(val => val.value === disposition)]}
+        values={[dispositionOptions.find(val => val.value === disposition)]}
         searchable={false}
         disabled={key.value === 0}
         dropdownGap={0}
@@ -85,7 +85,6 @@ const useStyles = makeStyles({
     zIndex: '3',
     borderWidth: '0px 0px 2px 0px !important',
     borderColor: `${props => props.theme && props.theme.text} $important`,
-    outline: 'none !important',
     boxShadow: 'none !important',
     padding: '0px !important',
     margin: 'auto',
@@ -93,8 +92,7 @@ const useStyles = makeStyles({
     marginBottom: '10px',
     display: 'inline',
     '&:hover': {
-      borderColor: `${props => props.theme && props.theme.text} !important`,
-      outline: 'none'
+      borderColor: `${props => props.theme && props.theme.text} !important`
     },
     '> & span': {
       width: '23px'

@@ -5,18 +5,6 @@ export const networkActions = {
       payload: param
     };
   },
-  setOptions: param => {
-    return {
-      type: 'SET_OPTIONS',
-      payload: param
-    };
-  },
-  setGraphInfo: param => {
-    return {
-      type: 'SET_GRAPH_INFO',
-      payload: param
-    };
-  },
   setElementIndex: (param, constraint) => {
     return {
       type: 'SET_ELEMENT_INDEX',
@@ -164,12 +152,6 @@ export const networkActions = {
       payload: param
     };
   },
-  setBeatIndex: param => {
-    return {
-      type: 'SET_BEAT_INDEX',
-      payload: param
-    };
-  },
   saveNetwork: () => {
     return {
       type: 'SAVE_NETWORK'
@@ -208,6 +190,21 @@ export const networkActions = {
     return {
       type: 'DELETE_PIANO_ROLL_FOR_ELEMENT',
       index: index
+    };
+  },
+  setSoloed: () => {
+    return {
+      type: 'SET_SOLOED'
+    };
+  },
+  setMuted: () => {
+    return {
+      type: 'SET_MUTED'
+    };
+  },
+  isSomethingMutedOrSoloed: () => {
+    return {
+      type: 'IS_SOMETHING_MUTED_OR_SOLOED'
     };
   }
 };

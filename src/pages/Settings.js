@@ -7,6 +7,7 @@ import { useFirebase, useFirestore, useFirestoreConnect } from 'react-redux-fire
 import { defaultConfig } from '../config';
 import { Redirect } from 'react-router-dom';
 import * as Routes from '../constants/routes';
+import { DeleteAccountModal } from '../components/modals/';
 
 const Settings = () => {
   const { profile } = useSelector(state => state.firebase);
@@ -39,19 +40,20 @@ const Settings = () => {
     button: {
       margin: '20px 20px 20px 0px',
       display: 'block',
-      width: '100px',
+      width: '150px',
       height: '40px',
       backgroundColor: theme && theme.background,
       color: theme && theme.text,
       borderWidth: '2px',
       borderColor: theme && theme.text,
+      fontSize: '16px',
       '&:disabled': {
         visibility: 'hidden'
       }
     },
     delete: {
-      color: theme && (theme.name === 'light' ? theme.actinide : theme.alkaliMetal),
-      borderColor: theme && (theme.name === 'light' ? theme.actinide : theme.alkaliMetal)
+      color: theme && theme.warningText,
+      borderColor: theme && theme.warningText
     }
   });
 
@@ -94,6 +96,11 @@ const Settings = () => {
     }
   };
 
+  const showAccountModal = () => {
+    dispatch(configActions.setModal(DeleteAccountModal, deleteAccount, false));
+    dispatch(networkActions.setModalVisible(true));
+  };
+
   const deleteAccount = () => {
     firestore
       .collection('config')
@@ -132,9 +139,11 @@ const Settings = () => {
         <button className={classes.button} onClick={restoreDefaults}>
           restore defaults
         </button>
-        <button className={`${classes.button} ${classes.delete}`} onClick={deleteAccount}>
-          delete account
-        </button>
+        {login.valid && profile.email && (
+          <button className={`${classes.button} ${classes.delete}`} onClick={showAccountModal}>
+            delete account
+          </button>
+        )}
       </div>
       {!login.valid && profile.email && <Redirect to={Routes.HOME} />}
     </div>

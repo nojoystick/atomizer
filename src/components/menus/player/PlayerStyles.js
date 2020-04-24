@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/styles';
 
 const PlayerStyles = makeStyles({
   player: {
-    width: '500px',
+    width: '570px',
     height: '80px',
     border: props => props.theme && `3px solid ${props.theme.text}`,
     backgroundColor: props => props.theme && props.theme.background,
@@ -19,7 +19,6 @@ const PlayerStyles = makeStyles({
     height: '48px',
     backgroundColor: props => props.theme && props.theme.background,
     border: 'none',
-    outline: 'none',
     padding: '0px',
     boxSizing: 'border-box',
     '&:hover': {
@@ -52,7 +51,6 @@ const PlayerStyles = makeStyles({
     width: '45px',
     fontFamily: 'Inconsolata',
     fontSize: '14px',
-    outline: 'none',
     border: 'none',
     display: 'inline-block',
     backgroundColor: props => props.theme && props.theme.background,
@@ -73,7 +71,6 @@ const PlayerStyles = makeStyles({
     zIndex: '3',
     borderWidth: '0px 0px 2px 0px !important',
     borderColor: `${props => props.theme && props.theme.text} $important`,
-    outline: 'none !important',
     boxShadow: 'none !important',
     padding: '0px !important',
     margin: 'auto',
@@ -81,8 +78,7 @@ const PlayerStyles = makeStyles({
     marginBottom: '10px',
     display: 'inline',
     '&:hover': {
-      borderColor: `${props => props.theme && props.theme.text} !important`,
-      outline: 'none'
+      borderColor: `${props => props.theme && props.theme.text} !important`
     },
     '> & span': {
       width: '23px'
@@ -135,6 +131,36 @@ const PlayerStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  msContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    height: '100%',
+    paddingRight: '10px'
+  },
+  ms: {
+    width: '30px',
+    height: '30px',
+    backgroundColor: 'transparent',
+    border: props => `3px solid ${props.theme && props.theme.text}`,
+    padding: '0px',
+    fontFamily: 'Inconsolata',
+    fontSize: '18px',
+    fontWeight: '600',
+    '&:hover': {
+      opacity: '0.6'
+    }
+  },
+  tooltip: {
+    height: '40px',
+    display: 'flex'
+  },
+  tooltipText: {
+    display: 'block',
+    color: props => props.theme && props.theme.background,
+    fontSize: '14px',
+    height: '35px'
   }
 });
 

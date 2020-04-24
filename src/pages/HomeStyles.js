@@ -10,7 +10,6 @@ const HomeStyles = makeStyles({
   },
   button: {
     position: 'absolute',
-    outline: 'none',
     transition: 'bottom 0.5s, left 0.5s, right 0.5s',
     backgroundColor: props => props.theme && props.theme.background,
     color: props => props.theme && props.theme.text,

@@ -132,7 +132,7 @@ const useSideMenuData = () => {
 };
 
 const nodeEditorData = {
-  label: 'send to node editor',
+  label: 'send to lab',
   action: networkActions.sendToLab,
   icon: IconSet.edit,
   viewBox: '0 0 30 30',
