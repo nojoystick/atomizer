@@ -3,12 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import Network from '../components/network/Network';
 import MenuPanel from '../components/menus/main/MenuPanel';
-import SideMenuPanel from '../components/menus/network-editor/SideMenuPanel';
-import NodeDetailPanel from '../components/menus/node-detail/NodeDetailPanel';
+import Lab from '../components/node-creator/Lab';
 import PlayerContainer from '../components/menus/player/PlayerContainer';
+import EditorContainer from '../components/menus/network-editor/EditorContainer';
 import Icon from '../components/Icon';
 import IconSet from '../constants/icon-set';
-import { sizeConstants } from '../config';
 import { useResizer, useHotkeys, useElementIndexHotkeys } from '../utils/hotkeys';
 import { useSelector, useDispatch } from 'react-redux';
 import { viewActions } from '../redux/actions';
@@ -17,11 +16,11 @@ import HomeStyles from './HomeStyles';
 
 const Home = () => {
   const [show, setShow] = useState(false);
-  const { menuVisible, sideMenuVisible, nodeDetailVisible } = useSelector(state => state.view);
+  const { menuVisible, labVisible, screenInfo } = useSelector(state => state.view);
   const theme = useSelector(state => state.network.theme);
   const audio = useSelector(state => state.network.audio);
 
-  const classes = HomeStyles({ theme: theme, menuVisible: menuVisible, sideMenuVisible: sideMenuVisible });
+  const classes = HomeStyles({ theme: theme, menuVisible: menuVisible, labVisible: labVisible, screenInfo: screenInfo });
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -33,10 +32,10 @@ const Home = () => {
   useElementIndexHotkeys('Home');
   usePlayer();
 
-  const getExpandIcon = (className, rotation, visible) => {
+  const getExpandIcon = (visible, rotation) => {
     return (
       <Icon
-        className={className}
+        className={classes.expandIcon}
         style={{ transform: `rotate(${visible ? rotation[0] + 'deg' : rotation[1] + 'deg'})` }}
         fill={theme && theme.text}
         viewBox='3 5 10 5'
@@ -47,40 +46,25 @@ const Home = () => {
 
   return (
     <div className={show ? 'page show' : 'page hide'}>
-      <PlayerContainer hideSourceOnDrag={true} />
+      <PlayerContainer />
+      <EditorContainer />
       <Network />
-      <SideMenuPanel />
       <MenuPanel />
-      <NodeDetailPanel />
-
+      <Lab />
       <button
-        className={`${classes.button} ${classes.sideMenuButton}`}
-        onClick={() => dispatch(viewActions.setSideMenuVisible(!sideMenuVisible))}
-      >
-        {getExpandIcon(classes.expandIcon, [90, 270], sideMenuVisible)}
-      </button>
-      <button
-        className={`${classes.button} ${classes.menuButton}`}
+        className={`${classes.button} ${classes.menuButton} ${screenInfo.isMobile && classes.menuButtonMobile}`}
         onClick={() => dispatch(viewActions.setMenuVisible(!menuVisible))}
       >
-        {getExpandIcon(classes.expandIcon, [180, 0], menuVisible)}
+        {getExpandIcon(menuVisible, [180, 0])}
       </button>
       <button
-        className={`${classes.button} ${classes.menuButton}`}
-        style={getDetailStyle(sideMenuVisible)}
-        onClick={() => dispatch(viewActions.setNodeDetailVisible(!nodeDetailVisible))}
+        className={`${classes.button} ${screenInfo.isMobile ? classes.labButtonMobile : classes.labButton}`}
+        onClick={() => dispatch(viewActions.setLabVisible(!labVisible))}
       >
-        {getExpandIcon(classes.expandIcon, [180, 0], nodeDetailVisible)}
+        {getExpandIcon(labVisible, screenInfo.isMobile ? [180, 0] : [90, 270])}
       </button>
     </div>
   );
-};
-
-const getDetailStyle = sideMenuVisible => {
-  return {
-    left: 'unset',
-    right: `${sideMenuVisible ? sizeConstants.SIDE_MENU_SIZE - 5 + 'px' : '40px'}`
-  };
 };
 
 export default Home;

@@ -13,9 +13,9 @@ export const viewActions = {
       screenSize: screenSize
     };
   },
-  setNodeDetailVisible: param => {
+  setLabVisible: param => {
     return {
-      type: 'SET_NODE_DETAIL_VISIBLE',
+      type: 'SET_LAB_VISIBLE',
       payload: param
     };
   },

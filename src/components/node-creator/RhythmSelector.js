@@ -53,7 +53,7 @@ const useStyles = makeStyles({
     fontFamily: 'Inconsolata',
     fontSize: '20px',
     fontWeight: '600',
-    backgroundColor: props => props.theme && props.theme.background,
+    backgroundColor: 'transparent',
     color: props => props.theme && props.theme.text,
     border: 'none',
     opacity: '0.6',

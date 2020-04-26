@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { configActions, networkActions, viewActions } from '../redux/actions';
 import { DeleteModal } from '../components/modals';
-import useSideMenuData from '../components/menus/network-editor/side-menu-data';
+import useSideMenuData from '../components/menus/network-editor/editor-data';
 
 function useResizer() {
   const dispatch = useDispatch();
@@ -78,28 +78,6 @@ function useModalHotkeys(confirm, cancel) {
       document.removeEventListener('keydown', _onKeyDown);
     };
   }, [cancel, confirm, modalVisible]);
-}
-
-function useNodeDetailHotkeys(index, setIndex) {
-  const nodeDetailVisible = useSelector(state => state.view.nodeDetailVisible);
-  useEffect(() => {
-    const _onKeyDown = e => {
-      if (e.key === 'ArrowRight') {
-        setIndex(1, index);
-      } else if (e.key === 'ArrowLeft') {
-        setIndex(-1, index);
-      }
-    };
-
-    if (nodeDetailVisible) {
-      document.addEventListener('keydown', _onKeyDown);
-    } else {
-      document.removeEventListener('keydown', _onKeyDown);
-    }
-    return () => {
-      document.removeEventListener('keydown', _onKeyDown);
-    };
-  }, [index, nodeDetailVisible, setIndex]);
 }
 
 function useElementIndexHotkeys(context) {
@@ -215,12 +193,4 @@ function useHotkeys(enabled) {
   });
 }
 
-export {
-  useMultiSelectHotkeys,
-  useModalHotkeys,
-  useNodeDetailHotkeys,
-  useElementIndexHotkeys,
-  usePlayerHotkeys,
-  useResizer,
-  useHotkeys
-};
+export { useMultiSelectHotkeys, useModalHotkeys, useElementIndexHotkeys, usePlayerHotkeys, useResizer, useHotkeys };

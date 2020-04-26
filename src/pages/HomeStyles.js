@@ -11,7 +11,7 @@ const HomeStyles = makeStyles({
   button: {
     position: 'absolute',
     transition: 'bottom 0.5s, left 0.5s, right 0.5s',
-    backgroundColor: props => props.theme && props.theme.background,
+    backgroundColor: props => props.theme && props.theme.secondaryBackground,
     color: props => props.theme && props.theme.text,
     zIndex: 8001,
     boxSizing: 'border-box',
@@ -22,20 +22,32 @@ const HomeStyles = makeStyles({
   menuButton: {
     width: '100px',
     height: '36px',
-    left: '40px',
+    right: props => (props.labVisible ? props.screenInfo.width - 150 + 'px' : 'calc(50% - 50px)'),
     borderColor: props => props.theme && props.theme.text,
     borderWidth: '2px 2px 0px 2px',
-    bottom: props => (props.menuVisible ? sizeConstants.BOTTOM_MENU_SIZE - 10 + 'px' : '-10px'),
-    right: props => (props.sideMenuVisible ? sizeConstants.SIDE_MENU_SIZE - 5 + 'px' : '40px')
+    bottom: props => (props.menuVisible ? sizeConstants.BOTTOM_MENU_SIZE + 'px' : props.labVisible ? '80px' : '-10px')
   },
-  sideMenuButton: {
-    top: '52px',
+  menuButtonMobile: {
+    right: '50vw !important',
+    bottom: props => (props.labVisible || props.menuVisible ? sizeConstants.BOTTOM_MENU_SIZE + 'px' : '80px')
+  },
+  labButton: {
+    bottom: props => (props.menuVisible ? sizeConstants.BOTTOM_MENU_SIZE + 'px' : '40%'),
     width: '36px',
     height: '100px',
     marginLeft: '40px',
+    zIndex: '10000',
     borderColor: props => props.theme && props.theme.text,
     borderWidth: '2px 0px 2px 2px',
-    right: props => (props.sideMenuVisible ? sizeConstants.SIDE_MENU_SIZE - 4 + 'px' : '-6px')
+    right: props => (props.labVisible ? sizeConstants.SIDE_MENU_SIZE + 'px' : '0px')
+  },
+  labButtonMobile: {
+    width: '100px',
+    height: '36px',
+    borderColor: props => props.theme && props.theme.text,
+    borderWidth: '2px 2px 0px 2px',
+    bottom: props => (props.menuVisible || props.labVisible ? sizeConstants.BOTTOM_MENU_SIZE + 'px' : '80px'),
+    left: '50vw'
   }
 });
 

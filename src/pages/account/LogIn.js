@@ -75,7 +75,9 @@ const LogInForm = () => {
           Sign In
         </button>
         {login && login.message && (
-          <p className={`${classes.message} ${classes.offset}`}>login error, check your username and password and try again</p>
+          <p className={`${classes.message} ${classes.offset} ${classes.error}`}>
+            check your username and password and try again
+          </p>
         )}
       </form>
       {login && login.valid && <Redirect to={Routes.HOME} />}

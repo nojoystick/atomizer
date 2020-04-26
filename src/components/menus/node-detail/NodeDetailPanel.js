@@ -3,7 +3,6 @@ import ElementTile from '../../ElementTile';
 import Icon from '../../Icon';
 import IconSet from '../../../constants/icon-set';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNodeDetailHotkeys } from '../../../utils/hotkeys';
 import NodeDetailStyles from './NodeDetailStyles';
 import ModeSelector from '../../ModeSelector';
 import NodeDetailData from './node-detail-data';
@@ -24,7 +23,7 @@ const octaves = [
 ];
 
 const NodeDetailPanel = () => {
-  const { menuVisible, sideMenuVisible, nodeDetailVisible, screenInfo } = useSelector(state => state.view);
+  const { menuVisible, sideMenuVisible, screenInfo } = useSelector(state => state.view);
   const network = useSelector(state => state.network.network);
   const selectedNodes = useSelector(state => state.network.selectedNodes);
   const [nodeData, setNodeData] = useState(null);
@@ -37,7 +36,6 @@ const NodeDetailPanel = () => {
     theme: theme,
     menuVisible: menuVisible,
     sideMenuVisible: sideMenuVisible,
-    nodeDetailVisible: nodeDetailVisible,
     screenInfo: screenInfo
   };
 
@@ -69,8 +67,6 @@ const NodeDetailPanel = () => {
       setIndex(i);
     }
   };
-
-  useNodeDetailHotkeys(index, updateIndex);
 
   return (
     <div id='nodeDetailPanel' className={classes.nodeDetailPanel}>

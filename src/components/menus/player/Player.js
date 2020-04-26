@@ -5,7 +5,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrag } from 'react-dnd';
-import ItemTypes from './ItemTypes';
+import ItemTypes from '../../../config/ItemTypes';
 import Icon from '../../Icon';
 import IconSet from '../../../constants/icon-set';
 import { networkActions } from '../../../redux/actions';
@@ -21,10 +21,17 @@ const Player = ({ id, left, top, hideSourceOnDrag, setInteractible }) => {
   const somethingIsSoloed = useSelector(state => state.network.audio.somethingIsSoloed);
   const playing = useSelector(state => state.network.audio.playing);
   const theme = useSelector(state => state.network.theme);
+  const { screenInfo, labVisible } = useSelector(state => state.view);
 
   const [isDraggable, setIsDraggable] = useState(true);
-
-  const classes = PlayerStyles({ theme: theme, solo: somethingIsSoloed, mute: somethingIsMuted });
+  const styleProps = {
+    theme: theme,
+    solo: somethingIsSoloed,
+    mute: somethingIsMuted,
+    screenInfo: screenInfo,
+    labVisible: labVisible
+  };
+  const classes = PlayerStyles(styleProps);
   const dispatch = useDispatch();
   usePlayerHotkeys();
 
@@ -46,31 +53,44 @@ const Player = ({ id, left, top, hideSourceOnDrag, setInteractible }) => {
 
   return (
     <div ref={drag} className={classes.player} style={{ left, top }}>
-      <button className={classes.button} onClick={() => dispatch(networkActions.playOrPause())}>
-        <Icon
-          className={classes.playIcon}
-          fill={theme && theme.text}
-          viewBox='0 0 300 300'
-          path={playing ? IconSet.pause : IconSet.play}
-        />
-      </button>
-      <button className={classes.button} onClick={() => dispatch(networkActions.stop())}>
-        <Icon className={classes.stopIcon} fill={theme && theme.text} viewBox='0 0 300 300' path={IconSet.stop} />
-      </button>
-      <KeyDropdowns />
-      {PlayerData.map(inputSlider => {
-        return <InputSlider key={inputSlider.max} useStyles={PlayerStyles} {...inputSlider} setDraggable={setIsDraggable} />;
-      })}
+      <div className={classes.block}>
+        <span className={classes.row}>
+          <button className={classes.button} onClick={() => dispatch(networkActions.playOrPause())}>
+            <Icon
+              className={classes.playIcon}
+              fill={theme && theme.text}
+              viewBox='0 0 300 300'
+              path={playing ? IconSet.pause : IconSet.play}
+            />
+          </button>
+          <button className={`${classes.button} ${classes.stopButton}`} onClick={() => dispatch(networkActions.stop())}>
+            <Icon className={classes.stopIcon} fill={theme && theme.text} viewBox='0 0 300 300' path={IconSet.stop} />
+          </button>
+        </span>
+        <span className={classes.row}>
+          <KeyDropdowns renderInBody />
+        </span>
+      </div>
       <div className={classes.msContainer}>
         <MuteSoloButtons
           mute={somethingIsMuted}
           solo={somethingIsSoloed}
           onMute={networkActions.setMuted}
           onSolo={networkActions.setSoloed}
-          helpTextEnabled
           redux
         />
       </div>
+      {PlayerData.map(inputSlider => {
+        return (
+          <InputSlider
+            key={inputSlider.max}
+            useStyles={PlayerStyles}
+            useStylesProps={styleProps}
+            {...inputSlider}
+            setDraggable={setIsDraggable}
+          />
+        );
+      })}
     </div>
   );
 };

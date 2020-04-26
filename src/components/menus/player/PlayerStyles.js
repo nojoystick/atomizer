@@ -1,22 +1,42 @@
 import { makeStyles } from '@material-ui/styles';
+import { sizeConstants } from '../../../config';
 
 const PlayerStyles = makeStyles({
   player: {
-    width: '570px',
+    width: props =>
+      props.screenInfo && props.screenInfo.isMobile
+        ? '100%'
+        : props.labVisible && props.screenInfo.width < 1200
+        ? props.screenInfo.width - sizeConstants.SIDE_MENU_SIZE + 'px'
+        : '450px',
     height: '80px',
     border: props => props.theme && `3px solid ${props.theme.text}`,
     backgroundColor: props => props.theme && props.theme.background,
     position: 'absolute',
-    zIndex: '8000',
+    zIndex: '100000',
+    boxSizing: 'border-box',
     pointerEvents: 'auto',
     visibility: 'visible',
     display: 'flex',
+    alignItems: 'center',
+    boxShadow: props => props.theme && props.theme.boxShadow,
+    overflowX: 'auto',
+    overflowY: 'hidden',
+    transition: '0.5s'
+  },
+  block: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: '0px 10px',
     alignItems: 'center'
   },
   button: {
-    margin: '0px 10px 0px 10px',
-    width: '50px',
-    height: '48px',
+    width: '15px',
+    height: '25px',
     backgroundColor: props => props.theme && props.theme.background,
     border: 'none',
     padding: '0px',
@@ -25,14 +45,16 @@ const PlayerStyles = makeStyles({
       opacity: '0.4'
     }
   },
+  stopButton: {
+    marginLeft: '20px'
+  },
   playIcon: {
     width: '15px',
     height: '17px'
   },
   stopIcon: {
     width: '15px',
-    height: '15px',
-    marginRight: '20px'
+    height: '15px'
   },
   sliderGroup: {
     display: 'inline-block',
@@ -73,9 +95,6 @@ const PlayerStyles = makeStyles({
     borderColor: `${props => props.theme && props.theme.text} $important`,
     boxShadow: 'none !important',
     padding: '0px !important',
-    margin: 'auto',
-    marginTop: '10px',
-    marginBottom: '10px',
     display: 'inline',
     '&:hover': {
       borderColor: `${props => props.theme && props.theme.text} !important`
@@ -90,19 +109,11 @@ const PlayerStyles = makeStyles({
     }
   },
   parent: {
+    margin: '15px',
     display: 'flex',
-    justifyContent: 'center'
-  },
-  row: {
-    marginTop: '10px',
-    borderStyle: 'solid',
-    border: props => `3px solid ${props.theme && props.theme.text}`,
-    width: '350px',
-    height: '75px',
-    margin: '0px',
-    transition: '0.5s',
+    justifyContent: 'center',
     backgroundColor: props => props.theme && props.theme.background,
-    zIndex: '2'
+    border: props => props.theme && `3px solid ${props.theme.text}`
   },
   short: {
     width: '120px',

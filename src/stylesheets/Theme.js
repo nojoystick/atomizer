@@ -1,6 +1,8 @@
 const Theme = {
   dark: {
-    background: 'rgba(18,18,18,1)',
+    background: 'rgba(50,50,50,1)',
+    secondaryBackground: 'rgba(119, 119, 119, 0.5)',
+    secondaryBackgroundSolid: 'rgba(70, 70, 70, 1.0)',
     text: 'rgba(227,227,227,1)',
     warningText: '#cc935e',
     alertText: '#cc5e5e',
@@ -16,10 +18,15 @@ const Theme = {
     metalloid: '#4aa18e',
     lanthanide: '#94445d',
     actinide: '#a1404e',
+    boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.6)',
+    boxShadowLight: '0px 5px 10px rgba(0, 0, 0, .4)',
+    boxShadowColor: 'rgba(0, 0, 0, .6)',
     name: 'dark'
   },
   light: {
     background: 'rgba(250,250,250,1)',
+    secondaryBackground: 'rgba(230, 230, 230, 0.5)',
+    secondaryBackgroundSolid: 'rgba(230, 230, 230, 1.0)',
     text: 'rgba(18,18,18,1)',
     warningText: '#9c450a',
     alertText: '#a1404e',
@@ -35,6 +42,9 @@ const Theme = {
     metalloid: '#9f82ce',
     lanthanide: '#f3bbf0',
     actinide: '#ce7777',
+    boxShadow: '0px 10px 20px rgba(77, 97, 108, .24)',
+    boxShadowLight: '0px 5px 10px rgba(77, 97, 108, .08)',
+    boxShadowColor: 'rgba(77, 97, 108, .24)',
     name: 'light'
   }
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Icon from '../Icon';
 import IconSet from '../../constants/icon-set';
 import ElementTile from '../ElementTile';
@@ -8,12 +8,11 @@ import Select from 'react-dropdown-select';
 import { configActions, networkActions } from '../../redux/actions';
 import elements from '../../constants/elements';
 
-const ElementSelector = ({ element }) => {
-  const elementIndex = useSelector(state => state.network.elementIndex);
-  const [nodeData] = useState(null);
-  const dispatch = useDispatch();
-
+const ElementSelector = () => {
   const theme = useSelector(state => state.network.theme);
+  const elementIndex = useSelector(state => state.network.elementIndex);
+
+  const dispatch = useDispatch();
   const classes = NodeSettingsStyles({ theme: theme });
 
   const updateIndex = (val, ind) => {
@@ -26,7 +25,7 @@ const ElementSelector = ({ element }) => {
 
   return (
     <div id='nodeDetailPanel' className={classes.nodeDetailPanel}>
-      <div className={`${classes.nodeToolbar} ${nodeData ? classes.show : null}`}>
+      <div className={classes.nodeToolbar}>
         <button className={classes.scrollButton} onClick={() => updateIndex(-1, elementIndex)}>
           <Icon
             className={classes.scrollIcon}
@@ -36,7 +35,7 @@ const ElementSelector = ({ element }) => {
             path={IconSet.expandArrow}
           />
         </button>
-        <ElementTile nodeData={element} style={{ margin: '10px' }} />
+        <ElementTile style={{ margin: '10px' }} />
         <button className={classes.scrollButton} onClick={() => updateIndex(1, elementIndex)}>
           <Icon
             className={classes.scrollIcon}
@@ -55,6 +54,7 @@ const ElementSelector = ({ element }) => {
         values={[elements(theme)[elementIndex - 1]]}
         dropdownGap={0}
         dropdownHandle={false}
+        dropdownHeight='150px'
         labelField='dropdownLabel'
         onDropdownOpen={() => dispatch(configActions.setHotkeys(false))}
         onDropdownClose={() => dispatch(configActions.setHotkeys(true))}

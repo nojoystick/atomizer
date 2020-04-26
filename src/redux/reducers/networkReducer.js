@@ -5,7 +5,7 @@ import Theme from '../../stylesheets/Theme';
 import Audio from '../../audio/Audio';
 import { frequency, volume } from '../../constants/frequencies';
 import Node from '../../audio/Node';
-import PianoRollData from '../../audio/PianoRollData';
+import NodeData from '../../audio/NodeData';
 
 const defaultState = {
   theme: Theme.light,
@@ -19,6 +19,7 @@ const defaultState = {
   addEdgeState: false,
   multiSelectState: false,
   organizeState: false,
+  fit: false,
   audio: {
     playing: false,
     key: { label: 'A', value: 21 },
@@ -29,7 +30,7 @@ const defaultState = {
     lpFilterQ: 0.1,
     hpFilterFrequency: 0.1,
     hpFilterQ: 0.1,
-    pianoRollData: PianoRollData,
+    nodeData: NodeData,
     somethingIsMuted: false,
     somethingIsSoloed: false
   }
@@ -42,16 +43,7 @@ const networkReducer = (state = defaultState, action) => {
       const nodesCopy = state.graphInfo.nodes.slice();
       const x = action.payload.pointer.canvas.x;
       const y = action.payload.pointer.canvas.y;
-      const audioNode = new Node(
-        state.audio.pianoRollData[state.elementIndex],
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        state.audio.somethingIsSoloed
-      );
+      const audioNode = state.audio.nodeData[state.elementIndex];
       nodesCopy.push({ ...elements(state.theme)[state.elementIndex - 1], id: id, x: x, y: y, audioNode: audioNode });
       const edgesCopy = state.graphInfo.edges.slice();
       if (action.payload.nodes.length) {
@@ -70,16 +62,7 @@ const networkReducer = (state = defaultState, action) => {
       const nodes = state.graphInfo.nodes.slice();
       const nodeX = state.elementIndex % 2 ? 30 : -30;
       const nodeY = state.elementIndex % 3 ? 30 : -30;
-      const _audioNode = new Node(
-        state.audio.pianoRollData[state.elementIndex],
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        state.audio.somethingIsSoloed
-      );
+      const _audioNode = state.audio.nodeData[state.elementIndex];
       nodes.push({ ...elements(state.theme)[state.elementIndex - 1], id: _id, x: nodeX, y: nodeY, audioNode: _audioNode });
       return {
         ...state,
@@ -134,18 +117,6 @@ const networkReducer = (state = defaultState, action) => {
     case 'DELETE':
       return doDeletion(state);
 
-    case 'DELETE_PIANO_ROLL_FOR_ELEMENT':
-      if (state.audio.pianoRollData[action.index]) {
-        let pianoRollCopy = {};
-        Object.keys(state.audio.pianoRollData).forEach(key => {
-          // eslint-disable-next-line eqeqeq
-          if (key != action.index) {
-            pianoRollCopy = { ...pianoRollCopy, [key]: state.audio.pianoRollData[key] };
-          }
-        });
-        return { ...state, audio: { ...state.audio, pianoRollData: pianoRollCopy } };
-      } else return state;
-
     case 'EDIT_EDGE':
       state.network.editEdgeMode();
       return state;
@@ -153,7 +124,13 @@ const networkReducer = (state = defaultState, action) => {
     case 'FILTER_SELECTION':
       const select = filterSelection(state, action.payload);
       state.network.setSelection({ nodes: select });
-      return { ...state, selectedNodes: select };
+      const _elIndex = state.network.body.nodes[select[select.length - 1]]
+        ? state.network.body.nodes[select[select.length - 1]].options.atomicNumber
+        : state.elementIndex;
+      return { ...state, elementIndex: _elIndex, selectedNodes: select };
+
+    case 'FIT':
+      return { ...state, fit: action.payload !== undefined ? action.payload : true };
 
     case 'MULTISELECT':
       const { dragStart, event } = action.payload;
@@ -429,6 +406,9 @@ const networkReducer = (state = defaultState, action) => {
         }
       });
       return { ...state, audio: { ...state.audio, somethingIsSoloed: somethingSolo, somethingIsMuted: somethingMute } };
+
+    case 'CREATE_NODE_FOR_ELEMENT':
+      return { ...state, audio: { ...state.audio, nodeData: { ...state.audio.nodeData, [action.payload]: new Node() } } };
 
     default:
       return state;

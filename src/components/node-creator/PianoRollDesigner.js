@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Grid from './Grid';
 import RhythmSelector from './RhythmSelector';
 import { noteToWidth, dispositionToSemitones, semitonesToDisposition } from '../../constants/frequencies';
-import { useSelector, useDispatch } from 'react-redux';
-import NodeCreatorModalStyles from './NodeCreatorModalStyles';
+import { useSelector } from 'react-redux';
+import LabStyles from './LabStyles';
 import Note from '../../audio/Note';
-import { networkActions } from '../../redux/actions';
-import { transformElementToPureObject } from '../../audio/PianoRollData';
-import { useFirestore, useFirestoreConnect } from 'react-redux-firebase';
+import elements from '../../constants/elements';
 
 const noteToMod = {
   whole: null,
@@ -34,16 +32,19 @@ const initializePianoRoll = (note, height, pianoRoll) => {
   return arr;
 };
 
-const PianoRollDesigner = ({ element, pianoRoll, setPianoRoll, node, setNode, mode, setMode }) => {
+const PianoRollDesigner = () => {
+  const [pianoRoll, setPianoRoll] = useState(null);
   const theme = useSelector(state => state.network.theme);
   const screenInfo = useSelector(state => state.view.screenInfo);
   const disposition = useSelector(state => state.network.audio.disposition);
-  const pianoRollData = useSelector(state => state.network.audio.pianoRollData);
-  const profile = useSelector(state => state.firebase.profile);
-  const id = !profile.isEmpty ? profile.email : 'default';
+  const elementIndex = useSelector(state => state.network.elementIndex);
+  const node = useSelector(state => state.network.audio.nodeData[elementIndex]);
+  const [elementList] = useState(elements(theme));
+  const [element, setElement] = useState(elementList[elementIndex - 1]);
 
-  useFirestoreConnect(() => [{ collection: 'pianoRollData', doc: id }]);
-  const firestore = useFirestore();
+  useEffect(() => {
+    setElement(elementList[elementIndex - 1]);
+  }, [element, elementIndex, elementList]);
 
   const getHeightForDisposition = () => {
     return disposition === 'c' ? 13 : 8;
@@ -52,8 +53,7 @@ const PianoRollDesigner = ({ element, pianoRoll, setPianoRoll, node, setNode, mo
   const [note, setNote] = useState('eighth');
   const [height, setHeight] = useState();
 
-  const classes = NodeCreatorModalStyles({ screenInfo: screenInfo, theme: theme });
-  const dispatch = useDispatch();
+  const classes = LabStyles({ screenInfo: screenInfo, theme: theme });
 
   useEffect(() => {
     const h = getHeightForDisposition(disposition);
@@ -104,9 +104,8 @@ const PianoRollDesigner = ({ element, pianoRoll, setPianoRoll, node, setNode, mo
       });
       return notes[smallestNote];
     };
-    if (element && pianoRollData) {
-      updateNode(pianoRollData[element.atomicNumber]);
-      loadPianoRoll(pianoRollData[element.atomicNumber]);
+    if (element && node) {
+      loadPianoRoll(node.notes);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [element, disposition]);
@@ -123,52 +122,29 @@ const PianoRollDesigner = ({ element, pianoRoll, setPianoRoll, node, setNode, mo
         }
       });
     });
-    if (Object.keys(parsedRoll).length === 0) {
-      updateNode(null);
-      dispatch(networkActions.deletePianoRollForElement(element.atomicNumber));
-      firestore
-        .collection('pianoRollData')
-        .doc(id)
-        .delete();
-    } else {
-      updateNode(parsedRoll);
-      dispatch(networkActions.setPianoRollForElement(element.atomicNumber, parsedRoll));
-      !profile.isEmpty &&
-        firestore
-          .collection('pianoRollData')
-          .doc(id)
-          .update({ [element.atomicNumber]: transformElementToPureObject(parsedRoll) });
-    }
-  };
-
-  const updateNode = newNotes => {
-    setNode(node.getCloneWithNewRoll(newNotes));
+    Object.keys(parsedRoll).length === 0 ? node.setNotes(null) : node.setNotes(parsedRoll);
   };
 
   const clear = () => {
     setPianoRoll(initializePianoRoll(note, height));
+    save();
   };
 
   return (
     <div className={classes.content}>
       <RhythmSelector note={note} setNote={setNote} />
-      {pianoRoll && (
-        <Grid
-          width={noteToWidth[note]}
-          mode={mode}
-          pianoRoll={pianoRoll}
-          setPianoRoll={setPianoRoll}
-          height={height}
-          color={element.color}
-          save={save}
-        />
-      )}
+      <Grid
+        width={noteToWidth[note]}
+        node={node}
+        pianoRoll={pianoRoll}
+        setPianoRoll={setPianoRoll}
+        height={height}
+        color={element && element.color}
+        save={save}
+      />
       <div className={classes.buttonContainer}>
         <button className={`${classes.cancelButton} ${classes.button}`} onClick={clear}>
           clear
-        </button>
-        <button className={`${classes.button} ${classes.confirmButton}`} onClick={save}>
-          save
         </button>
       </div>
     </div>

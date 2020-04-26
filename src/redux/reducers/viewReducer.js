@@ -1,12 +1,13 @@
 const defaultState = {
   menuVisible: false,
   sideMenuVisible: false,
-  nodeDetailVisible: false,
+  labVisible: false,
   modalVisible: false,
   screenInfo: {
-    breakpoint: 800,
+    breakpoint: 600,
     width: window.innerWidth,
-    height: window.innerHeight
+    height: window.innerHeight,
+    isMobile: window.innerWidth < 600
   }
 };
 
@@ -18,16 +19,17 @@ const viewReducer = (state = defaultState, action) => {
     case 'SET_SIDE_MENU_VISIBLE':
       closeOthers(state, action, 'sideMenuVisible');
       return (state = { ...state, sideMenuVisible: action.payload });
-    case 'SET_NODE_DETAIL_VISIBLE':
-      closeOthers(state, action, 'nodeDetailVisible');
-      return (state = { ...state, nodeDetailVisible: action.payload });
+    case 'SET_LAB_VISIBLE':
+      closeOthers(state, action, 'labVisible');
+      return (state = { ...state, labVisible: action.payload });
     case 'SET_SCREEN_DIMENSIONS':
       return (state = {
         ...state,
         screenInfo: {
           ...state.screenInfo,
           width: action.payload.width,
-          height: action.payload.height
+          height: action.payload.height,
+          isMobile: action.payload.width < state.screenInfo.breakpoint
         }
       });
     case 'CLOSE_ALL':
@@ -37,7 +39,7 @@ const viewReducer = (state = defaultState, action) => {
   }
 };
 const closeOthers = (state, action, keepOpen) => {
-  if (state.screenInfo.width < state.screenInfo.breakpoint && action.payload) {
+  if (state.screenInfo.isMobile && action.payload) {
     Object.keys(state).forEach(key => {
       if (key !== keepOpen && key !== 'screenInfo') {
         state[key] = false;

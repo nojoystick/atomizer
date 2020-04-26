@@ -1,58 +1,78 @@
 import React from 'react';
 import ModeSelector from '../ModeSelector';
-import InputSlider from '../InputSlider';
-import KeyDropdowns from '../KeyDropdowns';
-import { tempoBounds } from '../../constants/audio-data';
-import PlayerStyles from '../menus/player/PlayerStyles';
-import { useSelector, useDispatch } from 'react-redux';
-import { networkActions } from '../../redux/actions';
-import Icon from '../Icon';
-import IconSet from '../../constants/icon-set';
+import { useSelector } from 'react-redux';
+import Select from 'react-dropdown-select';
+import useForceUpdate from '../../utils/useForceUpdate';
+import { makeStyles } from '@material-ui/styles';
 
-const PlayerEditor = ({ node, mode, setMode }) => {
-  const playing = useSelector(state => state.network.audio.playing);
+const octaves = [
+  { id: 0, dropdownLabel: '0', value: 0 },
+  { id: 1, dropdownLabel: '1', value: 1 },
+  { id: 2, dropdownLabel: '2', value: 2 },
+  { id: 3, dropdownLabel: '3', value: 3 },
+  { id: 4, dropdownLabel: '4', value: 4 },
+  { id: 5, dropdownLabel: '5', value: 5 },
+  { id: 6, dropdownLabel: '6', value: 6 }
+];
+
+const useStyles = makeStyles({
+  parent: {
+    margin: '15px',
+    width: '100%',
+    padding: '10px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    border: props => props.theme && `3px solid ${props.theme.text}`,
+    backgroundColor: props => props.theme && props.theme.background
+  },
+  dropdown: {
+    width: '50px',
+    maxWidth: '60px',
+    height: '18px !important',
+    minHeight: '18px !important',
+    fontFamily: 'Inconsolata',
+    fontWeight: '800',
+    zIndex: '3',
+    borderWidth: '0px 0px 2px 0px !important',
+    borderColor: `${props => props.theme && props.theme.text} $important`,
+    boxShadow: 'none !important',
+    padding: '0px !important',
+    display: 'inline',
+    '&:hover': {
+      borderColor: `${props => props.theme && props.theme.text} !important`
+    },
+    '> & span': {
+      width: '23px'
+    },
+    '& div': {
+      '& input': {
+        color: props => props.theme && props.theme.text
+      }
+    }
+  }
+});
+
+const PlayerEditor = () => {
   const theme = useSelector(state => state.network.theme);
-
-  const classes = PlayerStyles({ theme: theme });
-  const dispatch = useDispatch();
+  const classes = useStyles({ theme: theme });
+  const elementIndex = useSelector(state => state.network.elementIndex);
+  const node = useSelector(state => state.network.audio.nodeData[elementIndex]);
+  const forceUpdate = useForceUpdate();
 
   return (
     <>
-      <div className={classes.parent}>
-        <div className={`${classes.row} ${classes.short}`}>
-          <button className={classes.button} onClick={() => dispatch(networkActions.playOrPause())}>
-            <Icon
-              className={classes.playIcon}
-              fill={theme && theme.text}
-              viewBox='0 0 300 300'
-              path={playing ? IconSet.pause : IconSet.play}
-            />
-          </button>
-          <button className={classes.button} onClick={() => dispatch(networkActions.stop())}>
-            <Icon className={classes.stopIcon} fill={theme && theme.text} viewBox='0 0 300 300' path={IconSet.stop} />
-          </button>
-        </div>
-
-        <div className={`${classes.row} ${classes.med} ${classes.last}`}>
-          <InputSlider
-            useStyles={PlayerStyles}
-            label='tempo'
-            min={tempoBounds.min}
-            max={tempoBounds.max}
-            decimals={0}
-            defaultValue='masterTempo'
-            defaultValueConversion={1}
-            onChange={networkActions.setTempo}
-            globalValue={true}
-          />
-        </div>
-      </div>
-
-      <div className={classes.row}>
-        <div className={classes.parent} style={{ paddingTop: '5px' }}>
-          <ModeSelector mode={mode} audioNode={node} setMode={setMode} />
-          <KeyDropdowns renderInBody={true} style={{ marginTop: '13px', marginLeft: '-10px' }} />
-        </div>
+      <div className={classes.parent} style={{ paddingTop: '5px' }}>
+        <Select
+          options={octaves}
+          onChange={e => node.setOctave(e[0].value)}
+          className={classes.dropdown}
+          values={[octaves[4]]}
+          dropdownGap={0}
+          dropdownHandle={false}
+          labelField='dropdownLabel'
+        />
+        <ModeSelector mode={node.mode} audioNode={node} updateParent={forceUpdate} />
       </div>
     </>
   );

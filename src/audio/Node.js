@@ -1,5 +1,6 @@
 import defaultAudioData from '../constants/audio-data';
 import Audio from './Audio';
+import { transformElementToPureObject } from './PianoRollData';
 
 class Node {
   constructor(pianoRoll, osc, volume, intensity, mode, octave, pan, somethingIsSoloed) {
@@ -55,6 +56,19 @@ class Node {
   }
   getCloneWithNewRoll(roll) {
     return new Node(roll, this.osc, this.volume, this.intensity, this.mode, this.octave, this.pan);
+  }
+  transformToPureObject() {
+    return {
+      osc: this.osc,
+      volume: this.volume,
+      intensity: this.intensity,
+      mode: this.mode,
+      notes: transformElementToPureObject(this.notes),
+      octave: this.octave,
+      pan: this.pan,
+      mute: this.mute,
+      solo: this.solo
+    };
   }
 }
 

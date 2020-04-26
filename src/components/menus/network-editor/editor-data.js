@@ -1,14 +1,43 @@
-import { networkActions, viewActions } from '../../../redux/actions';
+import { networkActions } from '../../../redux/actions';
 import { useSelector } from 'react-redux';
 import IconSet from '../../../constants/icon-set';
 
-const useSideMenuData = () => {
+const useEditorData = () => {
   const defaultState = useSelector(state => state.network.defaultState);
   const addEdgeState = useSelector(state => state.network.addEdgeState);
   const multiSelectState = useSelector(state => state.network.multiSelectState);
   const organizeState = useSelector(state => state.network.organizeState);
   return {
-    INTERACT: [
+    file: [
+      {
+        label: 'save network',
+        action: networkActions.saveNetwork,
+        icon: {
+          path: IconSet.save,
+          viewBox: '0 0 600 600'
+        },
+        shortcut: ''
+      },
+      {
+        label: 'load network',
+        action: networkActions.loadNetwork,
+        icon: {
+          path: IconSet.load,
+          viewBox: '0 0 50 50'
+        },
+        shortcut: ''
+      },
+      {
+        label: 'new network',
+        action: networkActions.newNetwork,
+        icon: {
+          path: IconSet.newFile,
+          viewBox: '0 0 50 50'
+        },
+        shortcut: ''
+      }
+    ],
+    edit: [
       {
         label: 'add node',
         action: networkActions.addNodeFromMenu,
@@ -46,7 +75,7 @@ const useSideMenuData = () => {
         shortcut: 'f'
       }
     ],
-    MODE: [
+    mode: [
       {
         active: defaultState,
         label: 'pointer',
@@ -78,7 +107,7 @@ const useSideMenuData = () => {
         shortcut: 'e'
       }
     ],
-    VIEW: [
+    view: [
       {
         active: organizeState,
         label: 'organize',
@@ -91,54 +120,15 @@ const useSideMenuData = () => {
       },
       {
         label: 'fit',
-        action: viewActions.closeAll,
+        action: networkActions.fit,
         icon: {
           path: IconSet.fit,
           viewBox: '0 0 68 68'
         },
         shortcut: 'x'
       }
-    ],
-    FILE: [
-      {
-        label: 'save network',
-        action: networkActions.saveNetwork,
-        icon: {
-          path: IconSet.save,
-          viewBox: '0 0 600 600'
-        },
-        shortcut: ''
-      },
-      {
-        label: 'load network',
-        action: networkActions.loadNetwork,
-        icon: {
-          path: IconSet.load,
-          viewBox: '0 0 50 50'
-        },
-        shortcut: ''
-      },
-      {
-        label: 'new network',
-        action: networkActions.newNetwork,
-        icon: {
-          path: IconSet.newFile,
-          viewBox: '0 0 50 50'
-        },
-        shortcut: ''
-      }
     ]
   };
 };
 
-const nodeEditorData = {
-  label: 'send to lab',
-  action: networkActions.sendToLab,
-  icon: IconSet.edit,
-  viewBox: '0 0 30 30',
-  shortcut: ''
-};
-
-export default useSideMenuData;
-
-export { nodeEditorData };
+export default useEditorData;

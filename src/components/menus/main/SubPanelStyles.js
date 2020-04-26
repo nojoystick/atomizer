@@ -9,7 +9,8 @@ const SubPanelStyles = makeStyles({
     minWidth: '285px',
     height: '470px',
     margin: '15px',
-    backgroundColor: props => props.theme && props.theme.background
+    backgroundColor: props => props.theme && props.theme.background,
+    boxShadow: props => props.theme && props.theme.boxShadow
   },
   titleHeader: {
     fontSize: '20px',

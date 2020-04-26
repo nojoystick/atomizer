@@ -52,8 +52,8 @@ const Settings = () => {
       }
     },
     delete: {
-      color: theme && theme.warningText,
-      borderColor: theme && theme.warningText
+      color: theme && theme.alertText,
+      borderColor: theme && theme.alertText
     }
   });
 
@@ -123,15 +123,15 @@ const Settings = () => {
         <span className={classes.toggle}>
           <p className={classes.sliderLabel}>theme</p>
           <label className='switch'>
-            <input type='checkbox' onChange={toggleTheme} defaultChecked={theme === Theme.dark} />
+            <input type='checkbox' onChange={toggleTheme} defaultChecked={theme === Theme.dark} tabIndex='0' />
             <span className='toggleSlider'></span>
           </label>
         </span>
-        {screenInfo.width > 500 && (
+        {!screenInfo.isMobile && (
           <span className={classes.toggle}>
             <p className={classes.sliderLabel}>hotkeys</p>
             <label className='switch'>
-              <input type='checkbox' onChange={toggleHotkeys} defaultChecked={hotkeys} />
+              <input type='checkbox' onChange={toggleHotkeys} defaultChecked={hotkeys} tabIndex='0' />
               <span className='toggleSlider'></span>
             </label>
           </span>

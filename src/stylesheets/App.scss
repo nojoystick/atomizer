@@ -103,6 +103,7 @@ body,
   margin-top: 0px !important;
   max-height: 150px !important;
   border: 2px solid black !important;
+  z-index: 9999 !important;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -133,7 +134,7 @@ body,
   text-align: center;
   div {
     width: 25px !important;
-    height: 90px !important;
+    max-height: 90px !important;
     /* Hide scrollbar for Chrome, Safari and Opera */
     &::-webkit-scrollbar {
       display: none;
@@ -224,6 +225,7 @@ body,
 
 .slider:focus::-webkit-slider-thumb {
   background: white;
+  outline: 1px solid lightblue;
 }
 
 .slider:focus::-webkit-slider-runnable-track {

@@ -3,10 +3,11 @@ import React, { useState, useEffect } from 'react';
 import Graph from './Graph';
 import { useMultiSelectHotkeys } from '../../utils/hotkeys';
 import { useSelector, useDispatch } from 'react-redux';
-import { networkActions, viewActions } from '../../redux/actions';
+import { networkActions } from '../../redux/actions';
 
 const Network = () => {
-  const { menuVisible, sideMenuVisible, nodeDetailVisible, screenInfo } = useSelector(state => state.view);
+  const { menuVisible, labVisible, screenInfo } = useSelector(state => state.view);
+  const doFit = useSelector(state => state.network.fit);
   const network = useSelector(state => state.network.network);
   const options = useSelector(state => state.network.options);
   const graphInfo = useSelector(state => state.network.graphInfo);
@@ -18,20 +19,27 @@ const Network = () => {
   useMultiSelectHotkeys(setCtrl);
 
   useEffect(() => {
-    if (network && network.getSelectedNodes().length === 0) {
-      if (!menuVisible && !sideMenuVisible && !nodeDetailVisible) {
+    if (network) {
+      if (!menuVisible && !labVisible) {
         network.moveTo(fit(0, 0, 1.0));
-      } else if (nodeDetailVisible && screenInfo.width < screenInfo.breakpoint) {
-        network.moveTo(fit(0, screenInfo.height * 0.7, 0.3));
-      } else if (nodeDetailVisible && menuVisible) {
-        network.moveTo(fit(screenInfo.width * 0.7, screenInfo.height * 0.7, 0.3));
+      } else if (screenInfo.isMobile) {
+        network.moveTo(fit(0, screenInfo.height * 0.8, 0.3));
+      } else if (labVisible) {
+        network.moveTo(fit(screenInfo.width * 1.0, screenInfo.height * 0.8, 0.3));
       } else if (menuVisible) {
-        network.moveTo(fit(0, screenInfo.height * 0.7, 0.3));
-      } else if (nodeDetailVisible && !menuVisible) {
+        network.moveTo(fit(0, screenInfo.height * 0.8, 0.3));
+      } else if (!menuVisible) {
         network.moveTo(fit(screenInfo.width * 0.3, 0, 0.7));
       }
     }
-  }, [menuVisible, sideMenuVisible, nodeDetailVisible]);
+  }, [menuVisible, labVisible]);
+
+  useEffect(() => {
+    if (doFit) {
+      network.moveTo(fit(0, 0, 1.0));
+      dispatch(networkActions.fit(false));
+    }
+  }, [doFit]);
 
   const events = {
     doubleClick: function(event) {
@@ -57,15 +65,9 @@ const Network = () => {
     },
     selectNode: function(event) {
       dispatch(networkActions.filterSelection(event.nodes));
-      if (event.nodes) {
-        dispatch(viewActions.setNodeDetailVisible(true));
-      }
     },
     deselectNode: function(event) {
       dispatch(networkActions.filterSelection(event.nodes));
-      if (event.nodes.length === 0) {
-        dispatch(viewActions.setNodeDetailVisible(false));
-      }
     }
   };
 

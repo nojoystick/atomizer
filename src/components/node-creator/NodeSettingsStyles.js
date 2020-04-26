@@ -2,15 +2,15 @@ import { makeStyles } from '@material-ui/styles';
 
 const NodeSettingsStyles = makeStyles({
   nodeDetailPanel: {
-    borderStyle: 'solid',
-    border: props => `3px solid ${props.theme && props.theme.text}`,
+    margin: '15px',
     height: '180px',
-    width: '350px',
-    margin: '0px',
+    width: '100%',
     transition: '0.5s',
     backgroundColor: props => props.theme && props.theme.background,
     overflowY: 'scroll',
-    zIndex: '2'
+    zIndex: '2',
+    border: props => `3px solid ${props.theme && props.theme.text}`,
+    boxShadow: props => props.theme && props.theme.boxShadow
   },
   nodeHeader: {
     padding: '5px',
@@ -20,22 +20,6 @@ const NodeSettingsStyles = makeStyles({
     padding: '5px',
     display: 'block',
     fontSize: '1.5em'
-  },
-  placeholder: {
-    height: '60%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    transition: 'opacity 0.5s',
-    opacity: '0'
-  },
-  placeholderText: {
-    fontStyle: 'italic',
-    fontSize: '1.2em',
-    color: props => props.theme && props.theme.secondary,
-    height: '0px',
-    justifySelf: 'center',
-    alignSelf: 'center'
   },
   nodeToolbar: {
     width: '100%',
@@ -48,7 +32,7 @@ const NodeSettingsStyles = makeStyles({
     flexGrow: '1',
     height: '100px',
     border: 'none',
-    backgroundColor: props => props.theme && props.theme.background,
+    backgroundColor: 'transparent',
     '&:hover': {
       opacity: '0.4'
     }
@@ -93,7 +77,7 @@ const NodeSettingsStyles = makeStyles({
     minHeight: '18px !important',
     fontFamily: 'Inconsolata',
     fontWeight: '800',
-    zIndex: '3',
+    zIndex: '9000',
     borderWidth: '0px 0px 2px 0px !important',
     borderColor: `${props => props.theme && props.theme.text} $important`,
     color: props => props.theme && props.theme.text,

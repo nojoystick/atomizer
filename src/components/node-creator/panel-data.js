@@ -11,8 +11,7 @@ const VolumeData = audioNode => {
       defaultValue: audioNode.volume,
       defaultValueConversion: 127,
       globalValue: false,
-      key: audioNode.volume,
-      vertical: true
+      key: audioNode.volume
     },
     {
       label: 'intensity',
@@ -23,8 +22,7 @@ const VolumeData = audioNode => {
       defaultValue: audioNode.intensity,
       defaultValueConversion: 1,
       globalValue: false,
-      key: audioNode.intensity,
-      vertical: true
+      key: audioNode.intensity
     }
   ];
 };

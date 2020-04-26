@@ -1,15 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
+import elements from '../constants/elements';
 
-const ElementTile = ({ nodeData, style }) => {
+const ElementTile = ({ style }) => {
   const theme = useSelector(state => state.network.theme);
+  const elementIndex = useSelector(state => state.network.elementIndex);
+  const [elementList] = useState(elements(theme));
+  const [element, setElement] = useState(elementList[elementIndex - 1]);
+
+  useEffect(() => {
+    setElement(elementList[elementIndex - 1]);
+  }, [element, elementIndex, elementList]);
+
   const useStyles = makeStyles({
     elementTile: {
-      backgroundColor: nodeData
-        ? nodeData.color.background
-          ? nodeData.color.background
-          : nodeData.color
+      backgroundColor: element
+        ? element.color.background
+          ? element.color.background
+          : element.color
         : theme && theme.background,
       border: `2px solid ${theme && theme.text}`,
       width: '100px',
@@ -25,11 +34,11 @@ const ElementTile = ({ nodeData, style }) => {
   });
   const classes = useStyles();
 
-  if (!nodeData) {
+  if (!element) {
     return <div className='elementTile' />;
   }
 
-  const { title, dropdownLabel, weight, atomicNumber } = nodeData;
+  const { title, dropdownLabel, weight, atomicNumber } = element;
 
   return (
     <>

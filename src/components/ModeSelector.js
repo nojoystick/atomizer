@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
 
-const ModeSelector = ({ mode, audioNode, setMode, updateParent }) => {
+const ModeSelector = ({ mode, audioNode, updateParent }) => {
   const theme = useSelector(state => state.network.theme);
   const classes = useStyles({ theme: theme });
   const disposition = useSelector(state => state.network.audio.disposition);
@@ -28,9 +28,8 @@ const ModeSelector = ({ mode, audioNode, setMode, updateParent }) => {
   };
 
   const onClick = e => {
-    audioNode && audioNode.setMode(e.target.value);
-    setMode && setMode(e.target.value);
-    updateParent && updateParent();
+    audioNode.setMode(e.target.value);
+    updateParent();
   };
 
   const labelsToMap = labels[disposition] ? labels[disposition] : labels['M'];
@@ -56,7 +55,6 @@ const ModeSelector = ({ mode, audioNode, setMode, updateParent }) => {
 const useStyles = makeStyles({
   parent: {
     padding: '10px',
-    width: '70%',
     margin: '0px',
     display: 'inline-block'
   },

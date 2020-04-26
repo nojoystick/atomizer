@@ -7,12 +7,12 @@ import { useSelector } from 'react-redux';
 import MenuStyles from './MenuStyles';
 
 const MenuPanel = ({ show }) => {
-  const { menuVisible, screenInfo } = useSelector(state => state.view);
+  const { menuVisible, labVisible, screenInfo } = useSelector(state => state.view);
   const [showSideMenu, setShowSideMenu] = useState(false);
   const scrollRef = useRef(null);
   const theme = useSelector(state => state.network.theme);
 
-  const classes = MenuStyles({ theme: theme, menuVisible: show || menuVisible, screenInfo: screenInfo });
+  const classes = MenuStyles({ theme: theme, menuVisible: show || menuVisible, labVisible: labVisible, screenInfo: screenInfo });
   const subPanelData = useSubPanelData();
 
   /**

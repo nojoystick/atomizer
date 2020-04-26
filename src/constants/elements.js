@@ -14,7 +14,11 @@ const elements = theme => {
       opacity: 0.5,
       color: theme.nonMetal,
       category: 'nonMetal',
-      weight: 1.008
+      weight: 1.008,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 2,
@@ -24,7 +28,11 @@ const elements = theme => {
       title: 'Helium',
       color: theme.nobleGas,
       category: 'nobleGas',
-      weight: 4.0026
+      weight: 4.0026,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 3,
@@ -34,7 +42,11 @@ const elements = theme => {
       title: 'Lithium',
       color: theme.alkaliMetal,
       category: 'alkaliMetal',
-      weight: 6.94
+      weight: 6.94,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 4,
@@ -44,7 +56,11 @@ const elements = theme => {
       title: 'Beryllium',
       color: theme.alkaliMetal,
       category: 'alkaliMetal',
-      weight: 9.0122
+      weight: 9.0122,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 5,
@@ -54,7 +70,11 @@ const elements = theme => {
       title: 'Boron',
       color: theme.metalloid,
       category: 'metalloid',
-      weight: 10.81
+      weight: 10.81,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 6,
@@ -64,7 +84,11 @@ const elements = theme => {
       title: 'Carbon',
       color: theme.nonMetal,
       category: 'nonMetal',
-      weight: 12.011
+      weight: 12.011,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 7,
@@ -74,7 +98,11 @@ const elements = theme => {
       title: 'Nitrogen',
       color: theme.nonMetal,
       category: 'nonMetal',
-      weight: 14.007
+      weight: 14.007,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 8,
@@ -84,7 +112,11 @@ const elements = theme => {
       title: 'Oxygen',
       color: theme.nonMetal,
       category: 'nonMetal',
-      weight: 15.999
+      weight: 15.999,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 9,
@@ -94,7 +126,11 @@ const elements = theme => {
       title: 'Fluorine',
       color: theme.nonMetal,
       category: 'nonMetal',
-      weight: 18.998
+      weight: 18.998,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 10,
@@ -104,7 +140,11 @@ const elements = theme => {
       title: 'Neon',
       color: theme.nobleGas,
       category: 'nobleGas',
-      weight: 20.18
+      weight: 20.18,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 11,
@@ -114,7 +154,11 @@ const elements = theme => {
       title: 'Sodium',
       color: theme.alkaliMetal,
       category: 'alkaliMetal',
-      weight: 22.99
+      weight: 22.99,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 12,
@@ -124,7 +168,11 @@ const elements = theme => {
       title: 'Magnesium',
       color: theme.alkaliMetal,
       category: 'alkaliMetal',
-      weight: 24.305
+      weight: 24.305,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 13,
@@ -134,7 +182,11 @@ const elements = theme => {
       title: 'Aluminum',
       color: theme.postTransitionMetal,
       category: 'postTransitionMetal',
-      weight: 26.982
+      weight: 26.982,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 14,
@@ -144,7 +196,11 @@ const elements = theme => {
       title: 'Silicon',
       color: theme.metalloid,
       category: 'metalloid',
-      weight: 28.085
+      weight: 28.085,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 15,
@@ -154,7 +210,11 @@ const elements = theme => {
       title: 'Phosphorus',
       color: theme.nonMetal,
       category: 'nonMetal',
-      weight: 30.974
+      weight: 30.974,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 16,
@@ -164,7 +224,11 @@ const elements = theme => {
       title: 'Sulfur',
       color: theme.nonMetal,
       category: 'nonMetal',
-      weight: 32.06
+      weight: 32.06,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 17,
@@ -174,7 +238,11 @@ const elements = theme => {
       title: 'Chlorine',
       color: theme.nonMetal,
       category: 'nonMetal',
-      weight: 35.45
+      weight: 35.45,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 18,
@@ -184,7 +252,11 @@ const elements = theme => {
       title: 'Argon',
       color: theme.nobleGas,
       category: 'nobleGas',
-      weight: 39.948
+      weight: 39.948,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 19,
@@ -194,7 +266,11 @@ const elements = theme => {
       title: 'Potassium',
       color: theme.alkaliMetal,
       category: 'alkaliMetal',
-      weight: 39.098
+      weight: 39.098,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 20,
@@ -204,7 +280,11 @@ const elements = theme => {
       title: 'Calcium',
       color: theme.alkaliMetal,
       category: 'alkaliMetal',
-      weight: 40.078
+      weight: 40.078,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 21,
@@ -214,7 +294,11 @@ const elements = theme => {
       title: 'Scandium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 44.956
+      weight: 44.956,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 22,
@@ -224,7 +308,11 @@ const elements = theme => {
       title: 'Titanium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 47.867
+      weight: 47.867,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 23,
@@ -234,7 +322,11 @@ const elements = theme => {
       title: 'Vanadium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 50.942
+      weight: 50.942,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 24,
@@ -244,7 +336,11 @@ const elements = theme => {
       title: 'Chromium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 51.996
+      weight: 51.996,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 25,
@@ -254,7 +350,11 @@ const elements = theme => {
       title: 'Manganese',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 54.938
+      weight: 54.938,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 26,
@@ -264,7 +364,11 @@ const elements = theme => {
       title: 'Iron',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 55.845
+      weight: 55.845,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 27,
@@ -274,7 +378,11 @@ const elements = theme => {
       title: 'Cobalt',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 58.933
+      weight: 58.933,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 28,
@@ -284,7 +392,11 @@ const elements = theme => {
       title: 'Nickel',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 58.693
+      weight: 58.693,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 29,
@@ -294,7 +406,11 @@ const elements = theme => {
       title: 'Copper',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 63.546
+      weight: 63.546,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 30,
@@ -304,7 +420,11 @@ const elements = theme => {
       title: 'Zinc',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 65.38
+      weight: 65.38,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 31,
@@ -314,7 +434,11 @@ const elements = theme => {
       title: 'Gallium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 69.723
+      weight: 69.723,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 32,
@@ -324,7 +448,11 @@ const elements = theme => {
       title: 'Germanium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 72.63
+      weight: 72.63,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 33,
@@ -334,7 +462,11 @@ const elements = theme => {
       title: 'Arsenic',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 74.922
+      weight: 74.922,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 34,
@@ -344,7 +476,11 @@ const elements = theme => {
       title: 'Selenium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 78.971
+      weight: 78.971,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 35,
@@ -354,7 +490,11 @@ const elements = theme => {
       title: 'Bromine',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 79.904
+      weight: 79.904,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 36,
@@ -364,7 +504,11 @@ const elements = theme => {
       title: 'Krypton',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 83.798
+      weight: 83.798,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 37,
@@ -374,7 +518,11 @@ const elements = theme => {
       title: 'Rubidium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 85.468
+      weight: 85.468,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 38,
@@ -384,7 +532,11 @@ const elements = theme => {
       title: 'Strontium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 87.62
+      weight: 87.62,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 39,
@@ -394,7 +546,11 @@ const elements = theme => {
       title: 'Yttrium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 88.9
+      weight: 88.9,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 40,
@@ -404,7 +560,11 @@ const elements = theme => {
       title: 'Zirconium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 91.224
+      weight: 91.224,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 41,
@@ -414,7 +574,11 @@ const elements = theme => {
       title: 'Niobium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 92.906
+      weight: 92.906,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 42,
@@ -424,7 +588,11 @@ const elements = theme => {
       title: 'Molybdeum',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 95.95
+      weight: 95.95,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 43,
@@ -434,7 +602,11 @@ const elements = theme => {
       title: 'Technetium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 98
+      weight: 98,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 44,
@@ -444,7 +616,11 @@ const elements = theme => {
       title: 'Ruthenium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 101.07
+      weight: 101.07,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 45,
@@ -454,7 +630,11 @@ const elements = theme => {
       title: 'Rhodium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 102.91
+      weight: 102.91,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 46,
@@ -464,7 +644,11 @@ const elements = theme => {
       title: 'Palladium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 106.42
+      weight: 106.42,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 47,
@@ -474,7 +658,11 @@ const elements = theme => {
       title: 'Silver',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 107.87
+      weight: 107.87,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 48,
@@ -484,7 +672,11 @@ const elements = theme => {
       title: 'Cadmium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 112.41
+      weight: 112.41,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 49,
@@ -494,7 +686,11 @@ const elements = theme => {
       title: 'Indium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 114.82
+      weight: 114.82,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 50,
@@ -504,7 +700,11 @@ const elements = theme => {
       title: 'Tin',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 118.71
+      weight: 118.71,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 51,
@@ -514,7 +714,11 @@ const elements = theme => {
       title: 'Antimony',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 121.76
+      weight: 121.76,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 52,
@@ -524,7 +728,11 @@ const elements = theme => {
       title: 'Tellurium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 127.6
+      weight: 127.6,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 53,
@@ -534,7 +742,11 @@ const elements = theme => {
       title: 'Iodine',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 126.9
+      weight: 126.9,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 54,
@@ -544,7 +756,11 @@ const elements = theme => {
       title: 'Xenon',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 131.29
+      weight: 131.29,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 55,
@@ -554,7 +770,11 @@ const elements = theme => {
       title: 'Caesium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 132.91
+      weight: 132.91,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 56,
@@ -564,7 +784,11 @@ const elements = theme => {
       title: 'Barium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 137.33
+      weight: 137.33,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 57,
@@ -574,7 +798,11 @@ const elements = theme => {
       title: 'Lanthanium',
       color: theme.lanthanide,
       category: 'lanthanide',
-      weight: 138.91
+      weight: 138.91,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 58,
@@ -584,7 +812,11 @@ const elements = theme => {
       title: 'Cerium',
       color: theme.lanthanide,
       category: 'lanthanide',
-      weight: 140.12
+      weight: 140.12,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 59,
@@ -594,7 +826,11 @@ const elements = theme => {
       title: 'Praseodymium',
       color: theme.lanthanide,
       category: 'lanthanide',
-      weight: 140.91
+      weight: 140.91,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 60,
@@ -604,7 +840,11 @@ const elements = theme => {
       title: 'Neodymium',
       color: theme.lanthanide,
       category: 'lanthanide',
-      weight: 144.24
+      weight: 144.24,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 61,
@@ -614,7 +854,11 @@ const elements = theme => {
       title: 'Prometheum',
       color: theme.lanthanide,
       category: 'lanthanide',
-      weight: 145
+      weight: 145,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 62,
@@ -624,7 +868,11 @@ const elements = theme => {
       title: 'Samarium',
       color: theme.lanthanide,
       category: 'lanthanide',
-      weight: 150.36
+      weight: 150.36,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 63,
@@ -634,7 +882,11 @@ const elements = theme => {
       title: 'Europium',
       color: theme.lanthanide,
       category: 'lanthanide',
-      weight: 151.96
+      weight: 151.96,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 64,
@@ -644,7 +896,11 @@ const elements = theme => {
       title: 'Gadolinium',
       color: theme.lanthanide,
       category: 'lanthanide',
-      weight: 157.25
+      weight: 157.25,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 65,
@@ -654,7 +910,11 @@ const elements = theme => {
       title: 'Terbium',
       color: theme.lanthanide,
       category: 'lanthanide',
-      weight: 158.93
+      weight: 158.93,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 66,
@@ -664,7 +924,11 @@ const elements = theme => {
       title: 'Dysprosium',
       color: theme.lanthanide,
       category: 'lanthanide',
-      weight: 162.5
+      weight: 162.5,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 67,
@@ -674,7 +938,11 @@ const elements = theme => {
       title: 'Holmium',
       color: theme.lanthanide,
       category: 'lanthanide',
-      weight: 164.93
+      weight: 164.93,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 68,
@@ -684,7 +952,11 @@ const elements = theme => {
       title: 'Erbium',
       color: theme.lanthanide,
       category: 'lanthanide',
-      weight: 167.26
+      weight: 167.26,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 69,
@@ -694,7 +966,11 @@ const elements = theme => {
       title: 'Thulium',
       color: theme.lanthanide,
       category: 'lanthanide',
-      weight: 168.93
+      weight: 168.93,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 70,
@@ -704,7 +980,11 @@ const elements = theme => {
       title: 'Ytterbium',
       color: theme.lanthanide,
       category: 'lanthanide',
-      weight: 173.05
+      weight: 173.05,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 71,
@@ -714,7 +994,11 @@ const elements = theme => {
       title: 'Lutetium',
       color: theme.lanthanide,
       category: 'lanthanide',
-      weight: 174.97
+      weight: 174.97,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 72,
@@ -724,7 +1008,11 @@ const elements = theme => {
       title: 'Hafnium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 178.49
+      weight: 178.49,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 73,
@@ -734,7 +1022,11 @@ const elements = theme => {
       title: 'Tantalum',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 180.95
+      weight: 180.95,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 74,
@@ -744,7 +1036,11 @@ const elements = theme => {
       title: 'Tungsten',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 183.84
+      weight: 183.84,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 75,
@@ -754,7 +1050,11 @@ const elements = theme => {
       title: 'Rhenium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 186.21
+      weight: 186.21,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 76,
@@ -764,7 +1064,11 @@ const elements = theme => {
       title: 'Osmium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 190.23
+      weight: 190.23,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 77,
@@ -774,7 +1078,11 @@ const elements = theme => {
       title: 'Iridium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 192.22
+      weight: 192.22,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 78,
@@ -784,7 +1092,11 @@ const elements = theme => {
       title: 'Platinum',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 195.08
+      weight: 195.08,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 79,
@@ -794,7 +1106,11 @@ const elements = theme => {
       title: 'Gold',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 196.97
+      weight: 196.97,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 80,
@@ -804,7 +1120,11 @@ const elements = theme => {
       title: 'Mercury',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 200.59
+      weight: 200.59,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 81,
@@ -814,7 +1134,11 @@ const elements = theme => {
       title: 'Thallium',
       color: theme.postTransitionMetal,
       category: 'postTransitionMetal',
-      weight: 204.38
+      weight: 204.38,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 82,
@@ -824,7 +1148,11 @@ const elements = theme => {
       title: 'Lead',
       color: theme.postTransitionMetal,
       category: 'postTransitionMetal',
-      weight: 174.97
+      weight: 174.97,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 83,
@@ -834,7 +1162,11 @@ const elements = theme => {
       title: 'Bismuth',
       color: theme.postTransitionMetal,
       category: 'postTransitionMetal',
-      weight: 174.97
+      weight: 174.97,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 84,
@@ -844,7 +1176,11 @@ const elements = theme => {
       title: 'Polonium',
       color: theme.postTransitionMetal,
       category: 'postTransitionMetal',
-      weight: 174.97
+      weight: 174.97,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 85,
@@ -854,7 +1190,11 @@ const elements = theme => {
       title: 'Astatine',
       color: theme.metalloid,
       category: 'metalloid',
-      weight: 174.97
+      weight: 174.97,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 86,
@@ -864,7 +1204,11 @@ const elements = theme => {
       title: 'Radon',
       color: theme.nobleGas,
       category: 'nobleGas',
-      weight: 222
+      weight: 222,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 87,
@@ -874,7 +1218,11 @@ const elements = theme => {
       title: 'Francium',
       color: theme.alkaliMetal,
       category: 'alkaliMetal',
-      weight: 223
+      weight: 223,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 88,
@@ -884,7 +1232,11 @@ const elements = theme => {
       title: 'Radium',
       color: theme.alkaliMetal,
       category: 'alkaliMetal',
-      weight: 226
+      weight: 226,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 89,
@@ -894,7 +1246,11 @@ const elements = theme => {
       title: 'Actinium',
       color: theme.actinide,
       category: 'actinide',
-      weight: 227
+      weight: 227,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 90,
@@ -904,7 +1260,11 @@ const elements = theme => {
       title: 'Thorium',
       color: theme.actinide,
       category: 'actinide',
-      weight: 232.04
+      weight: 232.04,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 91,
@@ -914,7 +1274,11 @@ const elements = theme => {
       title: 'Protactinium',
       color: theme.actinide,
       category: 'actinide',
-      weight: 231.04
+      weight: 231.04,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 92,
@@ -924,7 +1288,11 @@ const elements = theme => {
       title: 'Uranium',
       color: theme.actinide,
       category: 'actinide',
-      weight: 238.03
+      weight: 238.03,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 93,
@@ -934,7 +1302,11 @@ const elements = theme => {
       title: 'Neptunium',
       color: theme.actinide,
       category: 'actinide',
-      weight: 237
+      weight: 237,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 94,
@@ -944,7 +1316,11 @@ const elements = theme => {
       title: 'Plutonium',
       color: theme.actinide,
       category: 'actinide',
-      weight: 244
+      weight: 244,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 95,
@@ -954,7 +1330,11 @@ const elements = theme => {
       title: 'Americium',
       color: theme.actinide,
       category: 'actinide',
-      weight: 243
+      weight: 243,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 96,
@@ -964,7 +1344,11 @@ const elements = theme => {
       title: 'Curium',
       color: theme.actinide,
       category: 'actinide',
-      weight: 247
+      weight: 247,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 97,
@@ -974,7 +1358,11 @@ const elements = theme => {
       title: 'Berkelium',
       color: theme.actinide,
       category: 'actinide',
-      weight: 247
+      weight: 247,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 98,
@@ -984,7 +1372,11 @@ const elements = theme => {
       title: 'Californium',
       color: theme.actinide,
       category: 'actinide',
-      weight: 251
+      weight: 251,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 99,
@@ -994,7 +1386,11 @@ const elements = theme => {
       title: 'Einsteinium',
       color: theme.actinide,
       category: 'actinide',
-      weight: 252
+      weight: 252,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 100,
@@ -1004,7 +1400,11 @@ const elements = theme => {
       title: 'Fermium',
       color: theme.actinide,
       category: 'actinide',
-      weight: 257
+      weight: 257,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 101,
@@ -1014,7 +1414,11 @@ const elements = theme => {
       title: 'Mendelevium',
       color: theme.actinide,
       category: 'actinide',
-      weight: 258
+      weight: 258,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 102,
@@ -1024,7 +1428,11 @@ const elements = theme => {
       title: 'Nobelium',
       color: theme.actinide,
       category: 'actinide',
-      weight: 259
+      weight: 259,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 103,
@@ -1034,7 +1442,11 @@ const elements = theme => {
       title: 'Lawrencium',
       color: theme.actinide,
       category: 'actinide',
-      weight: 266
+      weight: 266,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 104,
@@ -1044,7 +1456,11 @@ const elements = theme => {
       title: 'Rutherfordium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 267
+      weight: 267,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 105,
@@ -1054,7 +1470,11 @@ const elements = theme => {
       title: 'Dubnium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 268
+      weight: 268,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 106,
@@ -1064,7 +1484,11 @@ const elements = theme => {
       title: 'Seaborgium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 269
+      weight: 269,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 107,
@@ -1074,7 +1498,11 @@ const elements = theme => {
       title: 'Bohrium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 270
+      weight: 270,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 108,
@@ -1084,7 +1512,11 @@ const elements = theme => {
       title: 'Hassium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 270
+      weight: 270,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 109,
@@ -1094,7 +1526,11 @@ const elements = theme => {
       title: 'Meitnerium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 278
+      weight: 278,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 110,
@@ -1104,7 +1540,11 @@ const elements = theme => {
       title: 'Darmstadtium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 281
+      weight: 281,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 111,
@@ -1114,7 +1554,11 @@ const elements = theme => {
       title: 'Roentgenium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 282
+      weight: 282,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 112,
@@ -1124,7 +1568,11 @@ const elements = theme => {
       title: 'Copernicium',
       color: theme.transitionMetal,
       category: 'transitionMetal',
-      weight: 285
+      weight: 285,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 113,
@@ -1134,7 +1582,11 @@ const elements = theme => {
       title: 'Nihonium',
       color: theme.postTransitionMetal,
       category: 'postTransitionMetal',
-      weight: 286
+      weight: 286,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 114,
@@ -1144,7 +1596,11 @@ const elements = theme => {
       title: 'Flerovium',
       color: theme.postTransitionMetal,
       category: 'postTransitionMetal',
-      weight: 289
+      weight: 289,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 115,
@@ -1154,7 +1610,11 @@ const elements = theme => {
       title: 'Moscovium',
       color: theme.postTransitionMetal,
       category: 'postTransitionMetal',
-      weight: 290
+      weight: 290,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 116,
@@ -1164,7 +1624,11 @@ const elements = theme => {
       title: 'Livermorium',
       color: theme.postTransitionMetal,
       category: 'postTransitionMetal',
-      weight: 293
+      weight: 293,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 117,
@@ -1174,7 +1638,11 @@ const elements = theme => {
       title: 'Tennessine',
       color: theme.postTransitionMetal,
       category: 'postTransitionMetal',
-      weight: 294
+      weight: 294,
+      shadow: {
+        enabled: true,
+        color: theme.boxShadowColor
+      }
     },
     {
       atomicNumber: 118,

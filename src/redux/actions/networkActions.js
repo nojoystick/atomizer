@@ -30,6 +30,12 @@ export const networkActions = {
       payload: param
     };
   },
+  fit: param => {
+    return {
+      type: 'FIT',
+      payload: param
+    };
+  },
   addNodeFromClick: event => {
     return {
       type: 'ADD_NODE_CLICK',
@@ -179,17 +185,10 @@ export const networkActions = {
       payload: param
     };
   },
-  setPianoRollForElement: (index, payload) => {
+  createNodeForElement: param => {
     return {
-      type: 'SET_PIANO_ROLL_FOR_ELEMENT',
-      index: index,
-      payload: payload
-    };
-  },
-  deletePianoRollForElement: index => {
-    return {
-      type: 'DELETE_PIANO_ROLL_FOR_ELEMENT',
-      index: index
+      type: 'CREATE_NODE_FOR_ELEMENT',
+      payload: param
     };
   },
   setSoloed: () => {

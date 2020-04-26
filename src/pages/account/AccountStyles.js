@@ -45,6 +45,9 @@ const AccountStyles = makeStyles({
   },
   offset: {
     marginLeft: '30px'
+  },
+  error: {
+    color: props => props.theme && props.theme.alertText
   }
 });
 

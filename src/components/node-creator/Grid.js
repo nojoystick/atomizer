@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import { keysToNotesMap, modeToOffsetMap, modeToSemitoneOffsetMap } from '../../constants/frequencies';
 
-const Grid = ({ width, mode, pianoRoll, setPianoRoll, height, color }) => {
+const Grid = ({ width, node, pianoRoll, setPianoRoll, height, color, save }) => {
   const theme = useSelector(state => state.network.theme);
   const key = useSelector(state => state.network.audio.key);
   const disposition = useSelector(state => state.network.audio.disposition);
@@ -16,11 +16,12 @@ const Grid = ({ width, mode, pianoRoll, setPianoRoll, height, color }) => {
         const selCopy = pianoRoll.slice();
         selCopy[i][j] = selCopy[i][j] === -1 ? 1 : -1;
         setPianoRoll(selCopy);
+        save();
       }
     };
 
     const getNoteName = i => {
-      let index = height - 1 - i + (disposition === 'c' ? modeToSemitoneOffsetMap[mode] : modeToOffsetMap[mode]);
+      let index = height - 1 - i + (disposition === 'c' ? modeToSemitoneOffsetMap[node.mode] : modeToOffsetMap[node.mode]);
       if (index >= height) {
         index -= height - 1;
       }
@@ -63,7 +64,7 @@ const Grid = ({ width, mode, pianoRoll, setPianoRoll, height, color }) => {
       );
     };
     setTable(createTable());
-  }, [pianoRoll, setPianoRoll, height, mode, disposition, key.label, classes]);
+  }, [pianoRoll, setPianoRoll, height, disposition, key.label, classes, node.mode, save]);
   return <>{table}</>;
 };
 
