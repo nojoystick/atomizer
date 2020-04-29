@@ -80,49 +80,26 @@ function useModalHotkeys(confirm, cancel) {
   }, [cancel, confirm, modalVisible]);
 }
 
-function useElementIndexHotkeys(context) {
+function useElementIndexHotkeys() {
   const elementIndex = useSelector(state => state.network.elementIndex);
   const dispatch = useDispatch();
 
-  // ES6 code
-  function throttled(delay, fn) {
-    let lastCall = 0;
-    return function(...args) {
-      const now = new Date().getTime();
-      if (now - lastCall < delay) {
-        return;
-      }
-      lastCall = now;
-      return fn(...args);
-    };
-  }
-
-  const _onKeyDown = e => {
-    switch (context) {
-      case 'Home':
-        if (e.key === 'ArrowDown') {
-          dispatch(networkActions.setElementIndex(parseInt(elementIndex) + 1, true));
-        } else if (e.key === 'ArrowUp') {
-          dispatch(networkActions.setElementIndex(parseInt(elementIndex) - 1, true));
-        }
-        break;
-      case 'Lab':
-        if (e.key === 'ArrowRight') {
-          dispatch(networkActions.setElementIndex(parseInt(elementIndex) + 1));
-        } else if (e.key === 'ArrowLeft') {
-          dispatch(networkActions.setElementIndex(parseInt(elementIndex) - 1));
-        }
-        break;
-      default:
+  const _onKeyUp = e => {
+    if (e.key === 'ArrowDown') {
+      dispatch(networkActions.setElementIndex(parseInt(elementIndex) + 1, true));
+    } else if (e.key === 'ArrowUp') {
+      dispatch(networkActions.setElementIndex(parseInt(elementIndex) - 1, true));
+    } else if (e.key === 'ArrowRight') {
+      dispatch(networkActions.setElementIndex(parseInt(elementIndex) + 1));
+    } else if (e.key === 'ArrowLeft') {
+      dispatch(networkActions.setElementIndex(parseInt(elementIndex) - 1));
     }
   };
 
-  const handler = throttled(100, _onKeyDown);
-
   useEffect(() => {
-    document.addEventListener('keydown', handler);
+    document.addEventListener('keyup', _onKeyUp);
     return () => {
-      document.removeEventListener('keydown', handler);
+      document.removeEventListener('keyup', _onKeyUp);
     };
   });
 }

@@ -56,7 +56,7 @@ const LabStyles = makeStyles({
     position: 'relative',
     display: 'flex',
     alignContent: 'center',
-    width: props => (props.screenInfo.isMobile ? 'unset' : '600px'),
+    width: '100%',
     height: props => (props.screenInfo.isMobile ? '400px' : '400px'),
     backgroundColor: props => props.theme && props.theme.background,
     overflow: 'scroll',

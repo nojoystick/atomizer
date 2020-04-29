@@ -29,5 +29,12 @@ export const configActions = {
       username: username,
       email: email
     };
+  },
+  setItemToUpdate: (param, value) => {
+    return {
+      type: 'SET_ITEM_TO_UPDATE',
+      payload: param,
+      value: value
+    };
   }
 };

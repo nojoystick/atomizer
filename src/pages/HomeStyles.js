@@ -36,7 +36,7 @@ const HomeStyles = makeStyles({
     width: '36px',
     height: '100px',
     marginLeft: '40px',
-    zIndex: '10000',
+    zIndex: '8005',
     borderColor: props => props.theme && props.theme.text,
     borderWidth: '2px 0px 2px 2px',
     right: props => (props.labVisible ? sizeConstants.SIDE_MENU_SIZE + 'px' : '0px')

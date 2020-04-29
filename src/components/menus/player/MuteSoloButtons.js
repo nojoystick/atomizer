@@ -44,7 +44,7 @@ const MuteSoloButtons = ({ mute, solo, onMute, onSolo, redux, updateParent }) =>
           warningActive={solo === -1}
           onClick={onMute}
         />
-        <Button label='s' alertColor={theme && theme.highlightText} alertActive={solo === 1} onClick={onSolo} />
+        <Button label='s' alertColor={theme && theme.highlightText} alertActive={solo} onClick={onSolo} />
       </>
     </>
   );

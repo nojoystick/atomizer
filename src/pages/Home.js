@@ -29,7 +29,7 @@ const Home = () => {
 
   useHotkeys(Object.keys(audio.pianoRollData).length > 0);
   useResizer();
-  useElementIndexHotkeys('Home');
+  useElementIndexHotkeys();
   usePlayer();
 
   const getExpandIcon = (visible, rotation) => {

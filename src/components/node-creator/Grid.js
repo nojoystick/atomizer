@@ -2,13 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import { keysToNotesMap, modeToOffsetMap, modeToSemitoneOffsetMap } from '../../constants/frequencies';
+import Player from '../../audio/Player';
 
-const Grid = ({ width, node, pianoRoll, setPianoRoll, height, color, save }) => {
+const noteToMod = {
+  whole: null,
+  half: 8,
+  quarter: 4,
+  eighth: 2,
+  sixteenth: 1
+};
+
+const Grid = ({ width, node, pianoRoll, setPianoRoll, height, color, save, note }) => {
   const theme = useSelector(state => state.network.theme);
   const key = useSelector(state => state.network.audio.key);
   const disposition = useSelector(state => state.network.audio.disposition);
+  const rerender = useSelector(state => state.config.itemToUpdate);
   const [table, setTable] = useState(null);
-  const classes = useStyles({ theme: theme, height: height, width: width, color: color });
+  const classes = useStyles({ theme: theme, height: height, width: width, color: color, interval: Player.interval });
 
   useEffect(() => {
     const setNote = (i, j, e) => {
@@ -31,29 +41,30 @@ const Grid = ({ width, node, pianoRoll, setPianoRoll, height, color, save }) => 
       let table = [];
       for (let i = 0; i < height; ++i) {
         let children = [];
-        // increment across the pianoRoll here instaed of the for loop!!
         for (let j = -1; j < 16; ++j) {
-          // eslint-disable-next-line no-lone-blocks
-          {
-            j === -1
-              ? children.push(
-                  <td className={classes.scaleLabel} key={j}>
-                    {getNoteName(i)}
-                  </td>
-                )
-              : pianoRoll[i] &&
-                pianoRoll[i][j] &&
-                (pianoRoll[i][j] === -1 || pianoRoll[i][j] === 1) &&
-                children.push(
-                  <td className={classes.tableCell} key={j}>
-                    <button
-                      className={`${classes.button} ${pianoRoll && pianoRoll[i] && pianoRoll[i][j] !== -1 && classes.selected}`}
-                      onMouseDown={() => setNote(i, j)}
-                      onPointerEnter={e => setNote(i, j, e)}
-                    />
-                  </td>
-                );
-          }
+          const isPlaying = Math.floor(j / noteToMod[note]) === Math.floor(Player.beatIndex / noteToMod[note]);
+          j === -1
+            ? children.push(
+                <td className={classes.scaleLabel} key={rerender && rerender[0] === 'mode' && rerender[1] + 100}>
+                  {node && getNoteName(i)}
+                </td>
+              )
+            : pianoRoll[i] &&
+              pianoRoll[i][j] &&
+              (pianoRoll[i][j] === -1 || pianoRoll[i][j] === 1) &&
+              children.push(
+                <td className={classes.tableCell} key={j}>
+                  <button
+                    key={rerender && rerender[0] === 'player' && rerender[1] + 50}
+                    className={`${classes.button} ${pianoRoll &&
+                      pianoRoll[i] &&
+                      pianoRoll[i][j] !== -1 &&
+                      classes.selected} ${isPlaying && classes.playing}`}
+                    onMouseDown={() => setNote(i, j)}
+                    onPointerEnter={e => setNote(i, j, e)}
+                  />
+                </td>
+              );
         }
         table.push(<tr key={i}>{children}</tr>);
       }
@@ -64,7 +75,7 @@ const Grid = ({ width, node, pianoRoll, setPianoRoll, height, color, save }) => 
       );
     };
     setTable(createTable());
-  }, [pianoRoll, setPianoRoll, height, disposition, key.label, classes, node.mode, save]);
+  }, [pianoRoll, setPianoRoll, height, disposition, key.label, classes, node, save, rerender, note]);
   return <>{table}</>;
 };
 
@@ -85,16 +96,24 @@ const useStyles = makeStyles({
     fontFamily: 'Inconsolata'
   },
   button: {
+    boxSizing: 'border-box',
     width: '100%',
     height: props => (props.height === 8 ? '20px' : '15px !important'),
     backgroundColor: 'transparent',
-    border: props => `2px solid ${props.theme && props.theme.text}`,
+    opacity: '0.7',
+    border: props => `2px solid ${props.theme && props.theme.secondaryText}`,
+    boxShadow: props => props.theme && props.themeboxShadow,
     '&:hover': {
-      opacity: '0.5'
+      opacity: '0.3'
     }
   },
   selected: {
     backgroundColor: props => props.color
+  },
+  playing: {
+    border: props => `2px solid ${props.theme && props.theme.text}`,
+    boxShadow: props => props.theme && props.theme.boxShadowLight,
+    filter: 'brightness(110%)'
   }
 });
 

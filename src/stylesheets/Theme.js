@@ -4,6 +4,7 @@ const Theme = {
     secondaryBackground: 'rgba(119, 119, 119, 0.5)',
     secondaryBackgroundSolid: 'rgba(70, 70, 70, 1.0)',
     text: 'rgba(227,227,227,1)',
+    secondaryText: 'rgba(230, 230, 230, 0.8)',
     warningText: '#cc935e',
     alertText: '#cc5e5e',
     highlightText: '#c994c7',
@@ -20,6 +21,7 @@ const Theme = {
     actinide: '#a1404e',
     boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.6)',
     boxShadowLight: '0px 5px 10px rgba(0, 0, 0, .4)',
+    boxShadowDark: '0px 5px 5px rgba(0, 0, 0, 0.2)',
     boxShadowColor: 'rgba(0, 0, 0, .6)',
     name: 'dark'
   },
@@ -28,6 +30,7 @@ const Theme = {
     secondaryBackground: 'rgba(230, 230, 230, 0.5)',
     secondaryBackgroundSolid: 'rgba(230, 230, 230, 1.0)',
     text: 'rgba(18,18,18,1)',
+    secondaryText: 'rgba(50,50,50,0.8)',
     warningText: '#9c450a',
     alertText: '#a1404e',
     highlightText: '#8f518c',
@@ -44,6 +47,7 @@ const Theme = {
     actinide: '#ce7777',
     boxShadow: '0px 10px 20px rgba(77, 97, 108, .24)',
     boxShadowLight: '0px 5px 10px rgba(77, 97, 108, .08)',
+    boxShadowDark: '0px 5px 5px rgba(77, 97, 108, 0.8)',
     boxShadowColor: 'rgba(77, 97, 108, .24)',
     name: 'light'
   }

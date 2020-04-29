@@ -24,7 +24,8 @@ const useStyles = makeStyles({
     justifyContent: 'center',
     alignItems: 'center',
     border: props => props.theme && `3px solid ${props.theme.text}`,
-    backgroundColor: props => props.theme && props.theme.background
+    backgroundColor: props => props.theme && props.theme.background,
+    boxShadow: props => props.theme && props.theme.boxShadow
   },
   dropdown: {
     width: '50px',
@@ -58,21 +59,27 @@ const PlayerEditor = () => {
   const classes = useStyles({ theme: theme });
   const elementIndex = useSelector(state => state.network.elementIndex);
   const node = useSelector(state => state.network.audio.nodeData[elementIndex]);
-  const forceUpdate = useForceUpdate();
+  const forceUpdateMode = useForceUpdate('mode');
+  useForceUpdate('octave');
 
   return (
     <>
       <div className={classes.parent} style={{ paddingTop: '5px' }}>
-        <Select
-          options={octaves}
-          onChange={e => node.setOctave(e[0].value)}
-          className={classes.dropdown}
-          values={[octaves[4]]}
-          dropdownGap={0}
-          dropdownHandle={false}
-          labelField='dropdownLabel'
-        />
-        <ModeSelector mode={node.mode} audioNode={node} updateParent={forceUpdate} />
+        {node && (
+          <>
+            <Select
+              key={elementIndex}
+              options={octaves}
+              onChange={e => node.setOctave(e[0].value)}
+              className={classes.dropdown}
+              values={[{ dropdownLabel: node.octave, value: node.octave }]}
+              dropdownGap={0}
+              dropdownHandle={false}
+              labelField='dropdownLabel'
+            />
+            <ModeSelector mode={node.mode} audioNode={node} updateParent={forceUpdateMode} />
+          </>
+        )}
       </div>
     </>
   );

@@ -12,7 +12,8 @@ const defaultState = {
     username: '',
     email: ''
   },
-  hotkeys: true
+  hotkeys: true,
+  itemToUpdate: [null, null]
 };
 
 const configReducer = (state = defaultState, action) => {
@@ -35,6 +36,8 @@ const configReducer = (state = defaultState, action) => {
           email: action.email ? action.email : state.formFields.email
         }
       };
+    case 'SET_ITEM_TO_UPDATE':
+      return { ...state, itemToUpdate: [action.payload, action.value] };
     default:
       return state;
   }

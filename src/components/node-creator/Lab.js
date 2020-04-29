@@ -5,7 +5,9 @@ import OscillatorSettings from './OscillatorSettings';
 import LabStyles from './LabStyles';
 import ElementSelector from './ElementSelector';
 import PlayerEditor from './PlayerEditor';
-import { useElementIndexHotkeys } from '../../utils/hotkeys';
+import WaveformSelector from './WaveformSelector';
+import EnvelopeSettings from './EnvelopeSettings';
+import FilterSettings from './FilterSettings';
 import { networkActions } from '../../redux/actions';
 
 const Lab = () => {
@@ -18,6 +20,7 @@ const Lab = () => {
   useEffect(() => {
     if (!node) {
       dispatch(networkActions.createNodeForElement(elementIndex));
+      dispatch(networkActions.createNodeForElement(elementIndex + 1));
     }
   }, [dispatch, elementIndex, node]);
 
@@ -27,18 +30,18 @@ const Lab = () => {
     screenInfo: screenInfo,
     menuVisible: menuVisible
   });
-  useElementIndexHotkeys('Lab');
 
   return (
     <div className={screenInfo.isMobile ? classes.labMobile : classes.lab} id='lab'>
-      {node && (
-        <>
-          <ElementSelector />
-          <PianoRollDesigner />
-          <PlayerEditor />
-          <OscillatorSettings />
-        </>
-      )}
+      <>
+        <ElementSelector />
+        <PianoRollDesigner />
+        <OscillatorSettings />
+        <PlayerEditor />
+        <WaveformSelector />
+        <EnvelopeSettings />
+        <FilterSettings />
+      </>
     </div>
   );
 };

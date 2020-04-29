@@ -14,7 +14,10 @@ const InputSlider = ({
   onChange,
   setDraggable,
   globalValue,
-  vertical
+  vertical,
+  step,
+  stepInput,
+  smallLabel
 }) => {
   const audio = useSelector(state => state.network.audio);
   const theme = useSelector(state => state.network.theme);
@@ -58,22 +61,25 @@ const InputSlider = ({
   };
 
   return (
-    <div className={`${classes.sliderGroup} sliderContainer`}>
-      <label className={`${classes.sliderLabel} ${classes.vertical}`}>{label}</label>
+    <div className={`${vertical ? classes.verticalSliderGroup : classes.sliderGroup} sliderContainer`}>
+      <label className={`${classes.sliderLabel} ${smallLabel && classes.smallLabel} ${vertical && classes.verticalLabel}`}>
+        {label}
+      </label>
       {!vertical && (
         <input
           className={classes.input}
           type='number'
           id={label}
-          key={localAudio}
+          key={localAudio * Math.random()}
           min={min}
           max={max}
           defaultValue={localAudio && localAudio.toFixed ? localAudio.toFixed(decimals) : localAudio}
           onKeyDown={e => verify(onChange, min, max / defaultValueConversion, e)}
+          step={stepInput ? stepInput : 1}
         />
       )}
       <input
-        className={`slider ${classes.slider} ${vertical && 'vertical'}`}
+        className={`slider ${classes.slider} ${vertical && 'vertical'} ${vertical && classes.verticalSlider}`}
         type='range'
         id={label}
         key={renderSlider}
@@ -85,17 +91,19 @@ const InputSlider = ({
         onChange={e => sliderChange(onChange, e)}
         onMouseUp={globalValue ? e => sliderUp(onChange, e) : null}
         onKeyUp={globalValue ? e => sliderUp(onChange, e) : null}
+        step={step ? step : 1}
       />
       {vertical && (
         <input
-          className={classes.input}
+          className={classes.verticalInput}
           type='number'
           id={label}
-          key={localAudio}
+          key={localAudio + Math.random()}
           min={min}
           max={max}
           defaultValue={localAudio && localAudio.toFixed ? localAudio.toFixed(decimals) : localAudio}
           onKeyDown={e => verify(onChange, min, max / defaultValueConversion, e)}
+          step={stepInput ? stepInput : 1}
         />
       )}
     </div>

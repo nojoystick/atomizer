@@ -3,19 +3,30 @@ import Audio from './Audio';
 import { transformElementToPureObject } from './PianoRollData';
 
 class Node {
-  constructor(pianoRoll, osc, volume, intensity, mode, octave, pan, somethingIsSoloed) {
-    this.osc = osc ? osc : addOscillatorNode();
-    this.volume = volume ? volume : defaultAudioData.volume;
-    this.intensity = intensity ? intensity : defaultAudioData.intensity;
-    this.mode = mode ? mode : defaultAudioData.mode;
+  constructor(pianoRoll, somethingIsSoloed) {
+    this.notes = pianoRoll ? pianoRoll : null;
+    this.nodes = buildNodes();
+    this.volume = defaultAudioData.volume;
+    this.intensity = defaultAudioData.intensity;
+    this.mode = defaultAudioData.mode;
     this.notes = pianoRoll;
-    this.octave = octave ? octave : 4;
-    this.pan = pan ? pan : 0.0;
-    this.mute = false;
-    this.solo = somethingIsSoloed ? 1 : 0;
+    this.octave = defaultAudioData.octave;
+    this.pan = defaultAudioData.pan;
+    this.waveforms = defaultAudioData.waveforms;
+    this.attack = defaultAudioData.attack;
+    this.sustain = defaultAudioData.sustain;
+    this.decay = defaultAudioData.decay;
+    this.hpFilterFrequency = defaultAudioData.hpFilterFrequency;
+    this.hpFilterQ = defaultAudioData.hpFilterQ;
+    this.lpFilterFrequency = defaultAudioData.lpFilterFrequency;
+    this.lpFilterQ = defaultAudioData.lpFilterQ;
+    this.release = defaultAudioData.release;
+    this.mute = defaultAudioData.mute;
+    this.solo = somethingIsSoloed ? 1 : defaultAudioData.solo;
   }
 
   setVolume(_volume) {
+    this.nodes.gain.gain.setTargetAtTime(_volume, Audio.context.currentTime, 0.03);
     this.volume = _volume;
   }
   setIntensity(_intensity) {
@@ -31,15 +42,62 @@ class Node {
     this.octave = _octave;
   }
   setPan(_pan) {
+    this.nodes.panner.pan.setTargetAtTime(_pan, Audio.context.currentTime, 0.03);
     this.pan = _pan;
   }
+  setWaveforms(_waveforms) {
+    this.waveforms = _waveforms;
+  }
+  addWaveform(_waveform) {
+    this.waveforms.push(_waveform);
+  }
+  removeWaveform(_waveform) {
+    if (this.waveforms.length > 1) {
+      const filteredWaveforms = this.waveforms.filter(el => el !== _waveform);
+      this.waveforms = filteredWaveforms;
+    }
+  }
+  setAttack(_attack) {
+    this.attack = _attack;
+  }
+  setDecay(_decay) {
+    this.decay = _decay;
+  }
+  setSustain(_sustain) {
+    this.sustain = _sustain;
+  }
+  setRelease(_release) {
+    this.release = _release;
+  }
+  setLPFilterFrequency(_freq) {
+    this.nodes.lpFilter.frequency.setTargetAtTime(_freq, Audio.context.currentTime, 0.03);
+    this.lpFilterFrequency = _freq;
+  }
+  setLPFilterQ(_q) {
+    this.nodes.lpFilter.Q.setTargetAtTime(_q, Audio.context.currentTime, 0.03);
+    this.lpFilterQ = _q;
+  }
+  setHPFilterFrequency(_freq) {
+    this.nodes.hpFilter.frequency.setTargetAtTime(_freq, Audio.context.currentTime, 0.03);
+    this.hpFilterFrequency = _freq;
+  }
+  setHPFilterQ(_q) {
+    this.nodes.hpFilter.Q.setTargetAtTime(_q, Audio.context.currentTime, 0.03);
+    this.hpFilterQ = _q;
+  }
   setMute(_mute) {
+    this.nodes.gain.gain.setTargetAtTime(_mute ? 0 : this.volume, Audio.context.currentTime, 0.03);
     this.mute = _mute;
   }
   setSolo(_solo) {
+    this.nodes.gain.gain.setTargetAtTime(_solo === -1 ? 0 : this.volume, Audio.context.currentTime, 0.03);
     this.solo = _solo;
   }
+  parseSolo(somethingIsSoloed) {
+    this.solo = somethingIsSoloed ? 1 : 0;
+  }
   toggleMute() {
+    this.nodes.gain.gain.setTargetAtTime(this.mute ? this.volume : 0, Audio.context.currentTime, 0.03);
     this.mute = !this.mute;
   }
   toggleSolo() {
@@ -53,18 +111,21 @@ class Node {
         break;
       default:
     }
-  }
-  getCloneWithNewRoll(roll) {
-    return new Node(roll, this.osc, this.volume, this.intensity, this.mode, this.octave, this.pan);
+    this.nodes.gain.gain.setTargetAtTime(this.solo === -1 ? 0 : this.volume, Audio.context.currentTime, 0.03);
   }
   transformToPureObject() {
     return {
-      osc: this.osc,
+      nodes: transformElementToPureObject(this.nodes),
       volume: this.volume,
       intensity: this.intensity,
       mode: this.mode,
       notes: transformElementToPureObject(this.notes),
       octave: this.octave,
+      waveform: this.waveform,
+      attack: this.attack,
+      decay: this.decay,
+      sustain: this.sustain,
+      release: this.release,
       pan: this.pan,
       mute: this.mute,
       solo: this.solo
@@ -72,11 +133,35 @@ class Node {
   }
 }
 
-const addOscillatorNode = () => {
+const buildNodes = () => {
+  const gain = addGainNode();
+  const panner = buildPanner();
+  const hpFilter = buildFilter('highpass');
+  const lpFilter = buildFilter('lowpass');
+  buildSignalChain([panner, hpFilter, lpFilter, gain]);
+  return { gain, panner, lpFilter, hpFilter };
+};
+
+const buildPanner = () => {
+  const panner = Audio.context.createStereoPanner();
+  return panner;
+};
+
+const buildFilter = type => {
+  const filter = Audio.context.createBiquadFilter();
+  filter.type = type;
+  return filter;
+};
+
+const addGainNode = () => {
   const oscillatorGainNode = Audio.context.createGain();
-  oscillatorGainNode.gain.setValueAtTime(defaultAudioData.volume, Audio.context.currentTime);
-  oscillatorGainNode.connect(Audio.preampGainNode);
   return oscillatorGainNode;
+};
+
+const buildSignalChain = nodes => {
+  nodes.forEach((node, index) => {
+    node.connect(index < nodes.length - 1 ? nodes[index + 1] : Audio.preampGainNode);
+  });
 };
 
 export default Node;

@@ -24,12 +24,10 @@ const Network = () => {
         network.moveTo(fit(0, 0, 1.0));
       } else if (screenInfo.isMobile) {
         network.moveTo(fit(0, screenInfo.height * 0.8, 0.3));
-      } else if (labVisible) {
-        network.moveTo(fit(screenInfo.width * 1.0, screenInfo.height * 0.8, 0.3));
       } else if (menuVisible) {
         network.moveTo(fit(0, screenInfo.height * 0.8, 0.3));
       } else if (!menuVisible) {
-        network.moveTo(fit(screenInfo.width * 0.3, 0, 0.7));
+        network.moveTo(fit(screenInfo.width * 0.3, 0, 0.3));
       }
     }
   }, [menuVisible, labVisible]);

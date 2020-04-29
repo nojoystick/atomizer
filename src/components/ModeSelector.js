@@ -29,7 +29,7 @@ const ModeSelector = ({ mode, audioNode, updateParent }) => {
 
   const onClick = e => {
     audioNode.setMode(e.target.value);
-    updateParent();
+    updateParent && updateParent();
   };
 
   const labelsToMap = labels[disposition] ? labels[disposition] : labels['M'];

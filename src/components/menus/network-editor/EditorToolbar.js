@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useDrag } from 'react-dnd';
 import ItemTypes from '../../../config/ItemTypes';
 import EditorStyles from './EditorStyles';
-import { usePlayerHotkeys } from '../../../utils/hotkeys';
 import useEditorData from './editor-data';
 import Icon from '../../Icon';
 import IconSet from '../../../constants/icon-set';
@@ -22,7 +21,6 @@ const EditorToolbar = ({ id, right, top, hideSourceOnDrag, setInteractible }) =>
   const classes = EditorStyles({ theme: theme, screenInfo: screenInfo, isCollapsed: isCollapsed, labVisible: labVisible });
   const editorData = useEditorData();
   const dispatch = useDispatch();
-  usePlayerHotkeys();
   const [{ isDragging }, drag] = useDrag({
     item: { id, right, top, type: ItemTypes.PLAYER },
     collect: monitor => ({

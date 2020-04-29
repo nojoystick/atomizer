@@ -26,10 +26,6 @@ const defaultState = {
     disposition: 'M',
     masterGain: 0.5,
     masterTempo: 120,
-    lpFilterFrequency: 0.1,
-    lpFilterQ: 0.1,
-    hpFilterFrequency: 0.1,
-    hpFilterQ: 0.1,
     nodeData: NodeData,
     somethingIsMuted: false,
     somethingIsSoloed: false
@@ -44,6 +40,7 @@ const networkReducer = (state = defaultState, action) => {
       const x = action.payload.pointer.canvas.x;
       const y = action.payload.pointer.canvas.y;
       const audioNode = state.audio.nodeData[state.elementIndex];
+      audioNode.parseSolo(state.somethingIsSoloed);
       nodesCopy.push({ ...elements(state.theme)[state.elementIndex - 1], id: id, x: x, y: y, audioNode: audioNode });
       const edgesCopy = state.graphInfo.edges.slice();
       if (action.payload.nodes.length) {
@@ -63,6 +60,7 @@ const networkReducer = (state = defaultState, action) => {
       const nodeX = state.elementIndex % 2 ? 30 : -30;
       const nodeY = state.elementIndex % 3 ? 30 : -30;
       const _audioNode = state.audio.nodeData[state.elementIndex];
+      _audioNode.parseSolo(state.somethingIsSoloed);
       nodes.push({ ...elements(state.theme)[state.elementIndex - 1], id: _id, x: nodeX, y: nodeY, audioNode: _audioNode });
       return {
         ...state,

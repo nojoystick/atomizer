@@ -141,6 +141,7 @@ const PianoRollDesigner = () => {
         height={height}
         color={element && element.color}
         save={save}
+        note={note}
       />
       <div className={classes.buttonContainer}>
         <button className={`${classes.cancelButton} ${classes.button}`} onClick={clear}>

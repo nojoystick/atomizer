@@ -1,6 +1,16 @@
 import React from 'react';
 
-const Icon = ({ style = {}, fill = '#000', width = '100%', className = '', height = '100%', viewBox = '0 0 32 32', path }) => (
+const Icon = ({
+  style = {},
+  fill = '#000',
+  stroke = 'none',
+  width = '100%',
+  strokeWidth = '0',
+  className = '',
+  height = '100%',
+  viewBox = '0 0 32 32',
+  path
+}) => (
   <svg
     width={width}
     style={style}
@@ -10,19 +20,19 @@ const Icon = ({ style = {}, fill = '#000', width = '100%', className = '', heigh
     xmlns='http://www.w3.org/2000/svg'
     xmlnsXlink='http://www.w3.org/1999/xlink'
   >
-    {typeof path === 'string' && <path d={path} fill={fill} />}
+    {typeof path === 'string' && <path d={path} fill={fill} stroke={stroke} strokeWidth={strokeWidth} />}
     {path &&
       Array.isArray(path) &&
       path.map((d, index) => {
-        return <path d={d} fill={fill} key={index} />;
+        return <path d={d} fill={fill} stroke={stroke} key={index} strokeWidth={strokeWidth} />;
       })}
     {typeof path === 'object' && typeof path.path === 'string' ? (
-      <path d={path.path} fill={fill} />
+      <path d={path.path} fill={fill} stroke={stroke} strokeWidth={strokeWidth} />
     ) : (
       path.path &&
       Array.isArray(path.path) &&
       path.map((d, index) => {
-        return <path d={d} fill={fill} key={index} />;
+        return <path d={d} fill={fill} stroke={stroke} strokeWidth={strokeWidth} key={index} />;
       })
     )}
     {path.rect &&
