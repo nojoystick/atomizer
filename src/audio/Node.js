@@ -42,7 +42,7 @@ class Node {
     this.octave = _octave;
   }
   setPan(_pan) {
-    this.nodes.panner.pan.setTargetAtTime(_pan, Audio.context.currentTime, 0.03);
+    this.nodes.panner.setPosition(_pan, 0, 1 - Math.abs(_pan));
     this.pan = _pan;
   }
   setWaveforms(_waveforms) {
@@ -143,7 +143,8 @@ const buildNodes = () => {
 };
 
 const buildPanner = () => {
-  const panner = Audio.context.createStereoPanner();
+  const panner = Audio.context.createPanner();
+  panner.panningModel = 'equalpower';
   return panner;
 };
 
