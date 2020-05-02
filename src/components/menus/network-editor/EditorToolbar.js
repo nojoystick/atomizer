@@ -38,7 +38,7 @@ const EditorToolbar = ({ id, right, top, hideSourceOnDrag, setInteractible }) =>
   }
 
   const _onActionClick = action => {
-    dispatch(action.action());
+    dispatch(action.action(action.passDispatch && dispatch));
     if (action.label === 'delete selected') {
       dispatch(configActions.setModal(DeleteModal, networkActions.delete, true));
     }

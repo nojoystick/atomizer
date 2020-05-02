@@ -19,7 +19,7 @@ const defaultAudioData = {
 
 const tempoBounds = {
   min: 6,
-  max: 400
+  max: 250
 };
 
 const volumeBounds = {
@@ -44,7 +44,7 @@ const envelopeBounds = {
 
 const filterBounds = {
   frequency: {
-    min: 100,
+    min: 0,
     max: 20000
   },
   q: {

@@ -149,7 +149,7 @@ function useHotkeys(enabled) {
             if (action.label === 'delete selected') {
               dispatch(configActions.setModal(DeleteModal, networkActions.delete, true));
             }
-            dispatch(action.action());
+            dispatch(action.action(action.passDispatch && dispatch));
           }
         });
       });

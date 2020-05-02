@@ -114,7 +114,7 @@ const HPFilterData = audioNode => {
       defaultValue: audioNode.hpFilterFrequency,
       defaultValueConversion: 1,
       globalValue: false,
-      key: audioNode.hpFilterFrequency + 1000,
+      key: audioNode.hpFilterFrequency + 100,
       step: 1,
       stepInput: 1
     },
@@ -127,7 +127,7 @@ const HPFilterData = audioNode => {
       defaultValue: audioNode.hpFilterQ,
       defaultValueConversion: 1,
       globalValue: false,
-      key: audioNode.hpFilterQ + 100,
+      key: audioNode.hpFilterQ + 200,
       step: 1,
       stepInput: 1
     }
@@ -145,7 +145,7 @@ const LPFilterData = audioNode => {
       defaultValue: audioNode.lpFilterFrequency,
       defaultValueConversion: 1,
       globalValue: false,
-      key: audioNode.lpFilterFrequency + 2000,
+      key: audioNode.lpFilterFrequency + 100000,
       step: 1,
       stepInput: 1
     },
@@ -158,7 +158,7 @@ const LPFilterData = audioNode => {
       defaultValue: audioNode.lpFilterQ,
       defaultValueConversion: 1,
       globalValue: false,
-      key: audioNode.lpFilterQ + 1000,
+      key: audioNode.lpFilterQ + 350,
       step: 1,
       stepInput: 1
     }

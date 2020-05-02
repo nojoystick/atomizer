@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Icon from '../Icon';
 import IconSet from '../../constants/icon-set';
 import ElementTile from '../ElementTile';
@@ -11,6 +11,16 @@ import elements from '../../constants/elements';
 const ElementSelector = () => {
   const theme = useSelector(state => state.network.theme);
   const elementIndex = useSelector(state => state.network.elementIndex);
+  const [elementList, setElementList] = useState(elements(theme));
+  const [element, setElement] = useState(elementList[elementIndex]);
+
+  useEffect(() => {
+    setElementList(elements(theme));
+  }, [theme]);
+
+  useEffect(() => {
+    setElement(elementList[elementIndex]);
+  }, [elementIndex, elementList]);
 
   const dispatch = useDispatch();
   const classes = NodeSettingsStyles({ theme: theme });
@@ -22,6 +32,10 @@ const ElementSelector = () => {
   const onDropdownChange = item => {
     dispatch(networkActions.setElementIndex(item[0].atomicNumber));
   };
+
+  if (!element) {
+    return <div className='elementTile' />;
+  }
 
   return (
     <div id='nodeDetailPanel' className={classes.nodeDetailPanel}>

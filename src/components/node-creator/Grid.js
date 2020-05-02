@@ -42,7 +42,13 @@ const Grid = ({ width, node, pianoRoll, setPianoRoll, height, color, save, note 
       for (let i = 0; i < height; ++i) {
         let children = [];
         for (let j = -1; j < 16; ++j) {
-          const isPlaying = Math.floor(j / noteToMod[note]) === Math.floor(Player.beatIndex / noteToMod[note]);
+          const isPlaying =
+            Math.floor(j / noteToMod[note]) === Math.floor(Player.beatIndex / noteToMod[note]) &&
+            node &&
+            !node.mute &&
+            node.solo !== -1 &&
+            Player.nodesThisMeasure &&
+            Player.nodesThisMeasure.includes(node);
           j === -1
             ? children.push(
                 <td className={classes.scaleLabel} key={rerender && rerender[0] === 'mode' && rerender[1] + 100}>

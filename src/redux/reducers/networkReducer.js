@@ -6,12 +6,14 @@ import Audio from '../../audio/Audio';
 import { frequency, volume } from '../../constants/frequencies';
 import Node from '../../audio/Node';
 import NodeData from '../../audio/NodeData';
+import { networkActions } from '../actions';
 
 const defaultState = {
   theme: Theme.light,
   network: null,
   options: networkData.options,
   graphInfo: networkData.defaultData,
+  shouldUpdateNetwork: 0,
   elementIndex: 1,
   selectedNodes: null,
   modalVisible: false,
@@ -42,16 +44,13 @@ const networkReducer = (state = defaultState, action) => {
       const audioNode = state.audio.nodeData[state.elementIndex];
       audioNode.parseSolo(state.somethingIsSoloed);
       nodesCopy.push({ ...elements(state.theme)[state.elementIndex - 1], id: id, x: x, y: y, audioNode: audioNode });
-      const edgesCopy = state.graphInfo.edges.slice();
-      if (action.payload.nodes.length) {
-        edgesCopy.push({ from: action.payload.nodes[0], to: id });
-      }
       return {
         ...state,
-        graphInfo: { nodes: nodesCopy, edges: edgesCopy },
+        graphInfo: { nodes: nodesCopy, edges: state.graphInfo.edges },
         defaultState: true,
         addEdgeState: false,
-        multiSelectState: false
+        multiSelectState: false,
+        shouldUpdateNetwork: state.shouldUpdateNetwork + 1
       };
 
     case 'ADD_NODE_MENU':
@@ -67,7 +66,8 @@ const networkReducer = (state = defaultState, action) => {
         graphInfo: { ...state.graphInfo, nodes: nodes },
         defaultState: true,
         addEdgeState: false,
-        multiSelectState: false
+        multiSelectState: false,
+        shouldUpdateNetwork: state.shouldUpdateNetwork + 1
       };
 
     case 'ADD_EDGE':
@@ -88,6 +88,7 @@ const networkReducer = (state = defaultState, action) => {
                   noDupe(nodeData.from, nodeData.to, state.network.body.nodes)
                 ) {
                   callback(nodeData);
+                  action.dispatch(networkActions.shouldUpdateNetwork());
                   state.network.addEdgeMode();
                 }
               }
@@ -104,9 +105,7 @@ const networkReducer = (state = defaultState, action) => {
       return { ...state, options: networkData.options, defaultState: true, addEdgeState: false, multiSelectState: false };
 
     case 'DELETE_SELECTED':
-      if (!state.selectedNodes) {
-        return state;
-      } else if (state.selectedNodes.length > 5) {
+      if (state.selectedNodes && state.selectedNodes.length > 5) {
         return setModalVisible(state, true);
       } else {
         return doDeletion(state);
@@ -408,6 +407,9 @@ const networkReducer = (state = defaultState, action) => {
     case 'CREATE_NODE_FOR_ELEMENT':
       return { ...state, audio: { ...state.audio, nodeData: { ...state.audio.nodeData, [action.payload]: new Node() } } };
 
+    case 'SHOULD_UPDATE_NETWORK':
+      return { ...state, shouldUpdateNetwork: state.shouldUpdateNetwork + 1 };
+
     default:
       return state;
   }
@@ -415,13 +417,14 @@ const networkReducer = (state = defaultState, action) => {
 
 const doDeletion = state => {
   state.network.deleteSelected(state.selectedNodes);
+  state.network.deleteSelected(state.network.getSelectedEdges());
   const graphCopy = state.graphInfo;
   for (var i = graphCopy.nodes.length - 1; i > -1; i--) {
-    if (state.selectedNodes.includes(graphCopy.nodes[i].id)) {
+    if (state.selectedNodes && state.selectedNodes.includes(graphCopy.nodes[i].id)) {
       graphCopy.nodes.splice(i, 1);
     }
   }
-  return (state = { ...state, graphInfo: graphCopy, selectedNodes: null });
+  return { ...state, graphInfo: graphCopy, selectedNodes: null, shouldUpdateNetwork: state.shouldUpdateNetwork + 1 };
 };
 
 const filterSelection = (state, n) => {

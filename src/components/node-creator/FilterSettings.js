@@ -13,7 +13,7 @@ const FilterSettings = () => {
 
   return (
     <div className={classes.row}>
-      <div className={`${classes.content}`} key={elementIndex + 101}>
+      <div className={`${classes.content}`} key={elementIndex + 100}>
         <h4>high pass filter</h4>
         {node &&
           Object.values(HPFilterData(node)).map((inputSlider, index) => {
@@ -28,7 +28,7 @@ const FilterSettings = () => {
             );
           })}
       </div>
-      <div className={`${classes.content}`} key={elementIndex + 102}>
+      <div className={`${classes.content}`} key={elementIndex + 200}>
         <h4>low pass filter</h4>
         {node &&
           Object.values(LPFilterData(node)).map((inputSlider, index) => {

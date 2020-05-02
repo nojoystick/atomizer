@@ -100,6 +100,7 @@ const useEditorData = () => {
         active: addEdgeState,
         label: 'add edges',
         action: networkActions.addEdge,
+        passDispatch: true,
         icon: {
           path: IconSet.addEdge,
           viewBox: '0 0 510 510'

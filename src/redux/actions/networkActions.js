@@ -47,9 +47,10 @@ export const networkActions = {
       type: 'ADD_NODE_MENU'
     };
   },
-  addEdge: () => {
+  addEdge: param => {
     return {
-      type: 'ADD_EDGE'
+      type: 'ADD_EDGE',
+      dispatch: param
     };
   },
   defaultMode: () => {
@@ -204,6 +205,11 @@ export const networkActions = {
   isSomethingMutedOrSoloed: () => {
     return {
       type: 'IS_SOMETHING_MUTED_OR_SOLOED'
+    };
+  },
+  shouldUpdateNetwork: () => {
+    return {
+      type: 'SHOULD_UPDATE_NETWORK'
     };
   }
 };

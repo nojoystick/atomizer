@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Graph from './Graph';
 import { useMultiSelectHotkeys } from '../../utils/hotkeys';
 import { useSelector, useDispatch } from 'react-redux';
-import { networkActions } from '../../redux/actions';
+import { networkActions, viewActions } from '../../redux/actions';
 
 const Network = () => {
   const { menuVisible, labVisible, screenInfo } = useSelector(state => state.view);
@@ -41,7 +41,7 @@ const Network = () => {
 
   const events = {
     doubleClick: function(event) {
-      dispatch(networkActions.addNodeFromClick(event));
+      dispatch(event.nodes.length ? viewActions.setLabVisible(true) : networkActions.addNodeFromClick(event));
     },
     dragStart: function(event) {
       if (!event.nodes.length && multiSelectState) {

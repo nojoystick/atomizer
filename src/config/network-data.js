@@ -60,8 +60,8 @@ const networkData = {
       }
     },
     autoResize: false,
-    width: 3000 + 'px',
-    height: 2000 + 'px'
+    width: window.innerWidth > 500 ? '3000px' : window.innerWidth + 'px',
+    height: window.innerWidth > 500 ? '2000px' : window.innerHeight + 'px'
   },
   defaultData: {
     nodes: [],

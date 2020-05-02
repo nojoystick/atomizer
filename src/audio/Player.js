@@ -4,11 +4,14 @@ import { frequency, modeToSemitoneOffsetMap, transformToDisposition } from '../c
 class Player {
   static beatIndex = 0;
   static interval = 0;
+  static nodesThisMeasure = null;
+
   constructor() {
     this.timerId = null;
     this.nextNoteTime = Audio.context.currentTime;
     this.network = null;
-    this.nodes = null;
+    this.rootNodes = null;
+    this.measuresPlayed = 0;
   }
   setTimerId(_id) {
     this.timerId = _id;
@@ -23,7 +26,7 @@ class Player {
   }
   updateNetwork(_network) {
     this.network = _network;
-    this.nodes = getRootNodes(_network);
+    this.rootNodes = getRootNodes(_network);
   }
   updateInterval(_tempo) {
     Player.interval = bpmToMs(_tempo);
@@ -39,12 +42,14 @@ class Player {
     }
   }
   playNote(time, audio) {
-    this.nodes.length > 0 &&
-      this.nodes.forEach(audioNode => {
+    if (Player.beatIndex === 0) {
+      this.updateNodesForNewMeasure();
+      ++this.measuresPlayed;
+    }
+    Player.nodesThisMeasure &&
+      Player.nodesThisMeasure.length > 0 &&
+      Player.nodesThisMeasure.forEach(audioNode => {
         if (audioNode && audioNode.notes && audioNode.notes[Player.beatIndex]) {
-          try {
-            // audioNode.release < 0.05 && audioNode.nodes.gain.gain.setValueCurveAtTime(expCurve(0, audioNode.volume), time, 0.03);
-          } catch (e) {}
           audioNode.notes[Player.beatIndex].forEach(note => {
             const stopTime = time + (note.length * Player.interval) / 1000;
             const envelope = buildEnvelope(audioNode, time, stopTime, audioNode.nodes.panner);
@@ -70,12 +75,71 @@ class Player {
       });
     Player.beatIndex = Player.beatIndex < 15 ? Player.beatIndex + 1 : 0;
   }
+
+  updateNodesForNewMeasure = () => {
+    let nodesThisMeasure = [];
+    this.rootNodes.forEach(node => {
+      if (this.network.getConnectedNodes(node.id).length === 0) {
+        nodesThisMeasure.push(node.options.audioNode);
+      }
+      node.depth = 0;
+      const maxDepth = getMaxDepth(node, this.network, 0);
+      const nodes = getAllNodesAtDepth(this.measuresPlayed % (maxDepth + 1), node, this.network);
+      nodesThisMeasure = [...nodesThisMeasure, ...nodes];
+    });
+    Player.nodesThisMeasure = [...nodesThisMeasure];
+  };
 }
+
+/**
+ * Return an array of all the nodes at the specified depth
+ * @param {*} depth
+ * @param {*} node
+ * @param {*} network
+ */
+const getAllNodesAtDepth = (depth, node, network) => {
+  if (node.depth === depth) {
+    return [node.options.audioNode];
+  }
+  const children = network.getConnectedNodes(node.id, 'to');
+  let nodesToReturn = [];
+  if (children.length !== 0) {
+    children.forEach(child => {
+      const c = network.body.nodes[child];
+      if (c.depth === depth) {
+        nodesToReturn.push(c.options.audioNode);
+      } else {
+        nodesToReturn = [...nodesToReturn, ...getAllNodesAtDepth(depth, c, network)];
+      }
+    });
+  }
+  return nodesToReturn;
+};
+
+/**
+ * Get the deepest point in the graph; tag each child with its depth while doing it
+ * @param {*} node
+ * @param {*} network
+ */
+const getMaxDepth = (node, network, currDepth) => {
+  const children = network.getConnectedNodes(node.id, 'to');
+  if (children.length === 0) {
+    return 0;
+  } else {
+    const maxDepths = [];
+    children.forEach(child => {
+      const n = network.body.nodes[child];
+      n.depth = currDepth + 1;
+      maxDepths.push(getMaxDepth(n, network, currDepth + 1) + 1);
+    });
+    return Math.max(...maxDepths);
+  }
+};
 
 const buildGainNode = (volume, startTime, stopTime, releaseActive) => {
   const node = Audio.context.createGain();
-  node.gain.setValueCurveAtTime(expCurve(0, volume), startTime, 0.03);
-  !releaseActive && node.gain.setValueCurveAtTime(expCurve(volume, 0), stopTime - 0.03, 0.03);
+  node.gain.setValueCurveAtTime(expCurve(0, volume), startTime, 0.015);
+  !releaseActive && node.gain.setValueCurveAtTime(expCurve(volume, 0), stopTime - 0.015, 0.015);
   return node;
 };
 
@@ -100,7 +164,7 @@ const buildEnvelope = (audioNode, startTime, stopTime, connectTo) => {
     envelope.connect(connectTo);
     adsr.attackDuration > 0
       ? envelope.gain.setValueCurveAtTime(expCurve(0, adsr.attackTo), adsr.attackStart, adsr.attackDuration)
-      : envelope.gain.setTargetAtTime(1, startTime, 0.03);
+      : envelope.gain.setTargetAtTime(1, startTime, 0.015);
     adsr.decayDuration > 0 && envelope.gain.setValueCurveAtTime(expCurve(1, adsr.decayTo), adsr.decayStart, adsr.decayDuration);
     const releaseFrom = audioNode.release > 0 && getValueAtReleaseStart(adsr, audioNode);
     adsr.releaseDuration > 0.05 &&
@@ -150,8 +214,8 @@ const getRootNodes = network => {
   const rootNodes = [];
   network &&
     Object.values(network.body.nodes).forEach(node => {
-      if (network.getConnectedNodes(node.id, 'to').length === 0) {
-        rootNodes.push(node.options.audioNode);
+      if (network.getConnectedNodes(node.id, 'from').length === 0) {
+        rootNodes.push(node);
       }
     });
   return rootNodes;
