@@ -38,6 +38,7 @@ body,
   width: 100%;
   touch-action: manipulation;
   background-color: inherit;
+  -webkit-font-smoothing: subpixel-antialiased;
 }
 
 #root {

@@ -67,10 +67,8 @@ class Player {
                 ],
                 time
               );
-              oscillatorNode.start ? oscillatorNode.start(time) : oscillatorNode.noteOn(time);
-              oscillatorNode.stop
-                ? oscillatorNode.stop(stopTime + audioNode.release)
-                : oscillatorNode.stop(stopTime + audioNode.release);
+              oscillatorNode.start(time);
+              oscillatorNode.stop(stopTime + audioNode.release);
             });
           });
         }

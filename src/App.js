@@ -90,6 +90,7 @@ const App = () => {
       Audio.masterGainNode.gain.setValueAtTime(0.0, Audio.context.currentTime);
       Audio.preampGainNode.connect(Audio.masterGainNode);
       Audio.masterGainNode.connect(Audio.context.destination);
+      Audio.monkeyPatch();
       Audio.unlockAudioContext();
     };
     initializeMasterGain();
