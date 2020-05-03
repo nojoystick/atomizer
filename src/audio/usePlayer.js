@@ -13,6 +13,7 @@ export default function usePlayer() {
   const network = useSelector(state => state.network.network);
   const shouldUpdateNetwork = useSelector(state => state.network.shouldUpdateNetwork);
   const graphInfo = useSelector(state => state.network.graphInfo);
+  const theme = useSelector(state => state.network.theme);
   const audio = useSelector(state => state.network.audio);
   const [timerId, setTimerId] = useState(null);
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ export default function usePlayer() {
 
   useEffect(() => {
     if (playing) {
-      const interval = player.start(network, audio, gain, tempo);
+      const interval = player.start(network, audio, gain, tempo, theme);
       setTimerId(setInterval(() => dispatch(configActions.setItemToUpdate('beatIndex', Math.random())), interval));
     } else {
       clearInterval(timerId);
@@ -39,7 +40,7 @@ export default function usePlayer() {
   useEffect(() => {
     if (playing) {
       player.stop();
-      player.start(network, audio, gain, tempo);
+      player.start(network, audio, gain, tempo, theme);
     }
   }, [tempo]);
 

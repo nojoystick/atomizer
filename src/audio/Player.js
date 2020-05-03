@@ -12,13 +12,15 @@ class Player {
     this.network = null;
     this.rootNodes = null;
     this.measuresPlayed = 0;
+    this.theme = null;
   }
   setTimerId(_id) {
     this.timerId = _id;
   }
-  start(network, audio, gain, tempo) {
+  start(network, audio, gain, tempo, theme) {
     this.updateNetwork(network);
     this.updateInterval(tempo);
+    this.theme = theme;
     Audio.masterGainNode.gain.setTargetAtTime(gain, Audio.context.currentTime, 0.001);
     this.nextNoteTime = Audio.context.currentTime;
     this.timerId = setInterval(() => this.schedule(audio), Player.interval);
@@ -48,7 +50,8 @@ class Player {
     }
     Player.nodesThisMeasure &&
       Player.nodesThisMeasure.length > 0 &&
-      Player.nodesThisMeasure.forEach(audioNode => {
+      Player.nodesThisMeasure.forEach(node => {
+        const audioNode = node.options.audioNode;
         if (audioNode && audioNode.notes && audioNode.notes[Player.beatIndex]) {
           audioNode.notes[Player.beatIndex].forEach(note => {
             const stopTime = time + (note.length * Player.interval) / 1000;
@@ -78,15 +81,23 @@ class Player {
 
   updateNodesForNewMeasure = () => {
     let nodesThisMeasure = [];
+    Player.nodesThisMeasure &&
+      Player.nodesThisMeasure.forEach(node => {
+        node.options.color.border = node.options.color.hover.border;
+      });
     this.rootNodes.forEach(node => {
       if (this.network.getConnectedNodes(node.id).length === 0) {
-        nodesThisMeasure.push(node.options.audioNode);
+        nodesThisMeasure.push(node);
       }
       node.depth = 0;
       const maxDepth = getMaxDepth(node, this.network, 0);
       const nodes = getAllNodesAtDepth(this.measuresPlayed % (maxDepth + 1), node, this.network);
       nodesThisMeasure = [...nodesThisMeasure, ...nodes];
     });
+    nodesThisMeasure &&
+      nodesThisMeasure.forEach(node => {
+        node.options.color.border = this.theme.text;
+      });
     Player.nodesThisMeasure = [...nodesThisMeasure];
   };
 }
@@ -99,7 +110,7 @@ class Player {
  */
 const getAllNodesAtDepth = (depth, node, network) => {
   if (node.depth === depth) {
-    return [node.options.audioNode];
+    return [node];
   }
   const children = network.getConnectedNodes(node.id, 'to');
   let nodesToReturn = [];
@@ -107,7 +118,7 @@ const getAllNodesAtDepth = (depth, node, network) => {
     children.forEach(child => {
       const c = network.body.nodes[child];
       if (c.depth === depth) {
-        nodesToReturn.push(c.options.audioNode);
+        nodesToReturn.push(c);
       } else {
         nodesToReturn = [...nodesToReturn, ...getAllNodesAtDepth(depth, c, network)];
       }

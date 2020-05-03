@@ -7,7 +7,6 @@ import useEditorData from './editor-data';
 import Icon from '../../Icon';
 import IconSet from '../../../constants/icon-set';
 import { configActions, networkActions } from '../../../redux/actions';
-import { DeleteModal } from '../../modals';
 
 const EditorToolbar = ({ id, right, top, hideSourceOnDrag, setInteractible }) => {
   const theme = useSelector(state => state.network.theme);
@@ -39,8 +38,11 @@ const EditorToolbar = ({ id, right, top, hideSourceOnDrag, setInteractible }) =>
 
   const _onActionClick = action => {
     dispatch(action.action(action.passDispatch && dispatch));
-    if (action.label === 'delete selected') {
-      dispatch(configActions.setModal(DeleteModal, networkActions.delete, true));
+    if (action.modal) {
+      dispatch(configActions.setModal(action.modal, action.modalAction, action.global));
+      if (action.alwaysShowModal) {
+        dispatch(networkActions.setModalVisible(true));
+      }
     }
   };
 

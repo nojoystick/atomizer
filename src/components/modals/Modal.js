@@ -3,7 +3,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { networkActions } from '../../redux/actions';
-import { useModalHotkeys } from '../../utils/hotkeys';
 import useOutsideAlerter from '../../utils/useOutsideAlerter';
 import ModalStyles from './ModalStyles';
 
@@ -17,7 +16,7 @@ const Modal = () => {
   const dispatch = useDispatch();
 
   const confirm = () => {
-    modal.global ? dispatch(modal.func()) : modal.func();
+    modal.global ? dispatch(modal.func()) : modal.func && modal.func();
     cancel();
   };
 
@@ -25,7 +24,6 @@ const Modal = () => {
     dispatch(networkActions.setModalVisible(false));
   };
 
-  useModalHotkeys(confirm, cancel);
   useOutsideAlerter(modalRef, cancel, show);
 
   return (

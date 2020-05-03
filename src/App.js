@@ -7,7 +7,6 @@ import Navbar from './components/menus/navbar/Navbar';
 import Theme from './stylesheets/Theme';
 import Audio from './audio/Audio';
 import { defaultConfig } from './config';
-import PianoRollData, { transformToPureObject } from './audio/PianoRollData';
 import { useFirestore, useFirestoreConnect, isEmpty } from 'react-redux-firebase';
 import useLoadFirestoreValues from './utils/useLoadFirestoreValues';
 import useResizer from './utils/useResizer';
@@ -23,13 +22,9 @@ const App = () => {
   const login = useSelector(state => state.config.login);
   const id = !profile.isEmpty ? profile.email : 'default';
 
-  useFirestoreConnect(() => [
-    { collection: 'config', doc: id },
-    { collection: 'pianoRollData', doc: id }
-  ]);
+  useFirestoreConnect(() => [{ collection: 'config', doc: id }]);
   const config = useSelector(state => state.firestore.ordered.config);
-  const pianoRollData = useSelector(state => state.firestore.ordered.pianoRollData);
-  useLoadFirestoreValues(_theme, _hotkeys, auth, pianoRollData);
+  useLoadFirestoreValues(_theme, _hotkeys, auth);
   const firestore = useFirestore();
 
   const theme = useSelector(state => state.network.theme);
@@ -64,17 +59,10 @@ const App = () => {
     // if it's a first time login, initialize values
     if (login.valid) {
       const configRef = firestore.collection('config').doc(id);
-      const pianoRollRef = firestore.collection('pianoRollData').doc(id);
 
       configRef.get().then(docSnapshot => {
         if (!docSnapshot.exists) {
           configRef.set(defaultConfig);
-        }
-      });
-
-      pianoRollRef.get().then(docSnapshot => {
-        if (!docSnapshot.exists) {
-          pianoRollRef.set(transformToPureObject(PianoRollData));
         }
       });
     }

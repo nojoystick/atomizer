@@ -52,7 +52,7 @@ class Graph extends Component {
     }
 
     if (optionsChange) {
-      this.Network.setOptions(nextProps.options);
+      // this.Network.setOptions(nextProps.options);
     }
 
     if (eventsChange) {
@@ -115,14 +115,6 @@ class Graph extends Component {
 
     if (this.props.getNetwork) {
       this.props.getNetwork(this.Network);
-    }
-
-    if (this.props.getNodes) {
-      this.props.getNodes(this.nodes);
-    }
-
-    if (this.props.getEdges) {
-      this.props.getEdges(this.edges);
     }
 
     // Add user provied events to network

@@ -39,6 +39,9 @@ export const transformToPureObject = pianoRoll => {
  * For saving a single element to firebase
  */
 export const transformElementToPureObject = element => {
+  if (!element) {
+    return [];
+  }
   Object.keys(element).forEach(key => {
     const arrToReplace = element[key];
     element[key] = [];

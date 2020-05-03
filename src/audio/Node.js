@@ -115,13 +115,13 @@ class Node {
   }
   transformToPureObject() {
     return {
-      nodes: transformElementToPureObject(this.nodes),
+      nodes: nodesToPureObject(this.nodes),
       volume: this.volume,
       intensity: this.intensity,
       mode: this.mode,
       notes: transformElementToPureObject(this.notes),
       octave: this.octave,
-      waveform: this.waveform,
+      waveforms: this.waveforms,
       attack: this.attack,
       decay: this.decay,
       sustain: this.sustain,
@@ -132,6 +132,25 @@ class Node {
     };
   }
 }
+
+const nodesToPureObject = _nodes => {
+  return {
+    lpFilter: {
+      frequency: _nodes.lpFilter.frequency.value,
+      Q: _nodes.lpFilter.Q.value
+    },
+    hpFilter: {
+      frequency: _nodes.hpFilter.frequency.value,
+      Q: _nodes.hpFilter.Q.value
+    },
+    gain: {
+      gain: _nodes.gain.gain.value
+    },
+    panner: {
+      pan: _nodes.panner.positionX.value
+    }
+  };
+};
 
 const buildNodes = () => {
   const gain = addGainNode();

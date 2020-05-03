@@ -58,28 +58,6 @@ function useMultiSelectHotkeys(setCtrl) {
   }, [multiSelectState, setCtrl]);
 }
 
-function useModalHotkeys(confirm, cancel) {
-  const modalVisible = useSelector(state => state.network.modalVisible);
-  useEffect(() => {
-    const _onKeyDown = e => {
-      if (e.key === 'Enter') {
-        confirm();
-      } else {
-        cancel();
-      }
-    };
-
-    if (modalVisible) {
-      document.addEventListener('keydown', _onKeyDown);
-    } else {
-      document.removeEventListener('keydown', _onKeyDown);
-    }
-    return () => {
-      document.removeEventListener('keydown', _onKeyDown);
-    };
-  }, [cancel, confirm, modalVisible]);
-}
-
 function useElementIndexHotkeys() {
   const elementIndex = useSelector(state => state.network.elementIndex);
   const dispatch = useDispatch();
@@ -170,4 +148,4 @@ function useHotkeys(enabled) {
   });
 }
 
-export { useMultiSelectHotkeys, useModalHotkeys, useElementIndexHotkeys, usePlayerHotkeys, useResizer, useHotkeys };
+export { useMultiSelectHotkeys, useElementIndexHotkeys, usePlayerHotkeys, useResizer, useHotkeys };

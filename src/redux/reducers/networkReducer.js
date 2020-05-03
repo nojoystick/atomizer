@@ -31,7 +31,9 @@ const defaultState = {
     nodeData: NodeData,
     somethingIsMuted: false,
     somethingIsSoloed: false
-  }
+  },
+  networkToSave: null,
+  shouldLoadNetwork: null
 };
 
 const networkReducer = (state = defaultState, action) => {
@@ -185,7 +187,10 @@ const networkReducer = (state = defaultState, action) => {
       }
 
     case 'SET_NETWORK':
-      return (state = { ...state, network: action.payload });
+      return { ...state, network: action.payload };
+
+    case 'SET_DATASET':
+      return { ...state, dataset: action.payload };
 
     case 'SET_ELEMENT_INDEX':
       if (action.constraint) {
@@ -260,6 +265,9 @@ const networkReducer = (state = defaultState, action) => {
       return { ...state, theme: action.payload };
 
     case 'STOP':
+      Object.values(state.network.body.nodes).forEach(node => {
+        node.options.color.border = node.options.color.hover.border;
+      });
       return { ...state, audio: { ...state.audio, playing: false } };
 
     case 'TOGGLE_SELECT':
@@ -279,7 +287,12 @@ const networkReducer = (state = defaultState, action) => {
       // pull up the modal and allow the user to name their network
       // if they cancel, close it, if they click save:
       // save the network object to the database, under the current user, in a default state
-      return state;
+      const networkJSON = { name: uuidv4(), nodes: [], edges: [] };
+      networkJSON.edges = state.network.body.edges;
+      state.graphInfo.nodes.forEach(node => {
+        networkJSON.nodes.push(node.audioNode.transformToPureObject());
+      });
+      return { ...state, networkToSave: networkJSON };
 
     case 'LOAD_NETWORK':
       // login required? or have some default options

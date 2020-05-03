@@ -17,6 +17,7 @@ import HomeStyles from './HomeStyles';
 const Home = () => {
   const [show, setShow] = useState(false);
   const { menuVisible, labVisible, screenInfo } = useSelector(state => state.view);
+  const modalVisible = useSelector(state => state.network.modalVisible);
   const theme = useSelector(state => state.network.theme);
   const audio = useSelector(state => state.network.audio);
 
@@ -27,7 +28,7 @@ const Home = () => {
     setShow(true);
   }, []);
 
-  useHotkeys(Object.keys(audio.pianoRollData).length > 0);
+  useHotkeys(Object.keys(audio.pianoRollData).length > 0 && !modalVisible);
   useResizer();
   useElementIndexHotkeys();
   usePlayer();

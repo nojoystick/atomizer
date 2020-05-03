@@ -16,7 +16,12 @@ const DeleteModalStyles = makeStyles({
   },
   buttonContainer: {
     width: '140px',
-    float: 'right'
+    float: 'right',
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+  wideButtonContainer: {
+    width: '200px'
   },
   button: {
     width: '60px',
@@ -39,7 +44,18 @@ const DeleteModalStyles = makeStyles({
   },
   wideButton: {
     alignSelf: 'center',
-    width: '120px'
+    width: '120px',
+    backgroundColor: props => props.theme && props.theme.background
+  },
+  input: {
+    backgroundColor: 'transparent',
+    color: props => props.theme && props.theme.text,
+    borderWidth: '0px 0px 2px 0px',
+    borderColor: props => props.theme && props.theme.text,
+    fontFamily: 'Inconsolata',
+    fontSize: '20px',
+    display: 'block',
+    margin: '20px'
   }
 });
 

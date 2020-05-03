@@ -5,6 +5,12 @@ export const networkActions = {
       payload: param
     };
   },
+  setDataSet: param => {
+    return {
+      type: 'SET_DATASET',
+      payload: param
+    };
+  },
   setElementIndex: (param, constraint) => {
     return {
       type: 'SET_ELEMENT_INDEX',

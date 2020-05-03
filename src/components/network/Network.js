@@ -16,6 +16,7 @@ const Network = () => {
   const [cursorPosition, setCursorPosition] = useState(null);
   const [ctrl, setCtrl] = useState(false);
   const dispatch = useDispatch();
+
   useMultiSelectHotkeys(setCtrl);
 
   useEffect(() => {
