@@ -28,45 +28,51 @@ const KeyDropdowns = ({ style, renderInBody }) => {
   };
 
   const onDispositionChange = e => {
-    const localDisposition = disposition;
-    dispatch(networkActions.setDisposition(e[0].value));
-    if (Object.keys(dispositionLabelChange).includes(key.label)) {
-      const label = dispositionLabelChange[key.label];
-      const newDisposition = dispositionLabelChange[localDisposition];
-      dispatch(networkActions.setKey(keyMap[newDisposition][label]));
+    if (disposition) {
+      const localDisposition = disposition;
+      dispatch(networkActions.setDisposition(e[0].value));
+      if (Object.keys(dispositionLabelChange).includes(key.label)) {
+        const label = dispositionLabelChange[key.label];
+        const newDisposition = dispositionLabelChange[localDisposition];
+        dispatch(networkActions.setKey(keyMap[newDisposition][label]));
+      }
     }
   };
 
   return (
-    <div className={classes.parent} style={style}>
-      <Select
-        portal={renderInBody && document.querySelector('body')}
-        options={keyArrs[disposition]}
-        onChange={onKeyChange}
-        className={`small-dropdown-no-search ${classes.dropdown}`}
-        values={[keyArrs[disposition].find(val => val.label === key.label)]}
-        searchable={false}
-        dropdownGap={0}
-        dropdownHandle={false}
-        labelField='label'
-        onDropdownOpen={() => dispatch(configActions.setHotkeys(false))}
-        onDropdownClose={() => dispatch(configActions.setHotkeys(true))}
-      />
-      <Select
-        portal={renderInBody && document.querySelector('body')}
-        options={dispositionOptions}
-        onChange={onDispositionChange}
-        className={`${classes.dropdown} wide-dropdown-no-search`}
-        values={[dispositionOptions.find(val => val.value === disposition)]}
-        searchable={false}
-        disabled={key.value === 0}
-        dropdownGap={0}
-        dropdownHandle={false}
-        labelField='label'
-        onDropdownOpen={() => dispatch(configActions.setHotkeys(false))}
-        onDropdownClose={() => dispatch(configActions.setHotkeys(true))}
-      />
-    </div>
+    <>
+      {disposition && (
+        <div className={classes.parent} style={style}>
+          <Select
+            portal={renderInBody && document.querySelector('body')}
+            options={keyArrs[disposition]}
+            onChange={onKeyChange}
+            className={`small-dropdown-no-search ${classes.dropdown}`}
+            values={[keyArrs[disposition].find(val => val.label === key.label)]}
+            searchable={false}
+            dropdownGap={0}
+            dropdownHandle={false}
+            labelField='label'
+            onDropdownOpen={() => dispatch(configActions.setHotkeys(false))}
+            onDropdownClose={() => dispatch(configActions.setHotkeys(true))}
+          />
+          <Select
+            portal={renderInBody && document.querySelector('body')}
+            options={dispositionOptions}
+            onChange={onDispositionChange}
+            className={`${classes.dropdown} wide-dropdown-no-search`}
+            values={[dispositionOptions.find(val => val.value === disposition)]}
+            searchable={false}
+            disabled={key.value === 0}
+            dropdownGap={0}
+            dropdownHandle={false}
+            labelField='label'
+            onDropdownOpen={() => dispatch(configActions.setHotkeys(false))}
+            onDropdownClose={() => dispatch(configActions.setHotkeys(true))}
+          />
+        </div>
+      )}
+    </>
   );
 };
 

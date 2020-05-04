@@ -3,25 +3,18 @@ import Audio from './Audio';
 import { transformElementToPureObject } from './PianoRollData';
 
 class Node {
-  constructor(pianoRoll, somethingIsSoloed) {
-    this.notes = pianoRoll ? pianoRoll : null;
-    this.nodes = buildNodes();
-    this.volume = defaultAudioData.volume;
-    this.intensity = defaultAudioData.intensity;
-    this.mode = defaultAudioData.mode;
+  constructor(pianoRoll, somethingIsSoloed, nodeJSON) {
+    if (nodeJSON) {
+      Object.keys(nodeJSON).forEach(key => {
+        this[key] = nodeJSON[key];
+      });
+    } else {
+      Object.keys(defaultAudioData).forEach(key => {
+        this[key] = defaultAudioData[key];
+      });
+    }
     this.notes = pianoRoll;
-    this.octave = defaultAudioData.octave;
-    this.pan = defaultAudioData.pan;
-    this.waveforms = defaultAudioData.waveforms;
-    this.attack = defaultAudioData.attack;
-    this.sustain = defaultAudioData.sustain;
-    this.decay = defaultAudioData.decay;
-    this.hpFilterFrequency = defaultAudioData.hpFilterFrequency;
-    this.hpFilterQ = defaultAudioData.hpFilterQ;
-    this.lpFilterFrequency = defaultAudioData.lpFilterFrequency;
-    this.lpFilterQ = defaultAudioData.lpFilterQ;
-    this.release = defaultAudioData.release;
-    this.mute = defaultAudioData.mute;
+    this.nodes = buildNodes();
     this.solo = somethingIsSoloed ? 1 : defaultAudioData.solo;
   }
 
@@ -130,6 +123,9 @@ class Node {
       mute: this.mute,
       solo: this.solo
     };
+  }
+  static renderFromJSON(node) {
+    return new Node(node.notes, node.somethingIsSoloed, node);
   }
 }
 

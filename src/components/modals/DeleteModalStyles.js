@@ -23,6 +23,9 @@ const DeleteModalStyles = makeStyles({
   wideButtonContainer: {
     width: '200px'
   },
+  endButtonContainer: {
+    justifyContent: 'flex-end'
+  },
   button: {
     width: '60px',
     height: '30px',
@@ -56,6 +59,26 @@ const DeleteModalStyles = makeStyles({
     fontSize: '20px',
     display: 'block',
     margin: '20px'
+  },
+  listParent: {
+    margin: '30px',
+    width: '90%',
+    maxHeight: '200px',
+    overflowY: 'auto',
+    border: props => `3px solid ${props.theme && props.theme.text}`
+  },
+  listItem: {
+    width: '100%',
+    height: '45px',
+    fontSize: '16px',
+    padding: '0px 10px',
+    textAlign: 'left',
+    background: props => props.theme && props.theme.secondaryBackground,
+    borderBottom: props => `1px solid ${props.theme && props.theme.text}`,
+    color: props => props.theme && props.theme.text,
+    '&:hover': {
+      opacity: '0.6'
+    }
   }
 });
 

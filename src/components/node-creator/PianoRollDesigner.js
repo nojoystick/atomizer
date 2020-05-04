@@ -38,7 +38,7 @@ const PianoRollDesigner = () => {
   const screenInfo = useSelector(state => state.view.screenInfo);
   const disposition = useSelector(state => state.network.audio.disposition);
   const elementIndex = useSelector(state => state.network.elementIndex);
-  const node = useSelector(state => state.network.audio.nodeData[elementIndex]);
+  const node = useSelector(state => state.network.audio.nodeData && state.network.audio.nodeData[elementIndex]);
   const [elementList] = useState(elements(theme));
   const [element, setElement] = useState(elementList[elementIndex - 1]);
 
@@ -65,7 +65,7 @@ const PianoRollDesigner = () => {
   useEffect(() => {
     const loadPianoRoll = roll => {
       const h = getHeightForDisposition(disposition);
-      if (!roll || Object.keys(roll).length === 0) {
+      if (!roll || Object.keys(roll).length === 0 || !disposition) {
         setPianoRoll(initializePianoRoll(note, h));
         return null;
       }
@@ -108,7 +108,7 @@ const PianoRollDesigner = () => {
       loadPianoRoll(node.notes);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [element, disposition]);
+  }, [element, node, disposition]);
 
   const save = () => {
     let parsedRoll = {};

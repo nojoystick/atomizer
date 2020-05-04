@@ -58,7 +58,7 @@ const PlayerEditor = () => {
   const theme = useSelector(state => state.network.theme);
   const classes = useStyles({ theme: theme });
   const elementIndex = useSelector(state => state.network.elementIndex);
-  const node = useSelector(state => state.network.audio.nodeData[elementIndex]);
+  const node = useSelector(state => state.network.audio.nodeData && state.network.audio.nodeData[elementIndex]);
   const forceUpdateMode = useForceUpdate('mode');
   useForceUpdate('octave');
 

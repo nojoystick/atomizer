@@ -28,7 +28,7 @@ const Home = () => {
     setShow(true);
   }, []);
 
-  useHotkeys(Object.keys(audio.pianoRollData).length > 0 && !modalVisible);
+  useHotkeys(audio.nodeData && Object.keys(audio.nodeData).length > 0 && !modalVisible);
   useResizer();
   useElementIndexHotkeys();
   usePlayer();

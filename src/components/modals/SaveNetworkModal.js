@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import DeleteModalStyles from './DeleteModalStyles';
 import { useFirestore, useFirestoreConnect } from 'react-redux-firebase';
 import { Redirect } from 'react-router-dom';
 import * as Routes from '../../constants/routes';
+import { networkActions } from '../../redux/actions';
 
 const goofyHeadings = ['whoa there', 'slow your roll', 'sorry partner', 'back it up', 'sorry'];
 const goofyPlaceholders = [
   'kites are fun',
-  "isn't it a pity",
-  'pitseleh',
   'piano concerto no. 2',
   'pink in the night',
   'carter son',
-  'last days reloaded',
-  'el pueblo unido',
-  'the internationale',
   "carolyn's fingers",
   'is this music?',
   'running up that hill',
@@ -23,8 +19,11 @@ const goofyPlaceholders = [
   'that old feeling'
 ];
 
-const SaveNetworkModal = React.forwardRef(({ cancel }, ref) => {
-  const [name, setName] = useState(goofyPlaceholders[Math.floor(Math.random() * goofyPlaceholders.length)]);
+const SaveNetworkModal = React.forwardRef(({ cancel, confirm }, ref) => {
+  const loadedNetworkName = useSelector(state => state.network.loadedNetworkName);
+  const [name, setName] = useState(
+    loadedNetworkName ? loadedNetworkName : goofyPlaceholders[Math.floor(Math.random() * goofyPlaceholders.length)]
+  );
   const [redirect, setRedirect] = useState(false);
   const [content, setContent] = useState(null);
   const networkToSave = useSelector(state => state.network.networkToSave);
@@ -35,19 +34,24 @@ const SaveNetworkModal = React.forwardRef(({ cancel }, ref) => {
 
   useFirestoreConnect(() => [{ collection: 'networks', doc: id }]);
   const firestore = useFirestore();
+  const dispatch = useDispatch();
+
+  if (!networkToSave && !profile.isEmpty) {
+    dispatch(networkActions.saveNetwork());
+  }
 
   useEffect(() => {
     const doSave = () => {
       firestore
         .collection('networks')
         .doc(id)
-        .set({ [name]: networkToSave }, { merge: true })
+        .set({ [name]: { ...networkToSave, name: name } }, { merge: true })
+        .then(confirm && confirm())
         .then(cancel());
     };
 
     const _onSave = () => {
-      if (networkToSave) {
-        // todo: warning of it's going to overwrite
+      if (networkToSave && name && !profile.isEmpty) {
         const networkRef = firestore.collection('networks').doc(id);
         networkRef.get().then(docSnapshot => {
           if (docSnapshot.exists) {
@@ -90,7 +94,7 @@ const SaveNetworkModal = React.forwardRef(({ cancel }, ref) => {
           }
         : defaultContent
     );
-  }, [cancel, classes, firestore, id, name, networkToSave, profile]);
+  }, [cancel, classes, confirm, dispatch, firestore, id, name, networkToSave, profile]);
 
   return (
     <div className={classes.content} ref={ref}>

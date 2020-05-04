@@ -1,7 +1,7 @@
 import { networkActions } from '../../../redux/actions';
 import { useSelector } from 'react-redux';
 import IconSet from '../../../constants/icon-set';
-import { DeleteModal, SaveNetworkModal } from '../../modals';
+import { DeleteModal, SaveNetworkModal, LoadNetworkModal, NewNetworkModal, DeleteNetworkModal } from '../../modals';
 
 const useEditorData = () => {
   const defaultState = useSelector(state => state.network.defaultState);
@@ -11,8 +11,7 @@ const useEditorData = () => {
   return {
     file: [
       {
-        label: 'save network',
-        action: networkActions.saveNetwork,
+        label: 'save network as...',
         modal: SaveNetworkModal,
         alwaysShowModal: true,
         icon: {
@@ -22,9 +21,9 @@ const useEditorData = () => {
         shortcut: ''
       },
       {
-        label: 'load network',
-        action: networkActions.loadNetwork,
-        modal: DeleteModal,
+        label: 'open network',
+        modalAction: networkActions.loadNetwork,
+        modal: LoadNetworkModal,
         alwaysShowModal: true,
         icon: {
           path: IconSet.load,
@@ -34,11 +33,24 @@ const useEditorData = () => {
       },
       {
         label: 'new network',
-        action: networkActions.newNetwork,
-        modal: DeleteModal,
+        modalAction: networkActions.newNetwork,
+        modal: NewNetworkModal,
         alwaysShowModal: true,
+        global: true,
         icon: {
           path: IconSet.newFile,
+          viewBox: '0 0 50 50'
+        },
+        shortcut: ''
+      },
+      {
+        label: 'delete network',
+        modalAction: networkActions.newNetwork,
+        modal: DeleteNetworkModal,
+        alwaysShowModal: true,
+        global: true,
+        icon: {
+          path: IconSet.delete,
           viewBox: '0 0 50 50'
         },
         shortcut: ''

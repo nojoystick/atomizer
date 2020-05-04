@@ -3,13 +3,13 @@ import elements from '../../constants/elements';
 import { v4 as uuidv4 } from 'uuid';
 import Theme from '../../stylesheets/Theme';
 import Audio from '../../audio/Audio';
-import { frequency, volume } from '../../constants/frequencies';
+import { volume } from '../../constants/frequencies';
 import Node from '../../audio/Node';
-import NodeData from '../../audio/NodeData';
 import { networkActions } from '../actions';
 
 const defaultState = {
   theme: Theme.light,
+  loadedNetworkName: null,
   network: null,
   options: networkData.options,
   graphInfo: networkData.defaultData,
@@ -22,13 +22,14 @@ const defaultState = {
   multiSelectState: false,
   organizeState: false,
   fit: false,
+  unsavedChanges: false,
   audio: {
     playing: false,
     key: { label: 'A', value: 21 },
     disposition: 'M',
     masterGain: 0.5,
     masterTempo: 120,
-    nodeData: NodeData,
+    nodeData: null,
     somethingIsMuted: false,
     somethingIsSoloed: false
   },
@@ -52,7 +53,8 @@ const networkReducer = (state = defaultState, action) => {
         defaultState: true,
         addEdgeState: false,
         multiSelectState: false,
-        shouldUpdateNetwork: state.shouldUpdateNetwork + 1
+        shouldUpdateNetwork: state.shouldUpdateNetwork + 1,
+        unsavedChanges: true
       };
 
     case 'ADD_NODE_MENU':
@@ -69,7 +71,8 @@ const networkReducer = (state = defaultState, action) => {
         defaultState: true,
         addEdgeState: false,
         multiSelectState: false,
-        shouldUpdateNetwork: state.shouldUpdateNetwork + 1
+        shouldUpdateNetwork: state.shouldUpdateNetwork + 1,
+        unsavedChanges: true
       };
 
     case 'ADD_EDGE':
@@ -100,7 +103,13 @@ const networkReducer = (state = defaultState, action) => {
           };
       state.network.setOptions(opt);
       state.addEdgeState ? state.network.disableEditMode() : state.network.addEdgeMode();
-      return { ...state, addEdgeState: !state.addEdgeState, multiSelectState: false, defaultState: state.addEdgeState };
+      return {
+        ...state,
+        addEdgeState: !state.addEdgeState,
+        multiSelectState: false,
+        defaultState: state.addEdgeState,
+        unsavedChanges: true
+      };
 
     case 'DEFAULT_MODE':
       state.network.disableEditMode();
@@ -118,7 +127,7 @@ const networkReducer = (state = defaultState, action) => {
 
     case 'EDIT_EDGE':
       state.network.editEdgeMode();
-      return state;
+      return { state, unsavedChanges: true };
 
     case 'FILTER_SELECTION':
       const select = filterSelection(state, action.payload);
@@ -194,19 +203,19 @@ const networkReducer = (state = defaultState, action) => {
 
     case 'SET_ELEMENT_INDEX':
       if (action.constraint) {
-        if (state.audio.pianoRollData[action.payload]) {
+        if (state.audio.node[action.payload]) {
           return { ...state, elementIndex: action.payload };
         } else if (state.elementIndex < action.payload) {
           // find the next highest existing element and set it
           // eslint-disable-next-line eqeqeq
-          const currIndex = Object.keys(state.audio.pianoRollData).findIndex(el => el == state.elementIndex);
-          const val = Object.keys(state.audio.pianoRollData)[currIndex + 1];
+          const currIndex = Object.keys(state.audio.node).findIndex(el => el == state.elementIndex);
+          const val = Object.keys(state.audio.node)[currIndex + 1];
           return val && val !== 'id' ? { ...state, elementIndex: val } : state;
         } else {
           // find the next lowest existing element and set it
           // eslint-disable-next-line eqeqeq
-          const currIndex = Object.keys(state.audio.pianoRollData).findIndex(el => el == state.elementIndex);
-          const val = Object.keys(state.audio.pianoRollData)[currIndex - 1];
+          const currIndex = Object.keys(state.audio.nodeData).findIndex(el => el == state.elementIndex);
+          const val = Object.keys(state.audio.nodeData)[currIndex - 1];
           return val && val > 0 ? { ...state, elementIndex: val } : state;
         }
       } else {
@@ -215,47 +224,25 @@ const networkReducer = (state = defaultState, action) => {
         } else return state;
       }
 
-    case 'SET_LP_FILTER_FREQUENCY':
-      Audio.lpFilter.frequency.setValueAtTime(frequency[action.payload], Audio.context.currentTime);
-      return { ...state, audio: { ...state.audio, lpFilterFrequency: frequency[action.payload] } };
-
-    case 'SET_LP_FILTER_Q':
-      Audio.lpFilter.Q.setValueAtTime(volume[action.payload] * 1000, Audio.context.currentTime);
-      return { ...state, audio: { ...state.audio, lpFilterQ: action.payload } };
-
-    case 'SET_HP_FILTER_FREQUENCY':
-      Audio.hpFilter.frequency.setValueAtTime(frequency[action.payload], Audio.context.currentTime);
-      return { ...state, audio: { ...state.audio, hpFilterFrequency: frequency[action.payload] } };
-
-    case 'SET_HP_FILTER_Q':
-      Audio.hpFilter.Q.setValueAtTime(volume[action.payload] * 1000, Audio.context.currentTime);
-      return { ...state, audio: { ...state.audio, hpFilterQ: action.payload } };
-
     case 'SET_MASTER_VOLUME':
       const vol = action.scale === 'MIDI' ? volume[action.payload] : action.payload;
       Audio.masterGainNode.gain.setValueAtTime(vol, Audio.context.currentTime);
-      return { ...state, audio: { ...state.audio, masterGain: vol } };
+      return { ...state, unsavedChanges: true, audio: { ...state.audio, masterGain: vol } };
 
     case 'SET_TEMPO':
-      return { ...state, audio: { ...state.audio, masterTempo: action.payload } };
+      return { ...state, unsavedChanges: true, audio: { ...state.audio, masterTempo: action.payload } };
 
     case 'SET_MODAL_VISIBLE':
       return setModalVisible(state, action.payload);
 
     case 'SET_KEY':
-      return { ...state, audio: { ...state.audio, key: action.payload } };
+      return { ...state, unsavedChanges: true, audio: { ...state.audio, key: action.payload } };
 
     case 'SET_DISPOSITION':
-      return { ...state, audio: { ...state.audio, disposition: action.payload } };
+      return { ...state, unsavedChanges: true, audio: { ...state.audio, disposition: action.payload } };
 
     case 'SET_PIANO_ROLL_DATA':
-      return { ...state, audio: { ...state.audio, pianoRollData: action.payload } };
-
-    case 'SET_PIANO_ROLL_FOR_ELEMENT':
-      return {
-        ...state,
-        audio: { ...state.audio, pianoRollData: { ...state.audio.pianoRollData, [action.index]: action.payload } }
-      };
+      return { ...state, unsavedChanges: true, audio: { ...state.audio, nodeData: action.payload } };
 
     case 'SET_THEME':
       if (action.payload === state.theme) {
@@ -283,34 +270,55 @@ const networkReducer = (state = defaultState, action) => {
       };
 
     case 'SAVE_NETWORK':
-      // login required.
-      // pull up the modal and allow the user to name their network
-      // if they cancel, close it, if they click save:
-      // save the network object to the database, under the current user, in a default state
-      const networkJSON = { name: uuidv4(), nodes: [], edges: [] };
-      networkJSON.edges = state.network.body.edges;
-      state.graphInfo.nodes.forEach(node => {
-        networkJSON.nodes.push(node.audioNode.transformToPureObject());
+      const networkJSON = { name: state.loadedNetworkName, audio: {}, nodes: [], edges: [], nodeData: {} };
+      Object.values(state.network.body.edges).forEach(edge => {
+        networkJSON.edges.push({ from: edge.fromId, to: edge.toId });
       });
-      return { ...state, networkToSave: networkJSON };
+      state.graphInfo.nodes.forEach(node => {
+        networkJSON.nodes.push({ ...node, audioNode: node.audioNode.transformToPureObject() });
+      });
+      Object.keys(state.audio).forEach(key => {
+        networkJSON.audio = { ...networkJSON.audio, [key]: state.audio[key] };
+      });
+      networkJSON.audio.nodeData = {};
+      Object.keys(state.audio.nodeData).forEach(key => {
+        networkJSON.nodeData = { ...networkJSON.nodeData, [key]: state.audio.nodeData[key].transformToPureObject() };
+      });
+      return {
+        ...state,
+        networkToSave: networkJSON,
+        unsavedChanges: false,
+        audio: {
+          ...state.audio,
+          playing: false
+        }
+      };
 
     case 'LOAD_NETWORK':
-      // login required? or have some default options
-      // pull up the modal and show the list of networks the user has created
-      // if they cancel, close it
-      // if they select one, load it in
-      // also allow them to delete their saved networks from this view
-      return state;
+      const _nodes = [];
+      let _nodeData = {};
+      action.payload.nodeData &&
+        Object.keys(action.payload.nodeData).forEach(key => {
+          _nodeData = { ..._nodeData, [key]: Node.renderFromJSON(action.payload.nodeData[key]) };
+        });
+      action.payload.nodes &&
+        action.payload.nodes.forEach(node => {
+          _nodes.push({ ...node, audioNode: _nodeData[node.atomicNumber] });
+        });
+      return {
+        ...state,
+        loadedNetworkName: action.payload.name,
+        graphInfo: { nodes: _nodes, edges: action.payload.edges },
+        unsavedChanges: false,
+        audio: {
+          ...action.payload.audio,
+          playing: false,
+          nodeData: _nodeData
+        }
+      };
 
     case 'NEW_NETWORK':
-      // if the current network is unsaved, pull up the modal
-      // prompt them to either save it, abandon it, or cancel
-      // then create a new network
-      return state;
-
-    case 'SEND_TO_LAB':
-      // right now this is a no-op
-      return state;
+      return { ...defaultState, theme: state.theme, network: state.network };
 
     case 'SET_MUTED':
       let somethingIsMuted = false;
@@ -336,7 +344,7 @@ const networkReducer = (state = defaultState, action) => {
           somethingIsMuted = true;
         }
       });
-      return { ...state, audio: { ...state.audio, somethingIsMuted: somethingIsMuted } };
+      return { ...state, unsavedChanges: true, audio: { ...state.audio, somethingIsMuted: somethingIsMuted } };
 
     case 'SET_SOLOED':
       let somethingIsSoloed = false;
@@ -397,7 +405,11 @@ const networkReducer = (state = defaultState, action) => {
           }
         });
       }
-      return { ...state, audio: { ...state.audio, somethingIsSoloed: somethingIsSoloed, somethingIsMuted: _somethingIsMuted } };
+      return {
+        ...state,
+        unsavedChanges: true,
+        audio: { ...state.audio, somethingIsSoloed: somethingIsSoloed, somethingIsMuted: _somethingIsMuted }
+      };
 
     case 'IS_SOMETHING_MUTED_OR_SOLOED':
       let somethingMute = false;
@@ -415,13 +427,17 @@ const networkReducer = (state = defaultState, action) => {
           setColorForState('unmute', key, state);
         }
       });
-      return { ...state, audio: { ...state.audio, somethingIsSoloed: somethingSolo, somethingIsMuted: somethingMute } };
+      return {
+        ...state,
+        unsavedChanges: true,
+        audio: { ...state.audio, somethingIsSoloed: somethingSolo, somethingIsMuted: somethingMute }
+      };
 
     case 'CREATE_NODE_FOR_ELEMENT':
       return { ...state, audio: { ...state.audio, nodeData: { ...state.audio.nodeData, [action.payload]: new Node() } } };
 
     case 'SHOULD_UPDATE_NETWORK':
-      return { ...state, shouldUpdateNetwork: state.shouldUpdateNetwork + 1 };
+      return { ...state, shouldUpdateNetwork: state.shouldUpdateNetwork + 1, unsavedChanges: true };
 
     default:
       return state;
@@ -437,7 +453,13 @@ const doDeletion = state => {
       graphCopy.nodes.splice(i, 1);
     }
   }
-  return { ...state, graphInfo: graphCopy, selectedNodes: null, shouldUpdateNetwork: state.shouldUpdateNetwork + 1 };
+  return {
+    ...state,
+    graphInfo: graphCopy,
+    selectedNodes: null,
+    shouldUpdateNetwork: state.shouldUpdateNetwork + 1,
+    unsavedChanges: true
+  };
 };
 
 const filterSelection = (state, n) => {

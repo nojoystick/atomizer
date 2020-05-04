@@ -37,7 +37,9 @@ const EditorToolbar = ({ id, right, top, hideSourceOnDrag, setInteractible }) =>
   }
 
   const _onActionClick = action => {
-    dispatch(action.action(action.passDispatch && dispatch));
+    if (action.action) {
+      dispatch(action.action(action.passDispatch && dispatch));
+    }
     if (action.modal) {
       dispatch(configActions.setModal(action.modal, action.modalAction, action.global));
       if (action.alwaysShowModal) {

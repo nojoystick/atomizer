@@ -14,7 +14,7 @@ const Lab = () => {
   const elementIndex = useSelector(state => state.network.elementIndex);
   const { menuVisible, labVisible, screenInfo } = useSelector(state => state.view);
   const theme = useSelector(state => state.network.theme);
-  const node = useSelector(state => state.network.audio.nodeData[elementIndex]);
+  const node = useSelector(state => state.network.audio.nodeData && state.network.audio.nodeData[elementIndex]);
   const dispatch = useDispatch();
 
   useEffect(() => {

@@ -2,6 +2,9 @@ import { volumeBounds, midiBounds, panBounds, envelopeBounds, filterBounds } fro
 import _ from 'lodash';
 
 const VolumeData = audioNode => {
+  if (!audioNode || !audioNode.volume) {
+    return {};
+  }
   return [
     {
       label: 'volume',
@@ -43,6 +46,9 @@ const VolumeData = audioNode => {
 };
 
 const EnvelopeData = audioNode => {
+  if (!audioNode || !audioNode.volume) {
+    return {};
+  }
   return [
     {
       label: 'attack',
@@ -104,6 +110,9 @@ const EnvelopeData = audioNode => {
 };
 
 const HPFilterData = audioNode => {
+  if (!audioNode || !audioNode.volume) {
+    return {};
+  }
   return [
     {
       label: 'frequency',
@@ -135,6 +144,9 @@ const HPFilterData = audioNode => {
 };
 
 const LPFilterData = audioNode => {
+  if (!audioNode || !audioNode.volume) {
+    return {};
+  }
   return [
     {
       label: 'frequency',

@@ -81,7 +81,7 @@ const Grid = ({ width, node, pianoRoll, setPianoRoll, height, color, save, note 
       );
     };
     setTable(createTable());
-  }, [pianoRoll, setPianoRoll, height, disposition, key.label, classes, node, save, rerender, note]);
+  }, [pianoRoll, setPianoRoll, height, disposition, key, classes, node, save, rerender, note]);
   return <>{table}</>;
 };
 

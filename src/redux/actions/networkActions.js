@@ -170,10 +170,11 @@ export const networkActions = {
       type: 'SAVE_NETWORK'
     };
   },
-  loadNetwork: param => {
+  loadNetwork: (name, items) => {
     return {
       type: 'LOAD_NETWORK',
-      payload: param
+      name: name,
+      payload: items
     };
   },
   sendToLab: () => {
@@ -184,12 +185,6 @@ export const networkActions = {
   newNetwork: () => {
     return {
       type: 'NEW_NETWORK'
-    };
-  },
-  setPianoRollData: param => {
-    return {
-      type: 'SET_PIANO_ROLL_DATA',
-      payload: param
     };
   },
   createNodeForElement: param => {

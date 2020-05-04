@@ -60,7 +60,7 @@ const icons = [
 export default function WaveformSelector() {
   const theme = useSelector(state => state.network.theme);
   const elementIndex = useSelector(state => state.network.elementIndex);
-  const node = useSelector(state => state.network.audio.nodeData[elementIndex]);
+  const node = useSelector(state => state.network.audio.nodeData && state.network.audio.nodeData[elementIndex]);
   const [waveforms, setWaveforms] = useState(node && node.waveforms);
   const classes = useStyles({ theme: theme });
   const forceUpdate = useForceUpdate();
@@ -90,7 +90,7 @@ export default function WaveformSelector() {
           return (
             <button
               key={index}
-              className={`${classes.button} ${node.waveforms.includes(icon.value) && classes.selected}`}
+              className={`${classes.button} ${node.waveforms && node.waveforms.includes(icon.value) && classes.selected}`}
               onClick={() => _handleClick(icon.value)}
             >
               <Icon
