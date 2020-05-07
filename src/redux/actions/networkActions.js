@@ -212,5 +212,11 @@ export const networkActions = {
     return {
       type: 'SHOULD_UPDATE_NETWORK'
     };
+  },
+  setShouldSaveNetwork: param => {
+    return {
+      type: 'SET_SHOULD_SAVE_NETWORK',
+      payload: param
+    };
   }
 };

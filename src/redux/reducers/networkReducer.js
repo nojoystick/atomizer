@@ -439,6 +439,12 @@ const networkReducer = (state = defaultState, action) => {
     case 'SHOULD_UPDATE_NETWORK':
       return { ...state, shouldUpdateNetwork: state.shouldUpdateNetwork + 1, unsavedChanges: true };
 
+    case 'SET_SHOULD_SAVE_NETWORK':
+      return {
+        ...state,
+        shouldSaveNetwork: action.payload ? action.payload : true,
+        modalVisible: state.loadedNetworkName === null
+      };
     default:
       return state;
   }

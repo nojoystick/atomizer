@@ -5,13 +5,14 @@ class Player {
   static beatIndex = 0;
   static interval = 0;
   static nodesThisMeasure = null;
+  static measureStopTime = null;
+  static measuresPlayed = 0;
 
   constructor() {
     this.timerId = null;
     this.nextNoteTime = Audio.context.currentTime;
     this.network = null;
     this.rootNodes = null;
-    this.measuresPlayed = 0;
     this.theme = null;
   }
   setTimerId(_id) {
@@ -46,12 +47,16 @@ class Player {
   playNote(time, audio) {
     if (Player.beatIndex === 0) {
       this.updateNodesForNewMeasure();
-      ++this.measuresPlayed;
+      Player.measureStopTime = time + (14 * Player.interval) / 1000;
+      ++Player.measuresPlayed;
     }
     Player.nodesThisMeasure &&
       Player.nodesThisMeasure.length > 0 &&
       Player.nodesThisMeasure.forEach(node => {
         const audioNode = node.options.audioNode;
+        if (!audioNode.mute && audioNode.solo !== 1) {
+          audioNode.setAutomatedValuesForNote(Player.beatIndex, time);
+        }
         if (audioNode && audioNode.notes && audioNode.notes[Player.beatIndex]) {
           audioNode.notes[Player.beatIndex].forEach(note => {
             const stopTime = time + (note.length * Player.interval) / 1000;
@@ -91,7 +96,7 @@ class Player {
       }
       node.depth = 0;
       const maxDepth = getMaxDepth(node, this.network, 0);
-      const nodes = getAllNodesAtDepth(this.measuresPlayed % (maxDepth + 1), node, this.network);
+      const nodes = getAllNodesAtDepth(Player.measuresPlayed % (maxDepth + 1), node, this.network);
       nodesThisMeasure = [...nodesThisMeasure, ...nodes];
     });
     nodesThisMeasure &&

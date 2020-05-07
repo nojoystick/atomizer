@@ -14,7 +14,13 @@ const defaultAudioData = {
   hpFilterQ: 0,
   lpFilterQ: 0,
   mute: false,
-  solo: 0
+  solo: 0,
+  volumeAutomation: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  panAutomation: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  hpFilterFrequencyAutomation: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  hpFilterQAutomation: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  lpFilterFrequencyAutomation: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  lpFilterQAutomation: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 };
 
 const tempoBounds = {
@@ -24,7 +30,8 @@ const tempoBounds = {
 
 const volumeBounds = {
   min: 0,
-  max: 127
+  max: 127,
+  valueConversion: 127
 };
 
 const midiBounds = {
@@ -34,7 +41,8 @@ const midiBounds = {
 
 const panBounds = {
   min: -127,
-  max: 127
+  max: 127,
+  valueConversion: 127
 };
 
 const envelopeBounds = {

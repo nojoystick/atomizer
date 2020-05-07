@@ -1,0 +1,29 @@
+.dropdown {
+  background-color: transparent !important;
+  font-family: 'Inconsolata';
+  font-weight: '800';
+  border: none !important;
+  &__control {
+    border: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    &--is-focused {
+      border: none !important;
+      background-color: transparent !important;
+      box-shadow: none !important;
+    }
+  }
+  &__value-container {
+    display: flex !important;
+    justify-content: flex-end !important;
+  }
+  &__indicator-separator {
+    display: none;
+  }
+  &__menu, &__menu-list, &__option--is-focused {
+    background-color: transparent !important;
+  }
+  &__option--is-focused {
+    text-decoration: underline;
+  }
+}

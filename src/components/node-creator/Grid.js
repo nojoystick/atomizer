@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import { keysToNotesMap, modeToOffsetMap, modeToSemitoneOffsetMap } from '../../constants/frequencies';
 import Player from '../../audio/Player';
+import Audio from '../../audio/Audio';
 
 const noteToMod = {
   whole: null,
@@ -41,14 +42,16 @@ const Grid = ({ width, node, pianoRoll, setPianoRoll, height, color, save, note 
       let table = [];
       for (let i = 0; i < height; ++i) {
         let children = [];
+        const measureIsPlaying =
+          node &&
+          !node.mute &&
+          node.solo !== -1 &&
+          Player.nodesThisMeasure &&
+          Player.nodesThisMeasure.filter(el => el.options.audioNode.id === node.id).length > 0 &&
+          Audio.context.currentTime < Player.measureStopTime;
         for (let j = -1; j < 16; ++j) {
           const isPlaying =
-            Math.floor(j / noteToMod[note]) === Math.floor(Player.beatIndex / noteToMod[note]) &&
-            node &&
-            !node.mute &&
-            node.solo !== -1 &&
-            Player.nodesThisMeasure &&
-            Player.nodesThisMeasure.includes(node);
+            measureIsPlaying && Math.floor(j / noteToMod[note]) === Math.floor(Player.beatIndex / noteToMod[note]);
           j === -1
             ? children.push(
                 <td className={classes.scaleLabel} key={rerender && rerender[0] === 'mode' && rerender[1] + 100}>

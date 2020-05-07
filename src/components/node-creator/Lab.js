@@ -8,6 +8,7 @@ import PlayerEditor from './PlayerEditor';
 import WaveformSelector from './WaveformSelector';
 import EnvelopeSettings from './EnvelopeSettings';
 import FilterSettings from './FilterSettings';
+import AutomationEditor from './AutomationEditor';
 import { networkActions } from '../../redux/actions';
 
 const Lab = () => {
@@ -37,7 +38,6 @@ const Lab = () => {
         <ElementSelector />
         <PianoRollDesigner />
         <OscillatorSettings />
-        <PlayerEditor />
         <WaveformSelector />
         <EnvelopeSettings />
         <FilterSettings />

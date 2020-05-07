@@ -11,12 +11,23 @@ const useEditorData = () => {
   return {
     file: [
       {
-        label: 'save network as...',
+        label: 'save',
         modal: SaveNetworkModal,
-        alwaysShowModal: true,
+        action: networkActions.setShouldSaveNetwork,
+        alwaysShowModal: false,
         icon: {
           path: IconSet.save,
           viewBox: '0 0 600 600'
+        },
+        shortcut: ''
+      },
+      {
+        label: 'save as...',
+        modal: SaveNetworkModal,
+        alwaysShowModal: true,
+        icon: {
+          path: IconSet.saveAs,
+          viewBox: '0 0 20 20'
         },
         shortcut: ''
       },

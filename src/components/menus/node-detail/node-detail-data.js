@@ -9,7 +9,7 @@ const NodeDetailData = audioNode => {
       max: volumeBounds.max,
       decimals: 2,
       defaultValue: audioNode.volume,
-      defaultValueConversion: 127,
+      defaultValueConversion: volumeBounds.valueConversion,
       globalValue: false,
       key: audioNode.volume
     },
@@ -31,7 +31,7 @@ const NodeDetailData = audioNode => {
       max: panBounds.max,
       decimals: 2,
       defaultValue: audioNode.pan,
-      defaultValueConversion: 127,
+      defaultValueConversion: panBounds.valueConversion,
       globalValue: false,
       key: audioNode.pan + 500
     }

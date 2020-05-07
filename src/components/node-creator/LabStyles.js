@@ -18,7 +18,7 @@ const LabStyles = makeStyles({
     transition: 'width 0.5s, height 0.5s',
     backgroundColor: props => props.theme && props.theme.secondaryBackground,
     zIndex: 8001,
-    overflowY: 'scroll',
+    overflowY: 'auto',
     overflowX: 'hidden',
     boxShadow: props => props.labVisible && props.theme && `-10px 0px 10px ${props.theme.boxShadowColor}`
   },
@@ -38,12 +38,12 @@ const LabStyles = makeStyles({
     transition: 'width 0.5s, height 0.5s',
     backgroundColor: props => props.theme && props.theme.secondaryBackground,
     zIndex: 8001,
-    overflowY: 'scroll',
+    overflowY: 'auto',
     overflowX: 'hidden'
   },
   effectsContainer: {
     display: 'flex',
-    overflowX: 'scroll',
+    overflowX: 'auto',
     overflowY: 'hidden',
     padding: '10px',
     height: '505px',
@@ -55,11 +55,12 @@ const LabStyles = makeStyles({
     padding: '15px',
     position: 'relative',
     display: 'flex',
+    flexDirection: 'column',
     alignContent: 'center',
     width: '100%',
-    height: props => (props.screenInfo.isMobile ? '400px' : '400px'),
+    height: 'fit-content',
     backgroundColor: props => props.theme && props.theme.background,
-    overflow: 'scroll',
+    overflow: 'auto',
     opacity: '1',
     zIndex: '9999',
     fontSize: '1.2em',
@@ -68,11 +69,18 @@ const LabStyles = makeStyles({
   },
   title: {
     color: props => props.theme && props.theme.text,
-    padding: '5px'
+    padding: '10px',
+    fontSize: '20px'
   },
   text: {
     height: '50px',
     backgroundColor: 'transparent',
+    color: props => props.theme && props.theme.text
+  },
+  buttonWrapper: {
+    backgroundColor: 'transparent',
+    border: 'none',
+    outline: 'none',
     color: props => props.theme && props.theme.text
   },
   buttonContainer: {
@@ -98,6 +106,29 @@ const LabStyles = makeStyles({
   cancelButton: {
     fontWeight: '400',
     backgroundColor: props => props.theme && props.theme.secondary
+  },
+  footer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingTop: '15px'
+  },
+  header: {
+    display: 'flex',
+    flexWrap: 'nowrap'
+  },
+  subheader: {
+    display: 'flex',
+    justifyContent: 'flex-end'
+  },
+  top: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  active: {
+    backgroundColor: 'rgba(100, 100, 100, 0.2)',
+    color: props => props.theme && props.theme.text,
+    boxShadow: props => props.theme && props.theme.boxShadowLight,
+    transition: '1s'
   }
 });
 

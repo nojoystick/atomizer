@@ -1,23 +1,36 @@
 import defaultAudioData from '../constants/audio-data';
 import Audio from './Audio';
 import { transformElementToPureObject } from './PianoRollData';
+import { v4 as uuidv4 } from 'uuid';
 
 class Node {
   constructor(pianoRoll, somethingIsSoloed, nodeJSON) {
+    this.nodes = buildNodes();
     if (nodeJSON) {
       Object.keys(nodeJSON).forEach(key => {
         this[key] = nodeJSON[key];
       });
     } else {
       Object.keys(defaultAudioData).forEach(key => {
-        this[key] = defaultAudioData[key];
+        this[key] = Array.isArray(defaultAudioData[key]) ? defaultAudioData[key].slice() : defaultAudioData[key];
       });
     }
+    this.initializeNodes();
     this.notes = pianoRoll;
-    this.nodes = buildNodes();
     this.solo = somethingIsSoloed ? 1 : defaultAudioData.solo;
+    this.id = uuidv4();
   }
-
+  initializeNodes() {
+    this.setVolume(this.volume);
+    this.setIntensity(this.intensity);
+    this.setPan(this.pan);
+    this.setLPFilterFrequency(this.lpFilterFrequency);
+    this.setLPFilterQ(this.lpFilterQ);
+    this.setHPFilterFrequency(this.hpFilterFrequency);
+    this.setHPFilterQ(this.hpFilterQ);
+    this.setMute(this.mute);
+    this.setSolo(this.solo);
+  }
   setVolume(_volume) {
     this.nodes.gain.gain.setTargetAtTime(_volume, Audio.context.currentTime, 0.03);
     this.volume = _volume;
@@ -108,7 +121,7 @@ class Node {
   }
   transformToPureObject() {
     return {
-      nodes: nodesToPureObject(this.nodes),
+      ...nodesToPureObject(this.nodes),
       volume: this.volume,
       intensity: this.intensity,
       mode: this.mode,
@@ -124,6 +137,49 @@ class Node {
       solo: this.solo
     };
   }
+  updateAutomationValues(dataset, key, note) {
+    const data = dataset.filter(el => el.label === key);
+    if (data[0]) {
+      this[key] = data[0].data.slice();
+    }
+  }
+  resetAutomation(key) {
+    this[key] = defaultAudioData[key].slice();
+  }
+  setAutomatedVolume(automatedValue, time) {
+    this.nodes.gain.gain.exponentialRampToValueAtTime(this.volume * automatedValue === 0 ? 0.00001 : automatedValue, time, 0.03);
+  }
+  setAutomatedPan(automatedValue, time) {
+    // this.nodes.panner.position.exponentialRampToValueAtTime(this.pan * (automatedValue === 0 ? 0.00001 : automatedValue), time, 0.03);
+  }
+  setAutomatedHpFilterFrequency(automatedValue, time) {
+    this.hpFilterFrequency * automatedValue === 0
+      ? this.nodes.hpFilter.frequency.setTargetAtTime(0, time, 0.03)
+      : this.nodes.hpFilter.frequency.exponentialRampToValueAtTime(this.hpFilterFrequency * automatedValue, time, 0.03);
+  }
+  setAutomatedHpFilterQ(automatedValue, time) {
+    this.hpFilterQ * automatedValue === 0
+      ? this.nodes.hpFilter.Q.setTargetAtTime(0, time, 0.03)
+      : this.nodes.hpFilter.Q.exponentialRampToValueAtTime(this.hpFilterQ * automatedValue, time, 0.03);
+  }
+  setAutomatedLpFilterFrequency(automatedValue, time) {
+    this.lpFilterFrequency * automatedValue === 0
+      ? this.nodes.lpFilter.frequency.setTargetAtTime(0, time, 0.03)
+      : this.nodes.lpFilter.frequency.exponentialRampToValueAtTime(this.lpFilterFrequency * automatedValue, time, 0.03);
+  }
+  setAutomatedLpFilterQ(automatedValue, time) {
+    this.lpFilterQ * automatedValue === 0
+      ? this.nodes.lpFilter.Q.setTargetAtTime(0, time, 0.03)
+      : this.nodes.lpFilter.Q.exponentialRampToValueAtTime(this.lpFilterQ * automatedValue, time, 0.03);
+  }
+  setAutomatedValuesForNote(beatIndex, time) {
+    this.setAutomatedVolume(this.volumeAutomation[beatIndex], time);
+    this.setAutomatedPan(this.panAutomation[beatIndex], time);
+    this.setAutomatedHpFilterFrequency(this.hpFilterFrequencyAutomation[beatIndex], time);
+    this.setAutomatedHpFilterQ(this.hpFilterQAutomation[beatIndex], time);
+    this.setAutomatedLpFilterFrequency(this.lpFilterFrequencyAutomation[beatIndex], time);
+    this.setAutomatedLpFilterQ(this.lpFilterQAutomation[beatIndex], time);
+  }
   static renderFromJSON(node) {
     return new Node(node.notes, node.somethingIsSoloed, node);
   }
@@ -131,20 +187,12 @@ class Node {
 
 const nodesToPureObject = _nodes => {
   return {
-    lpFilter: {
-      frequency: _nodes.lpFilter.frequency.value,
-      Q: _nodes.lpFilter.Q.value
-    },
-    hpFilter: {
-      frequency: _nodes.hpFilter.frequency.value,
-      Q: _nodes.hpFilter.Q.value
-    },
-    gain: {
-      gain: _nodes.gain.gain.value
-    },
-    panner: {
-      pan: _nodes.panner.positionX.value
-    }
+    lpFilterFrequency: _nodes.lpFilter.frequency.value,
+    lpFilterQ: _nodes.lpFilter.Q.value,
+    hpFilterFrequency: _nodes.hpFilter.frequency.value,
+    hpFilterQ: _nodes.hpFilter.Q.value,
+    gain: _nodes.gain.gain.value,
+    pan: _nodes.panner.positionX.value
   };
 };
 

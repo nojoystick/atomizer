@@ -41,9 +41,6 @@ const RhythmSelector = ({ note, setNote }) => {
 
 const useStyles = makeStyles({
   parent: {
-    position: 'absolute',
-    top: '10px',
-    right: '15px',
     margin: '0px',
     display: 'flex'
   },

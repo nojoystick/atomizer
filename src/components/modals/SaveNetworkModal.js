@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import DeleteModalStyles from './DeleteModalStyles';
 import { useFirestore, useFirestoreConnect } from 'react-redux-firebase';
@@ -27,6 +27,7 @@ const SaveNetworkModal = React.forwardRef(({ cancel, confirm }, ref) => {
   const [redirect, setRedirect] = useState(false);
   const [content, setContent] = useState(null);
   const networkToSave = useSelector(state => state.network.networkToSave);
+  const shouldSaveNetwork = useSelector(state => state.network.shouldSaveNetwork);
   const theme = useSelector(state => state.network.theme);
   const classes = DeleteModalStyles({ theme: theme });
   const profile = useSelector(state => state.firebase.profile);
@@ -36,20 +37,43 @@ const SaveNetworkModal = React.forwardRef(({ cancel, confirm }, ref) => {
   const firestore = useFirestore();
   const dispatch = useDispatch();
 
+  const onCancel = useCallback(() => {
+    dispatch(networkActions.setShouldSaveNetwork(false));
+    cancel();
+  }, [cancel, dispatch]);
+
+  const doSave = useCallback(() => {
+    const networkRef = firestore.collection('networks').doc(id);
+    networkRef.get().then(docSnapshot => {
+      if (docSnapshot.exists) {
+        const newNetworks = { ...docSnapshot.data(), [name]: { ...networkToSave, name: name } };
+        firestore
+          .collection('networks')
+          .doc(id)
+          .set(newNetworks)
+          .then(confirm && confirm())
+          .then(onCancel());
+      } else {
+        firestore
+          .collection('networks')
+          .doc(id)
+          .set({ [name]: networkToSave, name: name })
+          .then(confirm && confirm())
+          .then(onCancel());
+      }
+    });
+  }, [confirm, firestore, id, name, networkToSave, onCancel]);
+
+  if (shouldSaveNetwork && loadedNetworkName) {
+    console.log('clicked save');
+    doSave();
+  }
+
   if (!networkToSave && !profile.isEmpty) {
     dispatch(networkActions.saveNetwork());
   }
 
   useEffect(() => {
-    const doSave = () => {
-      firestore
-        .collection('networks')
-        .doc(id)
-        .set({ [name]: { ...networkToSave, name: name } }, { merge: true })
-        .then(confirm && confirm())
-        .then(cancel());
-    };
-
     const _onSave = () => {
       if (networkToSave && name && !profile.isEmpty) {
         const networkRef = firestore.collection('networks').doc(id);
@@ -94,7 +118,7 @@ const SaveNetworkModal = React.forwardRef(({ cancel, confirm }, ref) => {
           }
         : defaultContent
     );
-  }, [cancel, classes, confirm, dispatch, firestore, id, name, networkToSave, profile]);
+  }, [cancel, classes, confirm, dispatch, doSave, firestore, id, name, networkToSave, profile]);
 
   return (
     <div className={classes.content} ref={ref}>
@@ -103,7 +127,7 @@ const SaveNetworkModal = React.forwardRef(({ cancel, confirm }, ref) => {
           <h3>{content.header}</h3>
           {content.content}
           <div className={`${classes.buttonContainer} ${content.buttonContainerClass}`}>
-            <button className={`${classes.button} ${classes.cancelButton}`} onClick={cancel}>
+            <button className={`${classes.button} ${classes.cancelButton}`} onClick={onCancel}>
               cancel
             </button>
             <button

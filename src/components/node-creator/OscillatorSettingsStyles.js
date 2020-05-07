@@ -27,7 +27,6 @@ const OscillatorSettingsStyles = makeStyles({
     padding: '15px 0px'
   },
   sliderLabel: {
-    margin: '0px 0px 0px 20px',
     display: 'inline-block',
     fontFamily: 'Inconsolata',
     fontWeight: '800',

@@ -5,10 +5,12 @@ import { useFirestore, useFirestoreConnect } from 'react-redux-firebase';
 import { Redirect } from 'react-router-dom';
 import * as Routes from '../../constants/routes';
 import { networkActions } from '../../redux/actions';
+import Player from '../../audio/Player';
 
 const SaveNetworkModal = React.forwardRef(({ cancel }, ref) => {
   const [redirect, setRedirect] = useState(false);
   const [content, setContent] = useState(null);
+  const [contentLoaded, setContentLoaded] = useState(false);
   const [list, setList] = useState(null);
   const theme = useSelector(state => state.network.theme);
   const classes = DeleteModalStyles({ theme: theme });
@@ -21,11 +23,16 @@ const SaveNetworkModal = React.forwardRef(({ cancel }, ref) => {
 
   useEffect(() => {
     const networkRef = firestore.collection('networks').doc(id);
-    networkRef.get().then(docSnapshot => {
-      if (docSnapshot.exists) {
-        setList(docSnapshot.data());
-      }
-    });
+    (async () => {
+      await networkRef.get().then(docSnapshot => {
+        if (docSnapshot.exists) {
+          setList(docSnapshot.data());
+        }
+      });
+      setContentLoaded(true);
+    })();
+    Player.beatIndex = 0;
+    Player.measuresPlayed = 0;
   }, [firestore, id]);
 
   useEffect(() => {
@@ -36,7 +43,7 @@ const SaveNetworkModal = React.forwardRef(({ cancel }, ref) => {
     const NetworkList = () => {
       return (
         <div className={classes.listParent}>
-          {list ? (
+          {list && Object.keys(list).length > 0 ? (
             Object.keys(list).map((key, index) => {
               return (
                 <button className={classes.listItem} key={index} value={key} onClick={e => selectItem(e.target.value)}>
@@ -45,14 +52,20 @@ const SaveNetworkModal = React.forwardRef(({ cancel }, ref) => {
               );
             })
           ) : (
-            <p className={classes.text}>looks like you haven't saved any networks yet!</p>
+            <p className={classes.text} style={{ paddingLeft: '10px' }}>
+              looks like you haven't saved any networks yet!
+            </p>
           )}
         </div>
       );
     };
 
     const LoginMessage = () => {
-      return <p className={classes.text}>you'll need to be logged in to do that</p>;
+      return (
+        <p className={classes.text} style={{ paddingLeft: '10px' }}>
+          you'll need to be logged in to do that
+        </p>
+      );
     };
 
     const redirect = () => {
@@ -76,11 +89,11 @@ const SaveNetworkModal = React.forwardRef(({ cancel }, ref) => {
           }
         : defaultContent
     );
-  }, [cancel, classes, dispatch, firestore, id, list, profile]);
+  }, [cancel, classes, contentLoaded, dispatch, firestore, id, list, profile]);
 
   return (
     <div className={classes.content} ref={ref}>
-      {content && (
+      {content && contentLoaded && (
         <>
           <h3>load your tune</h3>
           <content.Component />
