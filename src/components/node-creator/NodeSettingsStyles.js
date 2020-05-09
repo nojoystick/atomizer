@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/styles';
 
-const NodeSettingsStyles = makeStyles({
+const useNodeSettingsStyles = makeStyles({
   nodeDetailPanel: {
     margin: '15px',
     height: '180px',
@@ -66,35 +66,39 @@ const NodeSettingsStyles = makeStyles({
   row: {
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     '& > div': {
       display: 'inline-block'
     }
   },
-  dropdown: {
-    width: '50px !important',
-    maxWidth: '60px',
-    height: '18px !important',
-    minHeight: '18px !important',
+  elementDropdown: {
+    backgroundColor: 'inherit !important',
+    color: 'inherit !important',
     fontFamily: 'Inconsolata',
     fontWeight: '800',
-    zIndex: '9000',
-    borderWidth: '0px 0px 2px 0px !important',
-    borderColor: `${props => props.theme && props.theme.text} $important`,
-    color: props => props.theme && props.theme.text,
-    boxShadow: 'none !important',
-    padding: '0px !important',
-    margin: 'auto',
-    marginTop: '10px',
-    marginBottom: '10px',
-    '&:hover': {
-      borderColor: `${props => props.theme && props.theme.text} !important`
+    border: 'none !important',
+    borderBottom: props => `2px solid ${props.theme && props.theme.text} !important`,
+    width: '50px',
+    '& *': {
+      fontFamily: 'Inconsolata',
+      fontWeight: '800'
     },
     '& div': {
-      '& input': {
-        color: props => props.theme && props.theme.text
-      }
+      boxShadow: 'none'
+    },
+    '&__menu': {
+      minWidth: '35px',
+      boxShadow: props => props.theme && `${props.theme.boxShadow} !important`
+    },
+    '&__menu-list': {
+      zIndex: '8001 !important',
+      backgroundColor: props => props.theme && `${props.theme.secondaryBackgroundSolid} !important`
+    },
+    '&__option': {
+      padding: '5px 0px !important',
+      color: props => props.theme && `${props.theme.text} !important`
     }
   }
 });
 
-export default NodeSettingsStyles;
+export default useNodeSettingsStyles;

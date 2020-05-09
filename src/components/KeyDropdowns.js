@@ -1,19 +1,62 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { networkActions, configActions } from '../redux/actions';
-import Select from 'react-dropdown-select';
+import Select from 'react-select';
 import { keyArrs, keyMap, dispositionOptions } from '../constants/frequencies';
 import { makeStyles } from '@material-ui/styles';
+import elements from '../constants/elements';
+import { parseToRgba } from '../utils/color-utils';
 
-const KeyDropdowns = ({ style, renderInBody }) => {
+const useStyles = makeStyles({
+  parent: {
+    padding: '0px',
+    width: '100px',
+    display: 'flex'
+  },
+  dropdown: {
+    backgroundColor: 'inherit !important',
+    color: 'inherit !important',
+    fontFamily: 'Inconsolata',
+    fontWeight: '800',
+    border: 'none !important',
+    width: '50px',
+    '& div': {
+      boxShadow: 'none'
+    },
+    '&__menu': {
+      minWidth: '35px',
+      boxShadow: props => props.theme && `${props.theme.boxShadow} !important`
+    },
+    '&__menu-list': {
+      zIndex: '8001 !important',
+      backgroundColor: props => props.theme && `${props.theme.secondaryBackgroundSolid} !important`
+    },
+    '&__option': {
+      padding: '5px 0px !important',
+      color: props => props.theme && `${props.theme.text} !important`
+    }
+  },
+  key: {
+    width: '30px'
+  }
+});
+
+const KeyDropdowns = () => {
   const { key, disposition } = useSelector(state => state.network.audio);
+  const elementIndex = useSelector(state => state.network.elementIndex);
   const theme = useSelector(state => state.network.theme);
+  const [elementList] = useState(elements(theme));
+  const [element, setElement] = useState(elementList[elementIndex - 1]);
 
   const dispatch = useDispatch();
   const classes = useStyles({ theme: theme });
 
+  useEffect(() => {
+    setElement(elementList[elementIndex - 1]);
+  }, [element, elementIndex, elementList]);
+
   const onKeyChange = e => {
-    dispatch(networkActions.setKey(e[0]));
+    dispatch(networkActions.setKey(e));
   };
 
   const dispositionLabelChange = {
@@ -30,7 +73,7 @@ const KeyDropdowns = ({ style, renderInBody }) => {
   const onDispositionChange = e => {
     if (disposition) {
       const localDisposition = disposition;
-      dispatch(networkActions.setDisposition(e[0].value));
+      dispatch(networkActions.setDisposition(e.value));
       if (Object.keys(dispositionLabelChange).includes(key.label)) {
         const label = dispositionLabelChange[key.label];
         const newDisposition = dispositionLabelChange[localDisposition];
@@ -39,76 +82,56 @@ const KeyDropdowns = ({ style, renderInBody }) => {
     }
   };
 
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      padding: '8px 3px',
+      backgroundColor: state.isSelected
+        ? `${element.color} !important`
+        : state.isFocused
+        ? `${parseToRgba(element.color, 0.3)} !important`
+        : ''
+    }),
+    menuPortal: styles => ({ ...styles, zIndex: 10000 }),
+    indicatorSeparator: styles => ({ display: 'none' })
+  };
+
   return (
     <>
       {disposition && (
-        <div className={classes.parent} style={style}>
+        <div className={classes.parent}>
           <Select
-            portal={renderInBody && document.querySelector('body')}
+            className={`${classes.dropdown} ${classes.key}`}
+            classNamePrefix={classes.dropdown}
+            menuPortalTarget={document.body}
+            components={{ DropdownIndicator: () => null }}
+            styles={customStyles}
             options={keyArrs[disposition]}
             onChange={onKeyChange}
-            className={`small-dropdown-no-search ${classes.dropdown}`}
-            values={[keyArrs[disposition].find(val => val.label === key.label)]}
-            searchable={false}
-            dropdownGap={0}
-            dropdownHandle={false}
-            labelField='label'
+            value={[keyArrs[disposition].find(val => val.label === key.label)]}
             onDropdownOpen={() => dispatch(configActions.setHotkeys(false))}
             onDropdownClose={() => dispatch(configActions.setHotkeys(true))}
+            menuPlacement='auto'
+            maxMenuHeight={150}
           />
           <Select
-            portal={renderInBody && document.querySelector('body')}
+            className={classes.dropdown}
+            classNamePrefix={classes.dropdown}
+            menuPortalTarget={document.body}
+            components={{ DropdownIndicator: () => null }}
+            styles={customStyles}
             options={dispositionOptions}
             onChange={onDispositionChange}
-            className={`${classes.dropdown} wide-dropdown-no-search`}
-            values={[dispositionOptions.find(val => val.value === disposition)]}
-            searchable={false}
+            value={[dispositionOptions.find(val => val.value === disposition)]}
             disabled={key.value === 0}
-            dropdownGap={0}
-            dropdownHandle={false}
-            labelField='label'
             onDropdownOpen={() => dispatch(configActions.setHotkeys(false))}
             onDropdownClose={() => dispatch(configActions.setHotkeys(true))}
+            menuPlacement='auto'
           />
         </div>
       )}
     </>
   );
 };
-
-const useStyles = makeStyles({
-  parent: {
-    width: '80px',
-    display: 'flex'
-  },
-  dropdown: {
-    width: '50px',
-    maxWidth: '60px',
-    height: '18px !important',
-    minHeight: '18px !important',
-    fontFamily: 'Inconsolata',
-    fontWeight: '800',
-    zIndex: '3',
-    borderWidth: '0px 0px 2px 0px !important',
-    borderColor: `${props => props.theme && props.theme.text} $important`,
-    boxShadow: 'none !important',
-    padding: '0px !important',
-    margin: 'auto',
-    marginTop: '10px',
-    marginBottom: '10px',
-    display: 'inline',
-    '&:hover': {
-      borderColor: `${props => props.theme && props.theme.text} !important`
-    },
-    '> & span': {
-      width: '23px'
-    },
-    '& div': {
-      '& input': {
-        color: props => props.theme && props.theme.text
-      }
-    }
-  }
-});
 
 export default KeyDropdowns;

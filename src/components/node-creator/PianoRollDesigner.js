@@ -40,7 +40,7 @@ const initializePianoRoll = (note, height, pianoRoll) => {
   return arr;
 };
 
-const PianoRollDesigner = () => {
+const PianoRollDesigner = ({ forceUpdate }) => {
   const [pianoRoll, setPianoRoll] = useState(null);
   const theme = useSelector(state => state.network.theme);
   const screenInfo = useSelector(state => state.view.screenInfo);
@@ -52,8 +52,7 @@ const PianoRollDesigner = () => {
   const [panelToShow, setPanelToShow] = useState(panels.pitch);
   const [parameterToAutomate, setParameterToAutomate] = useState(null);
   const [rerenderAutomation, setRerenderAutomation] = useState(null);
-  const [noteForPitch, setNoteForPitch] = useState('eighth');
-  const [noteForAutomation, setNoteForAutomation] = useState('eighth');
+  const [note, setNote] = useState('eighth');
   const [height, setHeight] = useState();
 
   useEffect(() => {
@@ -64,25 +63,25 @@ const PianoRollDesigner = () => {
     return disposition === 'c' ? 13 : 8;
   };
 
-  const classes = LabStyles({ screenInfo: screenInfo, theme: theme });
+  const classes = LabStyles({ screenInfo: screenInfo, theme: theme, isChromatic: disposition === 'c' });
 
   useEffect(() => {
     const h = getHeightForDisposition(disposition);
     setHeight(h);
-    setPianoRoll(initializePianoRoll(noteForPitch, h, pianoRoll));
+    setPianoRoll(initializePianoRoll(note, h, pianoRoll));
     pianoRoll && save();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [disposition, noteForPitch]);
+  }, [disposition, note]);
 
   useEffect(() => {
     const loadPianoRoll = roll => {
       const h = getHeightForDisposition(disposition);
       if (!roll || Object.keys(roll).length === 0 || !disposition) {
-        setPianoRoll(initializePianoRoll(noteForPitch, h));
+        setPianoRoll(initializePianoRoll(note, h));
         return null;
       }
-      setNoteForPitch(setGridForRoll(roll));
-      const grid = initializePianoRoll(noteForPitch, h);
+      setNote(setGridForRoll(roll));
+      const grid = initializePianoRoll(note, h);
       Object.keys(roll).forEach(beat => {
         roll[beat].forEach(note => {
           if (grid[h - 1 - semitonesToDisposition[disposition][note.pitch]]) {
@@ -131,7 +130,7 @@ const PianoRollDesigner = () => {
           if (!parsedRoll[j]) {
             parsedRoll[j] = [];
           }
-          parsedRoll[j].push(new Note(dispositionToSemitones[disposition][height - 1 - i], 120, noteForPitch, false));
+          parsedRoll[j].push(new Note(dispositionToSemitones[disposition][height - 1 - i], 120, note, false));
         }
       });
     });
@@ -140,11 +139,12 @@ const PianoRollDesigner = () => {
 
   const clear = () => {
     if (panelToShow === panels.pitch) {
-      setPianoRoll(initializePianoRoll(noteForPitch, height));
+      setPianoRoll(initializePianoRoll(note, height));
       save();
       node.setNotes(null);
     } else {
       node.resetAutomation(parameterToAutomate.key);
+      forceUpdate();
       setRerenderAutomation(rerenderAutomation + 1);
     }
   };
@@ -162,7 +162,7 @@ const PianoRollDesigner = () => {
         </span>
         <span className={classes.subheader}>
           {panelToShow === panels.pitch ? (
-            <PlayerEditor />
+            <PlayerEditor element={element} />
           ) : (
             <AutomationDropdown parameterToAutomate={parameterToAutomate} setParameterToAutomate={setParameterToAutomate} />
           )}
@@ -170,28 +170,20 @@ const PianoRollDesigner = () => {
       </div>
       {panelToShow === panels.pitch ? (
         <Grid
-          width={noteToWidth[noteForPitch]}
+          width={noteToWidth[note]}
           node={node}
           pianoRoll={pianoRoll}
           setPianoRoll={setPianoRoll}
           height={height}
           color={element && element.color}
           save={save}
-          note={noteForPitch}
+          note={note}
         />
       ) : (
-        <AutomationEditor
-          note={noteForAutomation}
-          setNote={setNoteForAutomation}
-          parameterToAutomate={parameterToAutomate}
-          key={rerenderAutomation}
-        />
+        <AutomationEditor parameterToAutomate={parameterToAutomate} key={rerenderAutomation} />
       )}
-      <span className={classes.footer}>
-        <RhythmSelector
-          note={panelToShow === panels.pitch ? noteForPitch : noteForAutomation}
-          setNote={panelToShow === panels.pitch ? setNoteForPitch : setNoteForAutomation}
-        />
+      <span className={`${classes.footer} ${panelToShow === panels.automation && classes.automationFooter}`}>
+        {panelToShow === panels.pitch && <RhythmSelector note={note} setNote={setNote} />}
         <button className={`${classes.cancelButton} ${classes.button}`} onClick={clear}>
           clear
         </button>

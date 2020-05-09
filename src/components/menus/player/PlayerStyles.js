@@ -34,6 +34,11 @@ const PlayerStyles = makeStyles({
     padding: '0px 10px',
     alignItems: 'center'
   },
+  rowNoPadding: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
   button: {
     width: '15px',
     height: '25px',
@@ -82,31 +87,6 @@ const PlayerStyles = makeStyles({
     width: '120px',
     display: 'inline',
     marginBottom: '20px'
-  },
-  dropdown: {
-    width: '50px',
-    maxWidth: '60px',
-    height: '18px !important',
-    minHeight: '18px !important',
-    fontFamily: 'Inconsolata',
-    fontWeight: '800',
-    zIndex: '3',
-    borderWidth: '0px 0px 2px 0px !important',
-    borderColor: `${props => props.theme && props.theme.text} $important`,
-    boxShadow: 'none !important',
-    padding: '0px !important',
-    display: 'inline',
-    '&:hover': {
-      borderColor: `${props => props.theme && props.theme.text} !important`
-    },
-    '> & span': {
-      width: '23px'
-    },
-    '& div': {
-      '& input': {
-        color: props => props.theme && props.theme.text
-      }
-    }
   },
   parent: {
     margin: '15px',

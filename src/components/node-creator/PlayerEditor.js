@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ModeSelector from '../ModeSelector';
 import { useSelector } from 'react-redux';
 import Select from 'react-select';
 import useForceUpdate from '../../utils/useForceUpdate';
 import { makeStyles } from '@material-ui/styles';
-import elements from '../../constants/elements';
 import { parseToRgba } from '../../utils/color-utils';
 
 const octaves = [
@@ -58,37 +57,34 @@ const useStyles = makeStyles({
       display: 'none !important'
     },
     '&__option': {
-      color: props => props.theme && `${props.theme.text} !important`,
-      '&--is-focused': {
-        backgroundColor: props => `${parseToRgba(props.nodeColor, 0.3)} !important`
-      },
-      '&--is-selected': {
-        backgroundColor: props => `${props.nodeColor} !important`
-      }
+      color: props => props.theme && `${props.theme.text} !important`
     }
   }
 });
 
-const PlayerEditor = () => {
+const PlayerEditor = ({ element }) => {
   const theme = useSelector(state => state.network.theme);
   const elementIndex = useSelector(state => state.network.elementIndex);
   const node = useSelector(state => state.network.audio.nodeData && state.network.audio.nodeData[elementIndex]);
-  const [elementList] = useState(elements(theme));
-  const [element, setElement] = useState(elementList[elementIndex - 1]);
-  const classes = useStyles({ theme: theme, nodeColor: element && element.color });
-
-  useEffect(() => {
-    setElement(elementList[elementIndex - 1]);
-  }, [element, elementIndex, elementList]);
-
   const forceUpdateMode = useForceUpdate('mode');
   const forceUpdateOctave = useForceUpdate('octave');
+  const classes = useStyles({ theme: theme, nodeColor: element.color });
 
   const _onChange = e => {
     node.setOctave(e.value);
     forceUpdateOctave();
   };
 
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected
+        ? `${element.color} !important`
+        : state.isFocused
+        ? `${parseToRgba(element.color, 0.3)} !important`
+        : ''
+    })
+  };
   return (
     <div className={classes.row}>
       {node && (
@@ -101,10 +97,11 @@ const PlayerEditor = () => {
             <Select
               className={classes.octaveDropdown}
               classNamePrefix={classes.octaveDropdown}
-              key={forceUpdateOctave}
+              styles={customStyles}
               options={octaves}
               onChange={_onChange}
               value={[{ label: node.octave, value: node.octave }]}
+              key={forceUpdateOctave + elementIndex}
             />
           </div>
         </>

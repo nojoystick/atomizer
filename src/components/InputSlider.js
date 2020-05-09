@@ -6,6 +6,7 @@ const InputSlider = ({
   useStyles,
   useStylesProps,
   label,
+  disabled,
   min,
   max,
   decimals,
@@ -61,7 +62,10 @@ const InputSlider = ({
   };
 
   return (
-    <div className={`${vertical ? classes.verticalSliderGroup : classes.sliderGroup} sliderContainer`}>
+    <div
+      className={`${vertical ? classes.verticalSliderGroup : classes.sliderGroup} sliderContainer ${disabled &&
+        classes.disabled}`}
+    >
       <label className={`${classes.sliderLabel} ${smallLabel && classes.smallLabel} ${vertical && classes.verticalLabel}`}>
         {label}
       </label>
@@ -76,6 +80,7 @@ const InputSlider = ({
           defaultValue={localAudio && localAudio.toFixed ? localAudio.toFixed(decimals) : localAudio}
           onKeyDown={e => verify(onChange, min, max / defaultValueConversion, e)}
           step={stepInput ? stepInput : 1}
+          disabled={disabled ? 'disabled' : ''}
         />
       )}
       <input
@@ -92,6 +97,7 @@ const InputSlider = ({
         onMouseUp={globalValue ? e => sliderUp(onChange, e) : null}
         onKeyUp={globalValue ? e => sliderUp(onChange, e) : null}
         step={step ? step : 1}
+        disabled={disabled ? 'disabled' : ''}
       />
       {vertical && (
         <input
@@ -104,6 +110,7 @@ const InputSlider = ({
           defaultValue={localAudio && localAudio.toFixed ? localAudio.toFixed(decimals) : localAudio}
           onKeyDown={e => verify(onChange, min, max / defaultValueConversion, e)}
           step={stepInput ? stepInput : 1}
+          disabled={disabled ? 'disabled' : ''}
         />
       )}
     </div>

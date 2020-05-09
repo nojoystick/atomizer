@@ -58,12 +58,13 @@ const LabStyles = makeStyles({
     flexDirection: 'column',
     alignContent: 'center',
     width: '100%',
-    height: 'fit-content',
     backgroundColor: props => props.theme && props.theme.background,
-    overflow: 'auto',
+    overflow: 'hidden',
     opacity: '1',
     zIndex: '9999',
     fontSize: '1.2em',
+    minHeight: '565px',
+    height: '565px',
     border: props => `3px solid ${props.theme && props.theme.text}`,
     boxShadow: props => props.theme && props.theme.boxShadow
   },
@@ -104,6 +105,7 @@ const LabStyles = makeStyles({
     backgroundColor: props => props.theme && props.theme.background
   },
   cancelButton: {
+    justifySelf: 'flex-end',
     fontWeight: '400',
     backgroundColor: props => props.theme && props.theme.secondary
   },
@@ -111,6 +113,9 @@ const LabStyles = makeStyles({
     display: 'flex',
     justifyContent: 'space-between',
     paddingTop: '15px'
+  },
+  automationFooter: {
+    justifyContent: 'flex-end'
   },
   header: {
     display: 'flex',

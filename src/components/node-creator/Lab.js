@@ -4,12 +4,11 @@ import PianoRollDesigner from './PianoRollDesigner';
 import OscillatorSettings from './OscillatorSettings';
 import LabStyles from './LabStyles';
 import ElementSelector from './ElementSelector';
-import PlayerEditor from './PlayerEditor';
 import WaveformSelector from './WaveformSelector';
 import EnvelopeSettings from './EnvelopeSettings';
 import FilterSettings from './FilterSettings';
-import AutomationEditor from './AutomationEditor';
 import { networkActions } from '../../redux/actions';
+import useForceUpdate from '../../utils/useForceUpdate';
 
 const Lab = () => {
   const elementIndex = useSelector(state => state.network.elementIndex);
@@ -17,6 +16,8 @@ const Lab = () => {
   const theme = useSelector(state => state.network.theme);
   const node = useSelector(state => state.network.audio.nodeData && state.network.audio.nodeData[elementIndex]);
   const dispatch = useDispatch();
+
+  const forceUpdate = useForceUpdate('automation');
 
   useEffect(() => {
     if (!node) {
@@ -36,11 +37,11 @@ const Lab = () => {
     <div className={screenInfo.isMobile ? classes.labMobile : classes.lab} id='lab'>
       <>
         <ElementSelector />
-        <PianoRollDesigner />
+        <PianoRollDesigner forceUpdate={forceUpdate} />
         <OscillatorSettings />
         <WaveformSelector />
         <EnvelopeSettings />
-        <FilterSettings />
+        <FilterSettings forceUpdate={forceUpdate} />
       </>
     </div>
   );

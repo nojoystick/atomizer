@@ -19,6 +19,14 @@ class Node {
     this.notes = pianoRoll;
     this.solo = somethingIsSoloed ? 1 : defaultAudioData.solo;
     this.id = uuidv4();
+    this.automationToNodeMap = {
+      volumeAutomation: this.nodes.gain.gain,
+      panAutomation: this.nodes.panner.positionX,
+      hpFilterFrequencyAutomation: this.nodes.hpFilter.frequency,
+      hpFilterQAutomation: this.nodes.hpFilter.Q,
+      lpFilterFrequencyAutomation: this.nodes.lpFilter.frequency,
+      lpFilterQAutomation: this.nodes.lpFilter.Q
+    };
   }
   initializeNodes() {
     this.setVolume(this.volume);
@@ -134,56 +142,66 @@ class Node {
       release: this.release,
       pan: this.pan,
       mute: this.mute,
-      solo: this.solo
+      solo: this.solo,
+      automationEnabled: this.automationEnabled,
+      volumeAutomation: this.volumeAutomation,
+      panAutomation: this.panAutomation,
+      hpFilterFrequencyAutomation: this.hpFilterFrequencyAutomation,
+      hpFilterQAutomation: this.hpFilterQAutomation,
+      lpFilterFrequencyAutomation: this.lpFilterFrequencyAutomation,
+      lpFilterQAutomation: this.lpFilterQAutomation
     };
   }
-  updateAutomationValues(dataset, key, note) {
-    const data = dataset.filter(el => el.label === key);
-    if (data[0]) {
-      this[key] = data[0].data.slice();
-    }
+  updateAutomationValues(dataset, key) {
+    this[key] = dataset.slice();
+    this.automationEnabled[key] = true;
   }
   resetAutomation(key) {
     this[key] = defaultAudioData[key].slice();
+    delete this.automationEnabled[key];
   }
-  setAutomatedVolume(automatedValue, time) {
-    this.nodes.gain.gain.exponentialRampToValueAtTime(this.volume * automatedValue === 0 ? 0.00001 : automatedValue, time, 0.03);
-  }
-  setAutomatedPan(automatedValue, time) {
-    // this.nodes.panner.position.exponentialRampToValueAtTime(this.pan * (automatedValue === 0 ? 0.00001 : automatedValue), time, 0.03);
-  }
-  setAutomatedHpFilterFrequency(automatedValue, time) {
-    this.hpFilterFrequency * automatedValue === 0
-      ? this.nodes.hpFilter.frequency.setTargetAtTime(0, time, 0.03)
-      : this.nodes.hpFilter.frequency.exponentialRampToValueAtTime(this.hpFilterFrequency * automatedValue, time, 0.03);
-  }
-  setAutomatedHpFilterQ(automatedValue, time) {
-    this.hpFilterQ * automatedValue === 0
-      ? this.nodes.hpFilter.Q.setTargetAtTime(0, time, 0.03)
-      : this.nodes.hpFilter.Q.exponentialRampToValueAtTime(this.hpFilterQ * automatedValue, time, 0.03);
-  }
-  setAutomatedLpFilterFrequency(automatedValue, time) {
-    this.lpFilterFrequency * automatedValue === 0
-      ? this.nodes.lpFilter.frequency.setTargetAtTime(0, time, 0.03)
-      : this.nodes.lpFilter.frequency.exponentialRampToValueAtTime(this.lpFilterFrequency * automatedValue, time, 0.03);
-  }
-  setAutomatedLpFilterQ(automatedValue, time) {
-    this.lpFilterQ * automatedValue === 0
-      ? this.nodes.lpFilter.Q.setTargetAtTime(0, time, 0.03)
-      : this.nodes.lpFilter.Q.exponentialRampToValueAtTime(this.lpFilterQ * automatedValue, time, 0.03);
-  }
-  setAutomatedValuesForNote(beatIndex, time) {
-    this.setAutomatedVolume(this.volumeAutomation[beatIndex], time);
-    this.setAutomatedPan(this.panAutomation[beatIndex], time);
-    this.setAutomatedHpFilterFrequency(this.hpFilterFrequencyAutomation[beatIndex], time);
-    this.setAutomatedHpFilterQ(this.hpFilterQAutomation[beatIndex], time);
-    this.setAutomatedLpFilterFrequency(this.lpFilterFrequencyAutomation[beatIndex], time);
-    this.setAutomatedLpFilterQ(this.lpFilterQAutomation[beatIndex], time);
+  setAutomatedValuesForNote(beatIndex, time, interval) {
+    const keys = [];
+    Object.keys(this.automationEnabled).forEach(key => {
+      if (this.automationEnabled[key] && this[key][beatIndex] !== null) {
+        keys.push(key);
+        setAutomatedValue(this[key], this.automationToNodeMap[key], beatIndex, time, interval);
+      }
+    });
   }
   static renderFromJSON(node) {
     return new Node(node.notes, node.somethingIsSoloed, node);
   }
 }
+
+const setAutomatedValue = (arr, node, beatIndex, time, interval) => {
+  const nextIndex = getNextAutomatedIndex(beatIndex + 1, arr);
+  const beatsBetweenIndices = nextIndex > beatIndex ? nextIndex - beatIndex : 16 - beatIndex + nextIndex;
+  if (nextIndex === -1 || nextIndex === beatIndex) {
+    return;
+  }
+  node.setTargetAtTime(arr[beatIndex], time, 0.03);
+  node.exponentialRampToValueAtTime(
+    arr[nextIndex] !== 0 ? arr[nextIndex] : 0.0001,
+    parseFloat(time - 0.01 + interval * beatsBetweenIndices)
+  );
+};
+
+const getNextAutomatedIndex = (startIndex, arr) => {
+  let hasLooped = 0;
+  if (startIndex >= arr.length) {
+    startIndex = 0;
+    hasLooped++;
+  }
+  while (arr[startIndex] === null && hasLooped < 2) {
+    startIndex++;
+    if (startIndex >= arr.length) {
+      startIndex = 0;
+      ++hasLooped;
+    }
+  }
+  return hasLooped > 1 ? -1 : startIndex;
+};
 
 const nodesToPureObject = _nodes => {
   return {

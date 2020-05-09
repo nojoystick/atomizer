@@ -94,7 +94,6 @@ const useStyles = makeStyles({
   },
   tableCell: {
     width: props => `${350 / props.width}px`,
-    height: props => (props.height === 8 ? '20px' : '15px !important'),
     padding: props => (props.height === 8 ? '3px' : '0px')
   },
   scaleLabel: {
@@ -106,8 +105,8 @@ const useStyles = makeStyles({
   },
   button: {
     boxSizing: 'border-box',
+    height: props => (props.height === 8 ? '40px' : '30px'),
     width: '100%',
-    height: props => (props.height === 8 ? '20px' : '15px !important'),
     backgroundColor: 'transparent',
     opacity: '0.7',
     border: props => `2px solid ${props.theme && props.theme.secondaryText}`,

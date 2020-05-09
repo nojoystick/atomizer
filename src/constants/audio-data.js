@@ -15,12 +15,13 @@ const defaultAudioData = {
   lpFilterQ: 0,
   mute: false,
   solo: 0,
-  volumeAutomation: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  panAutomation: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  hpFilterFrequencyAutomation: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  hpFilterQAutomation: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  lpFilterFrequencyAutomation: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  lpFilterQAutomation: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+  automationEnabled: {},
+  volumeAutomation: [1, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1],
+  panAutomation: [0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0],
+  hpFilterFrequencyAutomation: [0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0],
+  hpFilterQAutomation: [0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0],
+  lpFilterFrequencyAutomation: [19999, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 19999],
+  lpFilterQAutomation: [0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0]
 };
 
 const tempoBounds = {

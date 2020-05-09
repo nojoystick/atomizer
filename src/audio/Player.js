@@ -1,5 +1,6 @@
 import Audio from './Audio';
 import { frequency, modeToSemitoneOffsetMap, transformToDisposition } from '../constants/frequencies';
+import { expCurve } from './audio-utils';
 
 class Player {
   static beatIndex = 0;
@@ -40,8 +41,8 @@ class Player {
   }
   schedule(audio) {
     while (this.nextNoteTime < Audio.context.currentTime + 0.01) {
-      this.nextNoteTime += Player.interval / 1000;
       this.playNote(this.nextNoteTime, audio);
+      this.nextNoteTime += Player.interval / 1000;
     }
   }
   playNote(time, audio) {
@@ -54,8 +55,8 @@ class Player {
       Player.nodesThisMeasure.length > 0 &&
       Player.nodesThisMeasure.forEach(node => {
         const audioNode = node.options.audioNode;
-        if (!audioNode.mute && audioNode.solo !== 1) {
-          audioNode.setAutomatedValuesForNote(Player.beatIndex, time);
+        if (audioNode && !audioNode.mute && audioNode.solo !== 1) {
+          audioNode.setAutomatedValuesForNote(Player.beatIndex, time, Player.interval / 1000);
         }
         if (audioNode && audioNode.notes && audioNode.notes[Player.beatIndex]) {
           audioNode.notes[Player.beatIndex].forEach(note => {
@@ -91,9 +92,6 @@ class Player {
         node.options.color.border = node.options.color.hover.border;
       });
     this.rootNodes.forEach(node => {
-      if (this.network.getConnectedNodes(node.id).length === 0) {
-        nodesThisMeasure.push(node);
-      }
       node.depth = 0;
       const maxDepth = getMaxDepth(node, this.network, 0);
       const nodes = getAllNodesAtDepth(Player.measuresPlayed % (maxDepth + 1), node, this.network);
@@ -207,24 +205,6 @@ const transformForKey = (disposition, note) => {
   const val = transformToDisposition[disposition][note];
   return val;
 };
-
-/**
- * Custom curve, linearValueAtTime can't be cancelled midway through
- * @param {*} start
- * @param {*} end
- */
-function expCurve(start, end) {
-  var count = 10;
-  var t = 0;
-  var curve = new Float32Array(count + 1);
-  start = Math.max(start, 0.0000001);
-  end = Math.max(end, 0.0000001);
-  for (var i = 0; i <= count; ++i) {
-    curve[i] = start * Math.pow(end / start, t);
-    t += 1 / count;
-  }
-  return curve;
-}
 
 const getRootNodes = network => {
   const rootNodes = [];

@@ -67,8 +67,8 @@ const Player = ({ id, left, top, hideSourceOnDrag, setInteractible }) => {
             <Icon className={classes.stopIcon} fill={theme && theme.text} viewBox='0 0 300 300' path={IconSet.stop} />
           </button>
         </span>
-        <span className={classes.row}>
-          <KeyDropdowns renderInBody />
+        <span className={classes.rowNoPadding}>
+          <KeyDropdowns />
         </span>
       </div>
       <div className={classes.msContainer}>

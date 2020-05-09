@@ -81,6 +81,9 @@ const OscillatorSettingsStyles = makeStyles({
     display: 'inline-block',
     backgroundColor: props => props.theme && props.theme.secondaryBackground,
     color: props => props.theme && props.theme.text
+  },
+  disabled: {
+    filter: 'brightness(50%)'
   }
 });
 

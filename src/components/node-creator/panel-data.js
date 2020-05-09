@@ -1,4 +1,4 @@
-import { volumeBounds, midiBounds, panBounds, envelopeBounds, filterBounds } from '../../constants/audio-data';
+import { volumeBounds, panBounds, envelopeBounds, filterBounds } from '../../constants/audio-data';
 import _ from 'lodash';
 
 const VolumeData = audioNode => {
@@ -9,6 +9,7 @@ const VolumeData = audioNode => {
     {
       label: 'volume',
       onChange: _.throttle(audioNode.setVolume.bind(audioNode), 500),
+      disabled: audioNode.automationEnabled.volumeAutomation,
       min: volumeBounds.min,
       max: volumeBounds.max,
       decimals: 2,
@@ -19,19 +20,8 @@ const VolumeData = audioNode => {
       stepInput: 0.01
     },
     {
-      label: 'intensity',
-      onChange: _.throttle(audioNode.setIntensity.bind(audioNode), 500),
-      min: midiBounds.min,
-      max: midiBounds.max,
-      decimals: 0,
-      defaultValue: audioNode.intensity,
-      defaultValueConversion: 1,
-      globalValue: false,
-      key: audioNode.intensity,
-      stepInput: 1
-    },
-    {
       label: 'pan',
+      disabled: audioNode.automationEnabled.panAutomation,
       onChange: _.throttle(audioNode.setPan.bind(audioNode), 500),
       min: panBounds.min,
       max: panBounds.max,
@@ -116,6 +106,7 @@ const HPFilterData = audioNode => {
   return [
     {
       label: 'frequency',
+      disabled: audioNode.automationEnabled.hpFilterFrequencyAutomation,
       onChange: _.throttle(audioNode.setHPFilterFrequency.bind(audioNode), 300),
       min: filterBounds.frequency.min,
       max: filterBounds.frequency.max,
@@ -129,6 +120,7 @@ const HPFilterData = audioNode => {
     },
     {
       label: 'q',
+      disabled: audioNode.automationEnabled.hpFilterQAutomation,
       onChange: _.throttle(audioNode.setHPFilterQ.bind(audioNode), 300),
       min: filterBounds.q.min,
       max: filterBounds.q.max,
@@ -150,6 +142,7 @@ const LPFilterData = audioNode => {
   return [
     {
       label: 'frequency',
+      disabled: audioNode.automationEnabled.lpFilterFrequencyAutomation,
       onChange: _.throttle(audioNode.setLPFilterFrequency.bind(audioNode), 300),
       min: filterBounds.frequency.min,
       max: filterBounds.frequency.max,
@@ -163,6 +156,7 @@ const LPFilterData = audioNode => {
     },
     {
       label: 'q',
+      disabled: audioNode.automationEnabled.lpFilterQAutomation,
       onChange: _.throttle(audioNode.setLPFilterQ.bind(audioNode), 300),
       min: filterBounds.q.min,
       max: filterBounds.q.max,
