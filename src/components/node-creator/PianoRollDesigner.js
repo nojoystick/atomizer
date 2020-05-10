@@ -180,7 +180,7 @@ const PianoRollDesigner = ({ forceUpdate }) => {
           note={note}
         />
       ) : (
-        <AutomationEditor parameterToAutomate={parameterToAutomate} key={rerenderAutomation} />
+        <AutomationEditor parameterToAutomate={parameterToAutomate} key={rerenderAutomation} forceUpdate={forceUpdate} />
       )}
       <span className={`${classes.footer} ${panelToShow === panels.automation && classes.automationFooter}`}>
         {panelToShow === panels.pitch && <RhythmSelector note={note} setNote={setNote} />}

@@ -13,7 +13,7 @@ const useAutomationStyles = makeStyles({
   }
 });
 
-export default function AutomationEditor({ parameterToAutomate }) {
+export default function AutomationEditor({ parameterToAutomate, forceUpdate }) {
   const theme = useSelector(state => state.network.theme);
   const screenInfo = useSelector(state => state.view.screenInfo);
   const elementIndex = useSelector(state => state.network.elementIndex);
@@ -122,6 +122,7 @@ export default function AutomationEditor({ parameterToAutomate }) {
                 dataToUpdate[beatIndex] = Math.round(((height - e.offsetY) / (height - 10)) * (max - min) * 10) / 10;
                 node.updateAutomationValues(dataToUpdate, parameterToAutomate.key);
                 updateData(node[parameterToAutomate.key]);
+                forceUpdate();
               }
             }
           },
@@ -145,6 +146,7 @@ export default function AutomationEditor({ parameterToAutomate }) {
     return function cleanup() {
       automationChart && automationChart.destroy();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theme, options, parameterToAutomate, node, dataset]);
 
   const classes = useAutomationStyles({ screenInfo: screenInfo, theme: theme });
