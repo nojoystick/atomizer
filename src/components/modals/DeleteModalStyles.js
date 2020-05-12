@@ -10,6 +10,12 @@ const DeleteModalStyles = makeStyles({
     margin: 'auto',
     fontSize: '1.2em'
   },
+  backedContent: {
+    padding: '15px',
+    backgroundColor: props => props.theme && props.theme.secondaryBackgroundSolid,
+    height: 'fit-content',
+    width: props => (props.screenInfo && props.screenInfo.isMobile ? '100%' : '80%')
+  },
   text: {
     height: '50px',
     backgroundColor: 'transparent'
@@ -79,6 +85,28 @@ const DeleteModalStyles = makeStyles({
     '&:hover': {
       opacity: '0.6'
     }
+  },
+  noFootprintButton: {
+    font: 'inherit',
+    color: 'inherit',
+    backgroundColor: 'transparent',
+    border: 'none',
+    margin: '0px',
+    padding: '0px',
+    cursor: 'pointer',
+    '&:hover': {
+      opacity: '0.6'
+    }
+  },
+  elementTilesParent: {
+    margin: '5px 0px',
+    backgroundColor: props => props.theme && props.theme.background,
+    width: '100%',
+    maxHeight: '550px',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    overflow: 'auto'
   }
 });
 

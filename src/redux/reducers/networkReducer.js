@@ -202,27 +202,9 @@ const networkReducer = (state = defaultState, action) => {
       return { ...state, dataset: action.payload };
 
     case 'SET_ELEMENT_INDEX':
-      if (action.constraint) {
-        if (state.audio.node[action.payload]) {
-          return { ...state, elementIndex: action.payload };
-        } else if (state.elementIndex < action.payload) {
-          // find the next highest existing element and set it
-          // eslint-disable-next-line eqeqeq
-          const currIndex = Object.keys(state.audio.node).findIndex(el => el == state.elementIndex);
-          const val = Object.keys(state.audio.node)[currIndex + 1];
-          return val && val !== 'id' ? { ...state, elementIndex: val } : state;
-        } else {
-          // find the next lowest existing element and set it
-          // eslint-disable-next-line eqeqeq
-          const currIndex = Object.keys(state.audio.nodeData).findIndex(el => el == state.elementIndex);
-          const val = Object.keys(state.audio.nodeData)[currIndex - 1];
-          return val && val > 0 ? { ...state, elementIndex: val } : state;
-        }
-      } else {
-        if (action.payload > 0 && action.payload <= elements(state.theme).length) {
-          return { ...state, elementIndex: action.payload };
-        } else return state;
-      }
+      if (action.payload > 0 && action.payload <= elements(state.theme).length) {
+        return { ...state, elementIndex: action.payload };
+      } else return state;
 
     case 'SET_MASTER_VOLUME':
       const vol = action.scale === 'MIDI' ? volume[action.payload] : action.payload;
@@ -444,6 +426,18 @@ const networkReducer = (state = defaultState, action) => {
         ...state,
         shouldSaveNetwork: action.payload ? action.payload : true,
         modalVisible: state.loadedNetworkName === null
+      };
+
+    case 'COPY_NODE_FROM_INDEX':
+      return {
+        ...state,
+        audio: {
+          ...state.audio,
+          nodeData: {
+            ...state.audio.nodeData,
+            [state.elementIndex]: Node.renderFromJSON(state.audio.nodeData[action.payload].transformToPureObject())
+          }
+        }
       };
     default:
       return state;

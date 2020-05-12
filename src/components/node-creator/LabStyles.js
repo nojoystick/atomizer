@@ -134,6 +134,25 @@ const LabStyles = makeStyles({
     color: props => props.theme && props.theme.text,
     boxShadow: props => props.theme && props.theme.boxShadowLight,
     transition: '1s'
+  },
+  elementOptionDropdown: {
+    position: 'absolute',
+    right: props => `${props.dropdownRight}px`,
+    top: props => `${props.dropdownTop}px`,
+    zIndex: 9999,
+    boxShadow: props => props.theme && props.theme.boxShadow,
+    backgroundColor: props => props.theme && props.theme.secondaryBackgroundSolid
+  },
+  optionButton: {
+    color: props => props.theme && props.theme.text,
+    fontFamily: 'Inconsolata',
+    fontWeight: '900',
+    backgroundColor: 'transparent',
+    padding: '10px',
+    border: 'none',
+    '&:hover': {
+      opacity: '0.6'
+    }
   }
 });
 

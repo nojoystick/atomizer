@@ -218,5 +218,11 @@ export const networkActions = {
       type: 'SET_SHOULD_SAVE_NETWORK',
       payload: param
     };
+  },
+  copyNodeFromIndex: param => {
+    return {
+      type: 'COPY_NODE_FROM_INDEX',
+      payload: param
+    };
   }
 };

@@ -68,12 +68,16 @@ const PlayerEditor = ({ element }) => {
   const node = useSelector(state => state.network.audio.nodeData && state.network.audio.nodeData[elementIndex]);
   const forceUpdateMode = useForceUpdate('mode');
   const forceUpdateOctave = useForceUpdate('octave');
-  const classes = useStyles({ theme: theme, nodeColor: element.color });
+  const classes = useStyles({ theme: theme, nodeColor: element && element.color });
 
   const _onChange = e => {
     node.setOctave(e.value);
     forceUpdateOctave();
   };
+
+  if (!element) {
+    return <div />;
+  }
 
   const customStyles = {
     option: (provided, state) => ({

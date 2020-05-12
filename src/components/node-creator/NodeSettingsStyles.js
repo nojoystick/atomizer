@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/styles';
 
 const useNodeSettingsStyles = makeStyles({
   nodeDetailPanel: {
+    position: 'relative',
     margin: '15px',
     height: '180px',
     width: '100%',
@@ -97,6 +98,19 @@ const useNodeSettingsStyles = makeStyles({
     '&__option': {
       padding: '5px 0px !important',
       color: props => props.theme && `${props.theme.text} !important`
+    }
+  },
+  ellipsis: {
+    color: props => props.theme && props.theme.text,
+    padding: '10px',
+    fontSize: '24px',
+    position: 'absolute',
+    right: '10px',
+    bottom: '10px',
+    backgroundColor: 'transparent',
+    border: 'none',
+    '&:hover': {
+      opacity: '0.6'
     }
   }
 });

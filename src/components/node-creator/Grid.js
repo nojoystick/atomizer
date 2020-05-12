@@ -47,7 +47,8 @@ const Grid = ({ width, node, pianoRoll, setPianoRoll, height, color, save, note 
           !node.mute &&
           node.solo !== -1 &&
           Player.nodesThisMeasure &&
-          Player.nodesThisMeasure.filter(el => el.options.audioNode.id === node.id).length > 0 &&
+          Player.nodesThisMeasure.filter(el => el.options && el.options.audioNode && el.options.audioNode.id === node.id).length >
+            0 &&
           Audio.context.currentTime < Player.measureStopTime;
         for (let j = -1; j < 16; ++j) {
           const isPlaying =

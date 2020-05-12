@@ -9,11 +9,13 @@ import { configActions, networkActions } from '../../redux/actions';
 import elements from '../../constants/elements';
 import { parseToRgba } from '../../utils/color-utils';
 
-const ElementSelector = () => {
+const ElementSelector = ({ buttonRef, showDropdown, setShowDropdown }) => {
   const theme = useSelector(state => state.network.theme);
   const elementIndex = useSelector(state => state.network.elementIndex);
+  const nodeData = useSelector(state => state.network.audio.nodeData);
   const [elementList, setElementList] = useState(elements(theme));
   const [element, setElement] = useState(elementList[elementIndex - 1]);
+  const [canCopy, setCanCopy] = useState(false);
 
   useEffect(() => {
     setElementList(elements(theme));
@@ -22,6 +24,17 @@ const ElementSelector = () => {
   useEffect(() => {
     setElement(elementList[elementIndex - 1]);
   }, [elementIndex, elementList]);
+
+  useEffect(() => {
+    let _canCopy = false;
+    nodeData &&
+      Object.values(nodeData).forEach(node => {
+        if (node.notes) {
+          _canCopy = true;
+        }
+      });
+    setCanCopy(_canCopy);
+  }, [nodeData, elementIndex]);
 
   const dispatch = useDispatch();
   const classes = useNodeSettingsStyles({ theme: theme });
@@ -60,7 +73,7 @@ const ElementSelector = () => {
             path={IconSet.expandArrow}
           />
         </button>
-        <ElementTile style={{ margin: '10px' }} />
+        <ElementTile element={element} />
         <button className={classes.scrollButton} onClick={() => updateIndex(1, elementIndex)}>
           <Icon
             className={classes.scrollIcon}
@@ -87,6 +100,14 @@ const ElementSelector = () => {
           onDropdownClose={() => dispatch(configActions.setHotkeys(true))}
           maxMenuHeight={150}
         />
+        <button
+          ref={buttonRef}
+          className={classes.ellipsis}
+          onClick={() => setShowDropdown(!showDropdown)}
+          style={{ visibility: canCopy ? 'visible' : 'hidden' }}
+        >
+          ...
+        </button>
       </div>
     </div>
   );
