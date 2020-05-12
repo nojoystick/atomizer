@@ -134,16 +134,16 @@ const PianoRollDesigner = ({ forceUpdate }) => {
         }
       });
     });
-    Object.keys(parsedRoll).length === 0 ? node.setNotes(null) : node.setNotes(parsedRoll);
+    Object.keys(parsedRoll).length === 0 ? node && node.setNotes(null) : node && node.setNotes(parsedRoll);
   };
 
   const clear = () => {
     if (panelToShow === panels.pitch) {
       setPianoRoll(initializePianoRoll(note, height));
       save();
-      node.setNotes(null);
+      node && node.setNotes(null);
     } else {
-      node.resetAutomation(parameterToAutomate.key);
+      node && node.resetAutomation(parameterToAutomate.key);
       forceUpdate();
       setRerenderAutomation(rerenderAutomation + 1);
     }
